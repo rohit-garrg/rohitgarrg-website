@@ -1,0 +1,238 @@
+---
+// Lightbox component - activated via JavaScript
+---
+
+<div id="lightbox" class="lightbox" aria-hidden="true">
+  <div class="lightbox-overlay"></div>
+  <div class="lightbox-content">
+    <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+    <button class="lightbox-prev" aria-label="Previous image">&#8249;</button>
+    <div class="lightbox-image-container">
+      <img src="" alt="" class="lightbox-image" />
+    </div>
+    <button class="lightbox-next" aria-label="Next image">&#8250;</button>
+    <div class="lightbox-counter"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = lightbox?.querySelector('.lightbox-image') as HTMLImageElement;
+    const lightboxCounter = lightbox?.querySelector('.lightbox-counter');
+    const closeBtn = lightbox?.querySelector('.lightbox-close');
+    const prevBtn = lightbox?.querySelector('.lightbox-prev');
+    const nextBtn = lightbox?.querySelector('.lightbox-next');
+    const overlay = lightbox?.querySelector('.lightbox-overlay');
+
+    let galleryImages: string[] = [];
+    let currentIndex = 0;
+
+    // Find all gallery items
+    const galleryItems = document.querySelectorAll('.gallery-item img, .lightbox-trigger');
+
+    galleryItems.forEach((item, index) => {
+      const img = item as HTMLImageElement;
+      galleryImages.push(img.src);
+
+      item.addEventListener('click', () => {
+        currentIndex = index;
+        openLightbox(img.src);
+      });
+    });
+
+    function openLightbox(src: string) {
+      if (!lightbox || !lightboxImage) return;
+      lightboxImage.src = src;
+      lightbox.classList.add('active');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      updateCounter();
+      updateNavButtons();
+    }
+
+    function closeLightbox() {
+      if (!lightbox) return;
+      lightbox.classList.remove('active');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function showPrev() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        if (lightboxImage) lightboxImage.src = galleryImages[currentIndex];
+        updateCounter();
+        updateNavButtons();
+      }
+    }
+
+    function showNext() {
+      if (currentIndex < galleryImages.length - 1) {
+        currentIndex++;
+        if (lightboxImage) lightboxImage.src = galleryImages[currentIndex];
+        updateCounter();
+        updateNavButtons();
+      }
+    }
+
+    function updateCounter() {
+      if (lightboxCounter && galleryImages.length > 1) {
+        lightboxCounter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
+      }
+    }
+
+    function updateNavButtons() {
+      if (prevBtn) (prevBtn as HTMLElement).style.display = currentIndex > 0 ? 'flex' : 'none';
+      if (nextBtn) (nextBtn as HTMLElement).style.display = currentIndex < galleryImages.length - 1 ? 'flex' : 'none';
+      if (galleryImages.length <= 1) {
+        if (prevBtn) (prevBtn as HTMLElement).style.display = 'none';
+        if (nextBtn) (nextBtn as HTMLElement).style.display = 'none';
+      }
+    }
+
+    // Event listeners
+    closeBtn?.addEventListener('click', closeLightbox);
+    overlay?.addEventListener('click', closeLightbox);
+    prevBtn?.addEventListener('click', showPrev);
+    nextBtn?.addEventListener('click', showNext);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox?.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showPrev();
+      if (e.key === 'ArrowRight') showNext();
+    });
+  });
+</script>
+
+<style>
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .lightbox.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .lightbox-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  .lightbox-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: var(--space-lg);
+  }
+
+  .lightbox-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 90vw;
+    max-height: 85vh;
+  }
+
+  .lightbox-image {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    z-index: 10;
+  }
+
+  .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .lightbox-prev,
+  .lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    z-index: 10;
+  }
+
+  .lightbox-prev {
+    left: var(--space-md);
+  }
+
+  .lightbox-next {
+    right: var(--space-md);
+  }
+
+  .lightbox-prev:hover,
+  .lightbox-next:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .lightbox-counter {
+    position: absolute;
+    bottom: var(--space-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9375rem;
+  }
+
+  @media (max-width: 768px) {
+    .lightbox-prev,
+    .lightbox-next {
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+    }
+
+    .lightbox-close {
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+    }
+  }
+</style>

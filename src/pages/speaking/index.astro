@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpeakingEntry from '../../components/SpeakingEntry.astro';
+
+// Get speaking entries from content collection
+const allSpeaking = await getCollection('speaking');
+
+// Sort by date (newest first)
+const sortedSpeaking = allSpeaking
+  .map(entry => ({
+    slug: entry.id.replace(/\.md$/, ''),
+    event: entry.data.event,
+    title: entry.data.title,
+    date: entry.data.date,
+    description: entry.data.description,
+    leadImage: entry.data.leadImage,
+    hasGallery: entry.data.gallery && entry.data.gallery.length > 0
+  }))
+  .sort((a, b) => b.date.getTime() - a.date.getTime());
+---
+
+<BaseLayout
+  title="Speaking - Rohit Garg"
+  description="Talks and presentations on product management, AI in media, and building digital products at scale."
+>
+  <div class="container">
+    <header class="page-header">
+      <h1>Speaking</h1>
+      <p class="page-description">Talks and presentations at industry events and institutions.</p>
+    </header>
+
+    <div class="speaking-list">
+      {sortedSpeaking.length > 0 ? (
+        sortedSpeaking.map((entry) => (
+          <SpeakingEntry
+            slug={entry.slug}
+            event={entry.event}
+            title={entry.title}
+            date={entry.date}
+            description={entry.description}
+            leadImage={entry.leadImage}
+            hasGallery={entry.hasGallery}
+          />
+        ))
+      ) : (
+        <p class="empty-state">Speaking engagements coming soon.</p>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-md);
+  }
+
+  .page-header h1 {
+    margin-bottom: var(--space-xs);
+  }
+
+  .page-description {
+    color: var(--color-text-light);
+    font-size: 1.125rem;
+    margin-bottom: 0;
+  }
+
+  .speaking-list {
+    padding-bottom: var(--space-xl);
+  }
+
+  .empty-state {
+    padding: var(--space-xl) 0;
+    text-align: center;
+    color: var(--color-text-light);
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      padding: var(--space-lg) 0;
+    }
+  }
+</style>

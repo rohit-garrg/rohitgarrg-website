@@ -1,0 +1,310 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Lightbox from '../../components/Lightbox.astro';
+
+export async function getStaticPaths() {
+  const speaking = await getCollection('speaking');
+  return speaking.map((entry) => ({
+    params: { slug: entry.id.replace(/\.md$/, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { title, event, date, description, url, conferenceUrl, leadImage, gallery } = entry.data;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// Combine lead image with gallery for full photo list
+const allPhotos = [
+  ...(leadImage ? [leadImage] : []),
+  ...(gallery || [])
+];
+
+// Get canonical URL for schema
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = leadImage ? new URL(leadImage, Astro.site).toString() : new URL('/og-image.webp', Astro.site).toString();
+
+// Event schema for speaking engagement
+const eventSchema = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": `${title} - ${event}`,
+  "description": description,
+  "startDate": date.toISOString(),
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "image": imageURL,
+  "performer": {
+    "@type": "Person",
+    "name": "Rohit Garg",
+    "url": "https://rohitgarrg.com/about"
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": event
+  }
+};
+
+// Breadcrumb schema
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://rohitgarrg.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Speaking",
+      "item": "https://rohitgarrg.com/speaking"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": event,
+      "item": canonicalURL.toString()
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title={`${title} - ${event} | Rohit Garg`}
+  description={description}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(eventSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <div class="container">
+    <article class="speaking-detail">
+      <header class="detail-header">
+        <a href="/speaking" class="back-link">← Back to Speaking</a>
+        <p class="event-date">{formattedDate}</p>
+        <h1>{event}</h1>
+        <p class="talk-title">{title}</p>
+      </header>
+
+      <div class="detail-content">
+        <p class="description">{description}</p>
+
+        <div class="detail-links">
+          {url && (
+            <a href={url} target="_blank" rel="noopener noreferrer" class="primary-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              View presentation
+            </a>
+          )}
+          {conferenceUrl && (
+            <a href={conferenceUrl} target="_blank" rel="noopener noreferrer" class="secondary-link">
+              Conference page →
+            </a>
+          )}
+        </div>
+      </div>
+
+      {allPhotos.length > 0 && (
+        <section class="photo-gallery">
+          <h2>Photos</h2>
+          <p class="gallery-hint">Click on any photo to view full size</p>
+          <div class="gallery-grid" data-count={allPhotos.length}>
+            {allPhotos.map((photo, index) => (
+              <div class="gallery-item" data-index={index}>
+                <img src={photo} alt={`${event} - Photo ${index + 1}`} loading="lazy" />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+    </article>
+  </div>
+  <Lightbox />
+</BaseLayout>
+
+<style>
+  .speaking-detail {
+    padding: var(--space-lg) 0 var(--space-2xl);
+  }
+
+  .detail-header {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--space-lg);
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+
+  .event-date {
+    font-size: 0.9375rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--space-xs);
+  }
+
+  .detail-header h1 {
+    font-size: 2.25rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .talk-title {
+    font-size: 1.25rem;
+    color: var(--color-accent);
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+
+  .detail-content {
+    margin-bottom: var(--space-xl);
+  }
+
+  .description {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: var(--space-lg);
+  }
+
+  .detail-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .primary-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.75rem 1.25rem;
+    background-color: var(--color-accent);
+    color: white;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+
+  .primary-link:hover {
+    background-color: var(--color-accent-hover);
+    color: white;
+  }
+
+  .secondary-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text);
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .secondary-link:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .photo-gallery {
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .photo-gallery h2 {
+    margin-bottom: var(--space-xs);
+  }
+
+  .gallery-hint {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--space-lg);
+  }
+
+  .gallery-grid {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery-grid[data-count="1"] {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+
+  .gallery-grid[data-count="3"] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .gallery-item {
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: var(--color-border);
+    cursor: pointer;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    .detail-header h1 {
+      font-size: 1.75rem;
+    }
+
+    .talk-title {
+      font-size: 1.125rem;
+    }
+
+    .description {
+      font-size: 1rem;
+    }
+
+    .detail-links {
+      flex-direction: column;
+    }
+
+    .primary-link,
+    .secondary-link {
+      justify-content: center;
+    }
+
+    .gallery-grid,
+    .gallery-grid[data-count="3"] {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

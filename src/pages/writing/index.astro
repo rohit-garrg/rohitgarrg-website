@@ -1,0 +1,168 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+
+// Get articles from content collection
+const allArticles = await getCollection('writing');
+
+// Slugs that have lead images
+const articlesWithLeadImages = ['exceptional-managers', 'ai-presentation-workflow', 'audiobook-commute-reading-habit'];
+
+// Transform to usable format
+const articles = allArticles.map(article => {
+  const slug = article.id.replace(/\.md$/, '');
+  const hasLeadImage = articlesWithLeadImages.includes(slug);
+  return {
+    title: article.data.title,
+    description: article.data.description,
+    category: article.data.category,
+    date: article.data.date,
+    slug,
+    leadImage: hasLeadImage ? `/images/writing/${slug}/lead.webp` : undefined
+  };
+});
+
+// Extract unique categories
+const categories = [...new Set(articles.map(a => a.category))];
+
+// Sort articles by date (newest first)
+const sortedArticles = articles.sort((a, b) => b.date.getTime() - a.date.getTime());
+---
+
+<BaseLayout
+  title="Writing - Rohit Garg"
+  description="Articles on product management, leadership, AI tools, and personal development."
+>
+  <div class="container">
+    <header class="page-header">
+      <h1>Writing</h1>
+      <p class="page-description">Thoughts on product, leadership, AI tools, and personal growth.</p>
+    </header>
+
+    <!-- Category Filter -->
+    <nav class="filter-nav" aria-label="Filter articles by category">
+      <button class="filter-btn active" data-category="all">All</button>
+      {categories.map((category) => (
+        <button class="filter-btn" data-category={category}>{category}</button>
+      ))}
+    </nav>
+
+    <!-- Articles List -->
+    <div class="articles-list">
+      {sortedArticles.map((article) => (
+        <div class="article-item" data-category={article.category}>
+          <ArticleCard
+            title={article.title}
+            description={article.description}
+            category={article.category}
+            date={article.date}
+            slug={article.slug}
+            leadImage={article.leadImage}
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Category filtering
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const articleItems = document.querySelectorAll('.article-item');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const category = button.getAttribute('data-category');
+
+      // Update active button
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      // Filter articles
+      articleItems.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        if (category === 'all' || itemCategory === category) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .page-header {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-lg);
+  }
+
+  .page-header h1 {
+    margin-bottom: var(--space-xs);
+  }
+
+  .page-description {
+    color: var(--color-text-light);
+    font-size: 1.25rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  .filter-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: var(--space-lg);
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: rgba(37, 99, 235, 0.04);
+  }
+
+  .filter-btn.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  }
+
+  .articles-list {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .article-item {
+    transition: opacity 0.2s ease;
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      padding: var(--space-lg) 0;
+    }
+
+    .filter-nav {
+      gap: var(--space-xs);
+    }
+
+    .filter-btn {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+  }
+</style>

@@ -1,0 +1,244 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Person schema for about page
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Rohit Garg",
+  "url": "https://rohitgarrg.com",
+  "image": "https://rohitgarrg.com/images/headshot.webp",
+  "jobTitle": "Head of Product & Design",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Times of India",
+    "url": "https://timesofindia.indiatimes.com"
+  },
+  "description": "Product leader with 14+ years of experience across media, travel, and real estate. Leading a 60+ person team building digital products at scale.",
+  "knowsAbout": ["Product Management", "Design", "AI Tools", "Leadership"],
+  "sameAs": [
+    "https://www.linkedin.com/in/rohitgarrg/"
+  ]
+};
+
+// Breadcrumb schema
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://rohitgarrg.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "About",
+      "item": "https://rohitgarrg.com/about"
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title="About - Rohit Garg"
+  description="Head of Product & Design at Times of India. Building products at scale, writing about leadership and AI tools."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <div class="container">
+    <article class="about">
+      <!-- Photo + Intro Section -->
+      <header class="about-header">
+        <div class="photo-container">
+          <img
+            src="/images/headshot.webp"
+            alt="Rohit Garg"
+            class="headshot"
+          />
+        </div>
+        <div class="intro">
+          <h1>About Me</h1>
+          <p class="role">Head of Product & Design at Times of India</p>
+        </div>
+      </header>
+
+      <!-- Narrative Content -->
+      <section class="narrative prose">
+        <p class="lead">
+          I lead Product and Design at Times of India, India's largest digital news publisher. My team of 60+ handles everything from the core reading experience to the ad platform to the puzzle games you might be playing during your commute.
+        </p>
+
+        <p>
+          The work I find most interesting sits at the intersection of three things: building products that genuinely help users, making the math work for the business, and doing it with a team that's growing and learning along the way. I've been doing this for 14+ years across media, travel, and real estate — but the constants have stayed the same. Understand the user. Ship things. Measure what matters. Iterate.
+        </p>
+
+        <p>
+          These days, I'm especially interested in how AI is reshaping product development. Not the hype, but the practical stuff: how it changes what's possible to build, how fast you can move, what new capabilities become table stakes. This site is partly an excuse to keep experimenting.
+        </p>
+
+        <p>
+          Outside work, I'm based in Delhi-NCR, usually stuck in traffic between Gurgaon and Noida. I have twin toddlers, which means my reading happens via audiobooks during that commute. (<a href="/writing/audiobook-commute-reading-habit">38 books in the last three years</a> — I wrote about it.) When I'm not doing any of that, I'm probably tinkering with some side project that may or may not go anywhere.
+        </p>
+
+        <h2>Mentoring</h2>
+        <p>
+          I'm open to mentoring folks earlier in their product careers — especially those figuring out the craft, not just the job hunt. If you're working through a real problem and want a sounding board, feel free to reach out. I can't help with referrals or hiring at my current organization, but I'm happy to talk shop.
+        </p>
+      </section>
+
+      <!-- Contact Section -->
+      <section class="contact">
+        <h2>Get in Touch</h2>
+        <p>I'm always happy to connect with fellow product people, discuss ideas, or explore collaboration opportunities.</p>
+        <div class="contact-links">
+          <a href="https://www.linkedin.com/in/rohitgarrg/" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            LinkedIn
+          </a>
+          <a href="mailto:rohitgarrg@gmail.com" class="contact-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            Email
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .about {
+    padding: var(--space-xl) 0 var(--space-2xl);
+  }
+
+  .about-header {
+    display: flex;
+    gap: var(--space-xl);
+    align-items: flex-start;
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .photo-container {
+    flex-shrink: 0;
+  }
+
+  .headshot {
+    width: 140px;
+    height: 140px;
+    border-radius: 12px;
+    object-fit: cover;
+    background-color: var(--color-border);
+  }
+
+  .intro {
+    padding-top: var(--space-md);
+  }
+
+  .intro h1 {
+    margin-bottom: var(--space-xs);
+  }
+
+  .role {
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+    margin-bottom: 0;
+  }
+
+  /* Prose styles for narrative */
+  .narrative {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .prose {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .prose .lead {
+    font-size: 1.1875rem;
+    color: var(--color-text-light);
+  }
+
+  .prose h2 {
+    font-size: 1.375rem;
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .prose p {
+    margin-bottom: var(--space-md);
+  }
+
+  /* Contact section */
+  .contact h2 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .contact > p {
+    color: var(--color-text-light);
+    margin-bottom: var(--space-lg);
+  }
+
+  .contact-links {
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text);
+    transition: color 0.2s ease;
+  }
+
+  .contact-link:hover {
+    color: var(--color-accent);
+  }
+
+  .contact-link svg {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 768px) {
+    .about-header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--space-lg);
+    }
+
+    .intro {
+      padding-top: 0;
+    }
+
+    .headshot {
+      width: 120px;
+      height: 120px;
+    }
+
+    .contact-links {
+      flex-direction: column;
+    }
+
+    .contact-link {
+      justify-content: center;
+    }
+  }
+</style>

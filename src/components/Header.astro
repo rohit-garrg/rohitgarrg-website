@@ -1,0 +1,84 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header>
+  <div class="container">
+    <nav>
+      <a href="/" class="logo">Rohit Garg</a>
+      <ul class="nav-links">
+        <li><a href="/writing" class={currentPath.startsWith('/writing') ? 'active' : ''}>Writing</a></li>
+        <li><a href="/projects" class={currentPath.startsWith('/projects') ? 'active' : ''}>Projects</a></li>
+        <li><a href="/speaking" class={currentPath.startsWith('/speaking') ? 'active' : ''}>Speaking</a></li>
+        <li><a href="/about" class={currentPath === '/about' ? 'active' : ''}>About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-md) 0;
+    background-color: var(--color-bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+  }
+
+  .logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .logo:hover {
+    color: var(--color-accent);
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: var(--space-lg);
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--color-accent);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    nav {
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .nav-links {
+      gap: var(--space-md);
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav-links {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-sm);
+    }
+  }
+</style>
