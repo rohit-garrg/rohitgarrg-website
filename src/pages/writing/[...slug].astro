@@ -26,6 +26,7 @@ const leadImage = hasLeadImage ? `/images/writing/${slug}/lead.webp` : undefined
   category={article.data.category}
   date={article.data.date}
   leadImage={leadImage}
+  canonicalUrl={article.data.canonicalUrl}
 >
   <Content />
 </ArticleLayout>

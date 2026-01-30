@@ -13,6 +13,7 @@ const writing = defineCollection({
     ]),
     date: z.coerce.date(),
     leadImage: z.string().optional(),
+    canonicalUrl: z.string().url().optional(),
   }),
 });
 
