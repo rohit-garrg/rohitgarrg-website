@@ -2,7 +2,7 @@
 title: "What 10+ Bosses Taught Me About Exceptional Managers"
 description: "Leadership lessons from fifteen years of observing what makes managers truly effective."
 category: "Leadership / Career"
-date: 2026-01-15
+date: 2026-01-30
 leadImage: "/images/writing/exceptional-managers/lead.webp"
 canonicalUrl: "https://timesofindia.indiatimes.com/blogs/rohits-rationale/what-10-bosses-taught-me-about-exceptional-managers/"
 ---
