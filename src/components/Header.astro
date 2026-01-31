@@ -5,7 +5,7 @@ const currentPath = Astro.url.pathname;
 <header>
   <div class="container">
     <nav>
-      <a href="/" class="logo">Rohit Garg</a>
+      <a href="/" class="logo">RG</a>
       <ul class="nav-links">
         <li><a href="/writing" class={currentPath.startsWith('/writing') ? 'active' : ''}>Writing</a></li>
         <li><a href="/projects" class={currentPath.startsWith('/projects') ? 'active' : ''}>Projects</a></li>
@@ -34,9 +34,10 @@ const currentPath = Astro.url.pathname;
   }
 
   .logo {
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: 1.5rem;
+    font-weight: 800;
     color: var(--color-text);
+    letter-spacing: -0.02em;
   }
 
   .logo:hover {
@@ -63,22 +64,30 @@ const currentPath = Astro.url.pathname;
 
   /* Mobile responsive */
   @media (max-width: 768px) {
-    nav {
-      flex-direction: column;
-      gap: var(--space-sm);
-    }
-
     .nav-links {
       gap: var(--space-md);
-      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
     }
   }
 
   @media (max-width: 480px) {
-    .nav-links {
-      flex-wrap: wrap;
-      justify-content: center;
+    nav {
       gap: var(--space-sm);
+    }
+
+    .logo {
+      font-size: 1.25rem;
+    }
+
+    .nav-links {
+      gap: var(--space-sm);
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
     }
   }
 </style>

@@ -6,8 +6,6 @@ date: 2026-01-31
 leadImage: "/images/writing/weekend-website-claude-workflow/lead.webp"
 ---
 
-![Planning to Prompts to Execution to Live Site workflow](/images/writing/weekend-website-claude-workflow/lead.webp)
-
 This website went from idea to live in about three days. Four or five working sessions spread across a weekend and a couple of evenings.
 
 I'm not a developer. I can read code, I can debug simple things, but I don't write JavaScript for fun. So when I decided to build a personal site, my goal wasn't to learn web development. It was to get something live that I wouldn't be embarrassed to share.

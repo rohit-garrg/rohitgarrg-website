@@ -166,7 +166,53 @@ ls public/og-image.* 2>/dev/null || echo "MISSING: og-image"
 ls -R dist/ | grep "\.html"
 ```
 
-### 9. Lighthouse Performance Audit (Critical)
+### 9. Domain Consistency - www vs non-www (Critical)
+
+**Why it matters:** Search engines treat `www.example.com` and `example.com` as different sites. All URLs must use the canonical domain consistently.
+
+**Check which domain is canonical:**
+1. Visit your site's root domain and note if it redirects to www or non-www
+2. Verify `astro.config.mjs` matches:
+
+```bash
+grep "site:" astro.config.mjs
+```
+
+**Find inconsistent URLs in code:**
+```bash
+# If canonical is www.example.com, find non-www references:
+grep -r "https://example\.com[^.]" src/ public/ --include="*.astro" --include="*.ts" --include="*.js" --include="*.txt" --include="*.json" 2>/dev/null
+
+# If canonical is example.com (no www), find www references:
+grep -r "https://www\.example\.com" src/ public/ --include="*.astro" --include="*.ts" --include="*.js" --include="*.txt" --include="*.json" 2>/dev/null
+```
+
+**Files to check:**
+- `astro.config.mjs` - `site` property
+- `public/robots.txt` - Sitemap URL
+- All schema/JSON-LD URLs in `.astro` files
+- Any hardcoded URLs in layouts or components
+
+**Fix:**
+Replace all domain references to match canonical. Example for `www.rohitgarrg.com`:
+```bash
+# In astro.config.mjs
+site: 'https://www.rohitgarrg.com'
+
+# In robots.txt
+Sitemap: https://www.rohitgarrg.com/sitemap-index.xml
+
+# In all schema objects
+"url": "https://www.rohitgarrg.com"
+"item": "https://www.rohitgarrg.com/about"
+```
+
+After fixing, rebuild to regenerate sitemap with correct URLs:
+```bash
+npm run build
+```
+
+### 10. Lighthouse Performance Audit (Critical)
 
 **Prerequisites:**
 ```bash
@@ -228,7 +274,7 @@ else:
 rm -f lighthouse-report.report.json lighthouse-report.report.html
 ```
 
-### 10. Build Verification
+### 11. Build Verification
 
 ```bash
 npm run build

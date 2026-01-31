@@ -173,7 +173,6 @@ When adding a lead image to an article:
 - [ ] Can publish new blog posts by adding markdown files (no code changes)
 - [ ] Site loads fast (<3 seconds)
 - [ ] Fully responsive on mobile
-- [ ] rohitgarrg.in redirects to rohitgarrg.com
 
 ## Content Status
 

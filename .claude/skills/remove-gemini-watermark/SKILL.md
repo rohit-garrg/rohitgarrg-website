@@ -47,6 +47,14 @@ Invoke with the article folder name (the folder inside `public/images/writing/`)
 
 5. Report how many images were processed.
 
+## Important: Check Before Cropping
+
+**Before running this skill, visually inspect the images.** If important content (text, icons, diagram elements) is near the bottom or right edges, DO NOT crop. The 23% bottom / 3.5% right crop will remove that content.
+
+In such cases:
+- Inform the user the watermark cannot be auto-removed without losing content
+- Suggest manual removal in an image editor, or leaving the subtle watermark as-is
+
 ## Notes
 
 - This uses macOS `sips` command (built-in)

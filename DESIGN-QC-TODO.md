@@ -1,8 +1,36 @@
 # Design QC - Issues & Fixes
 
-**Reviewed by:** Design QC
-**Date:** January 26, 2026
-**Status:** Ready for Dev Implementation
+**Reviewed by:** Design QC Skill
+**Date:** January 31, 2026 (Updated)
+**Previous Review:** January 26, 2026
+**Status:** Mostly Resolved - Minor Polish Items Remain
+
+---
+
+## January 31, 2026 Update
+
+**New Article Reviewed:** "The Weekend Website: Planning in Claude, Executing in Claude Code"
+
+### Status of Previous Issues
+
+Based on visual review, many P0 and P1 issues from Jan 26 appear **resolved**:
+- [x] Hero now has visual impact (tagline in blue, clear hierarchy)
+- [x] Category tags now use sentence case (e.g., "AI Tools / Productivity")
+- [x] Article subheadings have proper visual hierarchy
+- [x] Projects section has improved styling (icon, no dashed border)
+- [x] Navigation works well on mobile (no horizontal scroll)
+
+### New Article - Specific Notes
+
+The weekend-website-claude-workflow article looks **clean and professional**:
+- Lead image displays correctly with proper responsive sizing
+- Inline images (skills-cycle, workflow-checklist) render well
+- Typography is readable
+- Mobile view works correctly
+
+**Minor items specific to this article:**
+- [ ] **P2**: Two images slightly over 200KB target (skills-cycle.webp: 248KB, workflow-checklist.webp: 204KB) - consider recompressing
+- [ ] **P3**: Inline images could benefit from figure captions for additional context
 
 ---
 

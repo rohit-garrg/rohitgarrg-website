@@ -73,5 +73,5 @@ Style notes for all images:
 > Indian man driving in traffic (Delhi NCR traffic jam visible through windshield), struggling to keep eyes open, yawning. The car is stationary in gridlock. Expression conveys boredom/drowsiness. Phone shows an audiobook playing but the person is clearly not engaged. Harsh afternoon light. Captures the "some books made me drowsy while driving" moment. Photorealistic.
 
 ### Inline Image 4 — "The Books That Stuck With Me" section
-**"Lost in contemplation during commute"**
+****
 > Indian man parked on the side of a road (car pulled over safely), staring thoughtfully out the window at a sunset over a Delhi NCR cityscape. Earbuds still in, but he's clearly processing something emotionally. The mood is reflective, almost melancholic. Captures the impact of meaningful audiobooks. Photorealistic with warm, emotional lighting.
