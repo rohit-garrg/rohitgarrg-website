@@ -139,10 +139,26 @@ slug: article-slug-here
 category: "Category Name"
 description: "One-line description for card preview"
 date: 2026-01-15
+leadImage: "/images/writing/article-slug/lead.webp"
 ---
 ```
 
 **Important:** When adding a new article, always use today's actual calendar date for the `date` field.
+
+## Adding Lead Images to Articles
+
+When adding a lead image to an article:
+
+1. **Add to frontmatter** - The `leadImage` field in frontmatter is the source of truth. Pages read from `article.data.leadImage`, not hardcoded lists.
+
+2. **Create responsive variants** - Each article with a lead image needs 3 files in `public/images/writing/[slug]/`:
+   - `lead.webp` (1400px width, main image)
+   - `lead-medium.webp` (600px width)
+   - `lead-thumb.webp` (400px width)
+
+3. **Image in article body is separate** - If you also want the lead image in the article body, add it as markdown: `![alt text](/images/writing/slug/lead.webp)`
+
+**Never use hardcoded lists** of articles with images in page files. Always read from frontmatter.
 
 ## Footer
 

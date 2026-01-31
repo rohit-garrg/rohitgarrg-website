@@ -5,22 +5,19 @@ import ArticleCard from '../components/ArticleCard.astro';
 
 // Get articles from content collection, sorted by date (newest first), limit to 3
 const allArticles = await getCollection('writing');
-// Slugs that have lead images
-const articlesWithLeadImages = ['exceptional-managers', 'ai-presentation-workflow', 'audiobook-commute-reading-habit'];
 
 const latestArticles = allArticles
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3)
   .map(article => {
     const slug = article.id.replace(/\.md$/, '');
-    const hasLeadImage = articlesWithLeadImages.includes(slug);
     return {
       title: article.data.title,
       description: article.data.description,
       category: article.data.category,
       date: article.data.date,
       slug,
-      leadImage: hasLeadImage ? `/images/writing/${slug}/lead.webp` : undefined
+      leadImage: article.data.leadImage
     };
   });
 

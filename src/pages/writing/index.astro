@@ -6,20 +6,16 @@ import ArticleCard from '../../components/ArticleCard.astro';
 // Get articles from content collection
 const allArticles = await getCollection('writing');
 
-// Slugs that have lead images
-const articlesWithLeadImages = ['exceptional-managers', 'ai-presentation-workflow', 'audiobook-commute-reading-habit'];
-
-// Transform to usable format
+// Transform to usable format - use leadImage from frontmatter
 const articles = allArticles.map(article => {
   const slug = article.id.replace(/\.md$/, '');
-  const hasLeadImage = articlesWithLeadImages.includes(slug);
   return {
     title: article.data.title,
     description: article.data.description,
     category: article.data.category,
     date: article.data.date,
     slug,
-    leadImage: hasLeadImage ? `/images/writing/${slug}/lead.webp` : undefined
+    leadImage: article.data.leadImage
   };
 });
 
