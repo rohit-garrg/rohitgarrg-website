@@ -81,7 +81,7 @@ const breadcrumbSchema = {
 };
 ---
 
-<BaseLayout title={`${title} - Rohit Garg`} description={description} canonicalUrl={canonicalUrl}>
+<BaseLayout title={`${title} - Rohit Garg`} description={description} canonicalUrl={canonicalUrl} ogImage={leadImage}>
   <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   <article class="article">
