@@ -34,6 +34,7 @@ const speaking = defineCollection({
     event: z.string(),
     date: z.coerce.date(),
     description: z.string(),
+    location: z.string(),
     url: z.string().optional(),
     conferenceUrl: z.string().optional(),
     leadImage: z.string().optional(),
