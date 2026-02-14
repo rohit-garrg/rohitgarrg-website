@@ -12,15 +12,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <p class="page-description">Side projects, experiments, and things I'm tinkering with.</p>
     </header>
 
-    <div class="placeholder-state">
-      <div class="placeholder-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 19V5"/>
-          <path d="M5 12l7-7 7 7"/>
-        </svg>
-      </div>
-      <h2>Coming Soon</h2>
-      <p>I'm working on a few side projects that I'll share here once they're ready. Check back soon, or follow along on <a href="https://www.linkedin.com/in/rohitgarrg/" target="_blank" rel="noopener noreferrer">LinkedIn</a> for updates.</p>
+    <div class="projects-grid">
+      <a href="/projects/office-survivors" class="project-card">
+        <div class="project-card-body">
+          <h2>Office Survivors</h2>
+          <p class="project-description">A satirical pixel-art browser game about surviving corporate life. Deliver tasks, dodge chaos agents, and climb from intern to CEO.</p>
+          <div class="project-meta">
+            <span class="project-tag">Phaser 3</span>
+            <span class="project-tag">Built with AI</span>
+          </div>
+        </div>
+        <span class="project-arrow">&rarr;</span>
+      </a>
     </div>
   </div>
 </BaseLayout>
@@ -42,43 +45,62 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     margin-bottom: 0;
   }
 
-  .placeholder-state {
-    text-align: center;
-    padding: var(--space-2xl) var(--space-lg);
-    border: 2px dashed var(--color-border);
-    border-radius: 12px;
-    margin-bottom: var(--space-xl);
+  .projects-grid {
+    display: grid;
+    gap: var(--space-lg);
   }
 
-  .placeholder-icon {
-    color: var(--color-border);
-    margin-bottom: var(--space-md);
+  .project-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s;
   }
 
-  .placeholder-state h2 {
-    font-size: 1.5rem;
-    margin-bottom: var(--space-sm);
-    color: var(--color-text);
+  .project-card:hover {
+    border-color: var(--color-text);
   }
 
-  .placeholder-state p {
+  .project-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .project-description {
     color: var(--color-text-light);
-    max-width: 400px;
-    margin: 0 auto;
     line-height: 1.6;
+    margin-bottom: var(--space-sm);
   }
 
-  .placeholder-state a {
-    font-weight: 500;
+  .project-meta {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+  }
+
+  .project-tag {
+    font-size: 0.8rem;
+    padding: 0.2em 0.6em;
+    background: var(--color-bg-alt, #f5f5f5);
+    border-radius: 4px;
+    color: var(--color-text-light);
+  }
+
+  .project-arrow {
+    font-size: 1.5rem;
+    color: var(--color-text-light);
+    flex-shrink: 0;
+    margin-left: var(--space-md);
   }
 
   @media (max-width: 768px) {
     .page-header {
       padding: var(--space-lg) 0;
-    }
-
-    .placeholder-state {
-      padding: var(--space-xl) var(--space-md);
     }
   }
 </style>
