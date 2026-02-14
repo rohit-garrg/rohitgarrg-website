@@ -1,36 +1,27 @@
 # Design QC - Issues & Fixes
 
 **Reviewed by:** Design QC Skill
-**Date:** January 31, 2026 (Updated)
-**Previous Review:** January 26, 2026
-**Status:** Mostly Resolved - Minor Polish Items Remain
+**Date:** February 2, 2026
+**Previous Reviews:** January 26, 2026; January 31, 2026
+**Status:** Production Ready - Polish Items Only
 
 ---
 
-## January 31, 2026 Update
+## February 2, 2026 Review Summary
 
-**New Article Reviewed:** "The Weekend Website: Planning in Claude, Executing in Claude Code"
+### Major Improvements Since Last Review
 
-### Status of Previous Issues
+The site has seen significant improvements. Most P0 and P1 issues from previous reviews have been **resolved**:
 
-Based on visual review, many P0 and P1 issues from Jan 26 appear **resolved**:
-- [x] Hero now has visual impact (tagline in blue, clear hierarchy)
-- [x] Category tags now use sentence case (e.g., "AI Tools / Productivity")
+- [x] Hero now has clear visual hierarchy (name bold, tagline in accent color)
+- [x] Category tags use proper sentence case ("AI Tools / Productivity")
+- [x] Article cards have excellent hover states (shadow, lift, image zoom)
+- [x] Projects placeholder has clean styling (icon, no dashed border)
+- [x] Navigation works well across all viewport sizes
+- [x] Filter buttons have proper active/hover states with shadow
 - [x] Article subheadings have proper visual hierarchy
-- [x] Projects section has improved styling (icon, no dashed border)
-- [x] Navigation works well on mobile (no horizontal scroll)
-
-### New Article - Specific Notes
-
-The weekend-website-claude-workflow article looks **clean and professional**:
-- Lead image displays correctly with proper responsive sizing
-- Inline images (skills-cycle, workflow-checklist) render well
-- Typography is readable
-- Mobile view works correctly
-
-**Minor items specific to this article:**
-- [ ] **P2**: Two images slightly over 200KB target (skills-cycle.webp: 248KB, workflow-checklist.webp: 204KB) - consider recompressing
-- [ ] **P3**: Inline images could benefit from figure captions for additional context
+- [x] Speaking page cards are consistent
+- [x] Mobile responsive - no horizontal scrolling
 
 ---
 
@@ -42,204 +33,81 @@ The weekend-website-claude-workflow article looks **clean and professional**:
 
 ---
 
-## 1. HOMEPAGE
+## Overall Assessment
+
+**The website is well-designed and production-ready.** It follows a clean, minimal aesthetic with good typography, consistent spacing, and professional appearance. The responsive design works well across desktop and mobile viewports.
+
+### Design Strengths
+- Clean, minimal design with intentional whitespace
+- Consistent card components across Writing and Speaking pages
+- Good typography hierarchy (H1 > H2 > H3 properly sized)
+- Navigation clearly indicates current page (blue accent)
+- Article cards have polished hover states (shadow, lift, subtle background, image zoom)
+- Filter buttons have proper active/hover states with shadow
+- Mobile responsive without horizontal scrolling
+- Professional sticky header
+- Appropriate footer elements
+
+---
+
+## Remaining Issues
 
 ### P0 - Critical
-
-- [ ] **Hero lacks visual impact**: The name "Rohit Garg" is plain black text with no visual distinction. Consider:
-  - Increase font-weight or size for the name
-  - Add subtle letter-spacing
-  - Consider a gradient or accent color treatment for the tagline
-
-### P1 - High
-
-- [ ] **"Latest Writing" section header alignment**: The "View all →" link floats right but doesn't align cleanly with the section title. Make them sit on the same baseline or give clearer visual grouping.
-
-- [ ] **Projects placeholder is underwhelming**: The current "Coming Soon" box looks unfinished. Options:
-  - Add a subtle illustration or icon
-  - Use a more engaging empty state pattern
-  - Remove the dashed border (looks dated)
-  - Consider hiding this section entirely until projects exist
-
-- [ ] **Excessive whitespace above footer**: There's too much empty space between the Projects section and the footer. Reduce bottom margin.
-
-### P2 - Medium
-
-- [ ] **Article card images**: The AI-generated images look generic. Consider:
-  - Adding subtle rounded corners to soften them
-  - Ensuring consistent aspect ratios (currently slightly inconsistent)
-  - Adding a subtle shadow on hover for depth
-
-- [ ] **Category tags are ALL CAPS**: This feels aggressive/shouty. Consider sentence case or title case instead (e.g., "Leadership / Career" instead of "LEADERSHIP / CAREER").
+**None.** The site meets professional standards.
 
 ---
 
-## 2. WRITING PAGE
-
 ### P1 - High
 
-- [ ] **Filter button spacing**: The filter buttons feel cramped. Add more horizontal padding between them (suggest `gap: 12px` instead of current spacing).
-
-- [ ] **Selected state needs more distinction**: The "All" button (selected) only differs by background color. Consider adding a subtle shadow or border to make selection clearer.
-
-### P2 - Medium
-
-- [ ] **Category tags consistency**: Same ALL CAPS issue as homepage. Convert to sentence/title case.
-
-- [ ] **Page description could be bolder**: "Thoughts on product, leadership, AI tools, and personal growth." feels small. Slight increase in font-size or line-height would help.
+#### Speaking Page
+- [ ] **Date format inconsistency with Writing page**: Speaking cards show "December 2025" format while Writing cards show "Jan 30, 2026". Consider standardizing: "Month YYYY" for events, "Mon DD, YYYY" for articles.
 
 ---
 
-## 3. ARTICLE PAGES
-
-### P0 - Critical
-
-- [ ] **Subheadings lack visual hierarchy**: The bold section titles ("The fair credit dictum", "The mistake meeting", etc.) appear as regular bold paragraphs, not proper subheadings. Fix:
-  - Use proper `<h2>` or `<h3>` tags
-  - Increase font-size for subheadings
-  - Add more margin-top before subheadings (suggest 2.5rem)
-  - Consider a subtle accent (like a left border or different font-weight)
-
-### P1 - High
-
-- [ ] **Too many horizontal rules**: The article uses `<hr>` dividers between every section, which fragments the reading experience. Options:
-  - Remove most horizontal rules, keep only 1-2 for major transitions
-  - Replace with extra whitespace instead
-  - If keeping, make them more subtle (lighter color, shorter width)
-
-- [ ] **Inline images need better treatment**:
-  - Images have no captions - add figure/figcaption elements
-  - Images should have consistent max-width (suggest 100% of content width)
-  - Add subtle rounded corners to match article card images
-  - Consider a light border or shadow to separate from content
-
-- [ ] **Hero image is very large**: The featured image at top pushes article content down significantly. Consider:
-  - Reducing max-height
-  - Using a more cinematic aspect ratio (16:9 instead of current)
-
 ### P2 - Medium
 
-- [ ] **Line length on wide screens**: Article text could benefit from a max-width cap to maintain comfortable reading measure (~70-75 characters per line). Currently stretches too wide on large monitors.
+#### Global
+- [ ] **System font stack could be more distinctive**: Currently using system fonts (`-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto`). Consider adding a distinctive body font like `'Source Sans Pro'`, `'DM Sans'`, or `'Libre Franklin'` for brand differentiation with system fonts as fallback.
 
-- [ ] **Blockquote styling**: Quoted text doesn't have visual distinction. Add left border, background, or italics for quotes.
+#### Homepage
+- [ ] **Hero tagline could be slightly more prominent**: The tagline "Product at scale. Built with AI." is good but could benefit from slightly larger font-size or subtle visual treatment.
+
+- [ ] **Social links in hero could have icons**: LinkedIn and Email are text-only. Adding small icons (like on About page) would improve visual consistency.
+
+#### Writing Page
+- [ ] **Filter button touch targets on mobile**: Currently ~32px height. Consider 40px+ for easier mobile tapping while maintaining pill aesthetic.
+
+#### Article Pages
+- [ ] **Inline images are full-width**: Article images stretch to full content width. Consider max-width of ~90% with centered alignment, or subtle border-radius.
+
+- [ ] **No "Next/Previous" article navigation**: After reading, users must use back button or header nav. Adding article navigation at bottom improves reading flow.
+
+#### Speaking Page
+- [ ] **"View details" link could be more prominent**: Currently just blue text. Consider styled button or clearer visual CTA.
+
+#### About Page
+- [ ] **Headshot could be slightly larger on desktop**: Currently adequate but a bit small for hero treatment. Consider 150-180px width.
+
+#### Mobile
+- [ ] **Nav items slightly tight on 375px width**: Currently functional but could benefit from hamburger menu at very small widths (<360px) or slightly shortened labels.
 
 ---
-
-## 4. PROJECTS PAGE
-
-### P1 - High
-
-- [ ] **Empty state needs work**: The placeholder looks like an unfinished page. Improvements:
-  - Remove the dashed border
-  - Add a more engaging illustration (consider a simple line drawing or icon set)
-  - Add more personality to the copy
-  - Consider showing this page only when projects exist, or redirect to homepage
-
-### P2 - Medium
-
-- [ ] **Page feels bare**: Even for a placeholder, there's too much emptiness. Consider:
-  - Adding "What I'm working on" teaser text
-  - Including a newsletter signup or "notify me" option
-
----
-
-## 5. SPEAKING PAGE
-
-### P1 - High
-
-- [ ] **Inconsistent text styling in cards**: The talk title (e.g., "Lessons from 15 Years in Product Management") appears in blue, while the event name is black. This creates visual confusion about what's clickable vs. just text. Make the hierarchy clearer:
-  - Event name: Black, bold
-  - Talk title: Could be blue as link indicator, but needs more consistency
-
-- [ ] **"View details" link inconsistency**: Some cards say "View details →" and others say "View details & photos →". Standardize the pattern.
-
-### P2 - Medium
-
-- [ ] **Cards have excessive height**: There's a lot of internal whitespace in each speaking card. Tighten up the padding.
-
----
-
-## 6. SPEAKING DETAIL PAGE
-
-### P1 - High
-
-- [ ] **Photo grid layout is uneven**: 3 photos display as 2 on top, 1 orphaned below. Fix:
-  - Use CSS grid with consistent sizing
-  - Consider 3 columns, or 2x2 with different sizing
-  - Ensure all photos have the same aspect ratio for clean grid
-
-- [ ] **Button styling inconsistency**: "View presentation" is a solid blue button, "Conference page →" is an outline/ghost button. For a CTA pair, they should have clearer visual hierarchy:
-  - Primary action (presentation): Solid button ✓
-  - Secondary action (external link): Text link or subtle button
-  - Current outline style is fine, but ensure it doesn't compete
-
-### P2 - Medium
-
-- [ ] **Photos lack captions**: Add context about what's happening in each photo.
-
----
-
-## 7. ABOUT PAGE
-
-### P1 - High
-
-- [ ] **"Get in Touch" buttons are oversized**: The LinkedIn and Email buttons are quite large relative to the content. Scale them down slightly or use text links instead.
-
-### P2 - Medium
-
-- [ ] **Heading "About Me" is generic**: Consider a more distinctive title or removing it entirely (the page is self-evident from navigation).
-
-- [ ] **Photo could be more modern**: The circular crop with shadow is a bit dated. Consider:
-  - Square with rounded corners
-  - Slightly smaller size
-  - Different framing (environmental photo vs. headshot)
-
----
-
-## 8. MOBILE RESPONSIVENESS
-
-### P1 - High
-
-- [ ] **Navigation should collapse on small screens**: Currently all nav items display inline, which works for 4 items but:
-  - Could clip on very small screens (320px width)
-  - Consider hamburger menu below 480px breakpoint
-  - At minimum, ensure no horizontal scrolling occurs
-
-### P2 - Medium
-
-- [ ] **Mobile article cards could be tighter**: There's good stacking behavior but the cards have generous padding that could be reduced slightly on mobile for more content density.
-
-- [ ] **About page hero on mobile**: Photo + heading stack nicely, but spacing between could be tightened.
-
----
-
-## 9. GLOBAL / SITE-WIDE
-
-### P1 - High
-
-- [ ] **Category tag styling (ALL CAPS)**: As mentioned multiple times, this appears across homepage, writing page, and article pages. Global CSS change needed to convert to sentence/title case.
-
-- [ ] **Hover states need polish**: Links change color on hover, but interactive elements (cards, buttons) could benefit from:
-  - Subtle scale transform on cards
-  - Background color shift
-  - Smooth transitions (0.2s ease)
-
-- [ ] **Inconsistent link styling**: Some text links are blue, some aren't. Establish clear pattern:
-  - In-content links: Blue with underline on hover
-  - Navigation links: Current color is fine
-  - CTA buttons: Current styling is fine
-
-### P2 - Medium
-
-- [ ] **Footer "Built with Claude Code" text**: This should be more subtle - consider lighter gray text, smaller font-size.
-
-- [ ] **Footer duplicates navigation**: LinkedIn and Email appear in both header (hero) and footer. Consider if footer links are necessary, or differentiate them.
 
 ### P3 - Low
 
-- [ ] **Consider dark mode**: Not required for launch, but the clean design would translate well to dark mode.
+#### Global
+- [ ] **No dark mode**: Optional enhancement. Add CSS custom properties toggle for `prefers-color-scheme: dark`.
 
-- [ ] **Add favicon**: Ensure favicon.ico exists and displays correctly.
+#### Article Pages
+- [ ] **Bold text used for section headers**: The pattern `**Section Title**` creates pseudo-headers. Using actual `### H3` tags provides better semantic structure.
+
+- [ ] **Horizontal rules could be styled**: Default browser styling. Consider shorter width or subtle color.
+
+#### Writing Page
+- [ ] **No empty state for filtered results**: If filtering results in no articles, list appears empty. Consider "No articles in this category yet" message.
+
+#### Footer
+- [ ] **Footer links could have larger touch targets on mobile**: LinkedIn and Email are small text links.
 
 ---
 
@@ -247,21 +115,44 @@ The weekend-website-claude-workflow article looks **clean and professional**:
 
 | Priority | Count |
 |----------|-------|
-| P0 - Critical | 2 |
-| P1 - High | 15 |
-| P2 - Medium | 14 |
-| P3 - Low | 2 |
-| **Total** | **33** |
+| P0 - Critical | 0 |
+| P1 - High | 1 |
+| P2 - Medium | 9 |
+| P3 - Low | 5 |
+| **Total** | **15** |
 
 ---
 
-## Recommended Fix Order
+## Verdict
 
-1. **First pass (P0)**: Hero visual impact, article subheading hierarchy
-2. **Second pass (P1 - Layout)**: Projects empty state, photo grid, mobile nav
-3. **Third pass (P1 - Polish)**: Category tags, link consistency, hover states
-4. **Final pass (P2)**: Spacing refinements, subtle enhancements
+**The site is ready for launch.** There are no critical (P0) issues. The single P1 issue (date format inconsistency) is minor and doesn't break professional appearance.
+
+P2 items are refinements that would elevate the design but aren't blockers. P3 items are nice-to-haves for future iterations.
+
+### Recommended Fix Order
+
+1. **Pre-launch (optional)**: Fix P1 date format consistency
+2. **First iteration**: Address P2 typography and spacing refinements
+3. **Future**: Dark mode, article navigation, mobile hamburger menu
 
 ---
 
-*This QC was conducted by reviewing all pages on desktop (1280px) and mobile (375px) viewports. Screenshots are available in the `.playwright-mcp/` directory for reference.*
+## Screenshots Reference
+
+Desktop screenshots (1280x800) saved to `.playwright-mcp/`:
+- `qc-home-desktop-full.png`
+- `qc-about-desktop-full.png`
+- `qc-writing-desktop-full.png`
+- `qc-article-desktop-full.png`
+- `qc-speaking-desktop-full.png`
+- `qc-projects-desktop-full.png`
+
+Mobile screenshots (375x812):
+- `qc-home-mobile-full.png`
+- `qc-writing-mobile-full.png`
+- `qc-article-mobile-full.png`
+- `qc-about-mobile-full.png`
+
+---
+
+*This QC was conducted by reviewing all pages on desktop (1280px) and mobile (375px) viewports using Playwright automation.*
