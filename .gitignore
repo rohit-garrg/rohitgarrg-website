@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# tooling artifacts
+.playwright-mcp/
+game-title.png
