@@ -14,6 +14,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     <div class="projects-grid">
       <a href="/projects/office-survivors" class="project-card">
+        <img src="/images/projects/office-survivors-og.webp" alt="Office Survivors game screenshot" class="project-thumb" loading="lazy" />
         <div class="project-card-body">
           <h2>Office Survivors</h2>
           <p class="project-description">A satirical pixel-art browser game about surviving corporate life. Deliver tasks, dodge chaos agents, and climb from intern to CEO.</p>
@@ -22,7 +23,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             <span class="project-tag">Built with AI</span>
           </div>
         </div>
-        <span class="project-arrow">&rarr;</span>
       </a>
     </div>
   </div>
@@ -51,12 +51,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .project-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-lg);
+    display: block;
     border: 1px solid var(--color-border);
     border-radius: 8px;
+    overflow: hidden;
     text-decoration: none;
     color: inherit;
     transition: border-color 0.2s;
@@ -64,6 +62,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   .project-card:hover {
     border-color: var(--color-text);
+  }
+
+  .project-thumb {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .project-card-body {
+    padding: var(--space-lg);
   }
 
   .project-card h2 {
@@ -89,13 +97,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     background: var(--color-bg-alt, #f5f5f5);
     border-radius: 4px;
     color: var(--color-text-light);
-  }
-
-  .project-arrow {
-    font-size: 1.5rem;
-    color: var(--color-text-light);
-    flex-shrink: 0;
-    margin-left: var(--space-md);
   }
 
   @media (max-width: 768px) {
