@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Solar System Explorer | Rohit Garg" description="An interactive 3D solar system for kids to explore. Touch, zoom, and discover all the planets and moons." ogImage="/images/projects/solar-system-og.webp">
+  <article class="project-page">
+    <h1>Solar System Explorer</h1>
+    <p class="subtitle">An interactive 3D solar system that kids can touch, explore, and learn from.</p>
+
+    <div class="explorer-wrapper">
+      <iframe
+        id="solar-frame"
+        src="https://solar-system-explorer-liart.vercel.app"
+        width="100%"
+        height="600"
+        style="border: none; display: block; min-height: 500px; border-radius: 8px;"
+        allow="autoplay"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="project-details">
+      <h2>About</h2>
+      <p>Solar System Explorer is a 3D interactive experience built for kids ages 4-8. Drag to orbit, pinch to zoom, and tap any planet or moon to discover fun facts. A time slider lets you speed up or slow down the orbits, and a spacecraft mode lets you fly between worlds.</p>
+      <p>All 9 planets, 12 named moons, an asteroid belt, and 2 comets are explorable — 22 celestial bodies in total. A discovery tracker keeps count of how many you've visited.</p>
+
+      <h2>Features</h2>
+      <ul>
+        <li>Touch-friendly 3D controls (drag, pinch zoom, tap to select)</li>
+        <li>Age-appropriate fact cards for every planet and moon</li>
+        <li>Adjustable time speed (0.1x to 20x)</li>
+        <li>Spacecraft fly-between-planets mode</li>
+        <li>Ambient space audio and per-planet sounds</li>
+        <li>Discovery tracker (22 worlds to explore)</li>
+        <li>Size comparison mode</li>
+      </ul>
+
+      <h2>Built With</h2>
+      <p>React, Three.js (React Three Fiber), Zustand, Tailwind CSS, Vite.</p>
+      <p class="credit">Built with AI as a portfolio experiment.</p>
+    </div>
+  </article>
+
+  <style>
+    .project-page { max-width: 1040px; margin: 0 auto; padding: 2rem 1rem; }
+    .subtitle { font-size: 1.1rem; opacity: 0.7; margin-bottom: 2rem; }
+    .explorer-wrapper {
+      position: relative;
+      width: 100%;
+      margin: 2rem auto;
+      background: #0a0a1a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .explorer-wrapper iframe {
+      width: 100%;
+      height: 600px;
+      min-height: 500px;
+    }
+    .project-details { max-width: 720px; margin: 2rem auto; }
+    .project-details ul {
+      padding-left: 1.5rem;
+      line-height: 1.8;
+    }
+    .credit { margin-top: 2rem; font-style: italic; opacity: 0.7; }
+    @media (max-width: 768px) {
+      .explorer-wrapper iframe {
+        height: 400px;
+        min-height: 400px;
+      }
+    }
+  </style>
+</BaseLayout>
