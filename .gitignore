@@ -26,3 +26,5 @@ pnpm-debug.log*
 # tooling artifacts
 .playwright-mcp/
 game-title.png
+.vercel
+.env*.local
