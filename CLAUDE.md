@@ -8,10 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-**Project not yet initialized.** Once Astro is set up, common commands will be:
-- `npm create astro@latest` - Initialize the project
 - `npm install` - Install dependencies
-- `npm run dev` - Start development server (typically http://localhost:4321)
+- `npm run dev` - Start development server (http://localhost:4321)
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build locally
 
@@ -37,10 +35,9 @@ rohitgarrg.com/
 │   ├── content/
 │   │   ├── writing/
 │   │   │   ├── exceptional-managers.md
-│   │   │   ├── presentation-hack-notebooklm-gamma.md
-│   │   │   └── audiobook-commute-reading-habit.md
-│   │   ├── projects/
-│   │   │   └── (placeholder)
+│   │   │   ├── ai-presentation-workflow.md
+│   │   │   ├── audiobook-commute-reading-habit.md
+│   │   │   └── weekend-website-claude-workflow.md
 │   │   └── speaking/
 │   │       ├── inma-mumbai-2025.md
 │   │       ├── wan-ifra-2025.md
@@ -57,29 +54,44 @@ rohitgarrg.com/
 │   │   │   ├── index.astro
 │   │   │   └── [...slug].astro
 │   │   ├── projects/
-│   │   │   └── index.astro
+│   │   │   ├── index.astro
+│   │   │   ├── office-survivors.astro
+│   │   │   └── solar-system.astro
 │   │   └── speaking/
-│   │       └── index.astro
+│   │       ├── index.astro
+│   │       └── [...slug].astro
 │   │
 │   ├── components/
 │   │   ├── Header.astro
 │   │   ├── Footer.astro
 │   │   ├── ArticleCard.astro
-│   │   ├── ProjectCard.astro
-│   │   └── SpeakingEntry.astro
+│   │   ├── SpeakingEntry.astro
+│   │   └── Lightbox.astro
 │   │
 │   └── styles/
 │       └── global.css
 │
 ├── public/
 │   ├── images/
-│   │   ├── headshot.jpg
-│   │   └── og-image.png
-│   └── favicon.ico
+│   │   ├── headshot.webp
+│   │   ├── writing/
+│   │   │   ├── exceptional-managers/
+│   │   │   ├── ai-presentation-workflow/
+│   │   │   ├── audiobook-commute-reading-habit/
+│   │   │   └── weekend-website-claude-workflow/
+│   │   └── projects/
+│   │       ├── office-survivors-og.webp
+│   │       └── solar-system-og.webp
+│   ├── projects/
+│   │   └── office-survivors/
+│   ├── favicon.svg
+│   ├── favicon.ico
+│   └── robots.txt
 │
 ├── astro.config.mjs
 ├── package.json
-└── README.md
+├── tsconfig.json
+└── .gitignore
 ```
 
 ## Pages to Build
@@ -135,11 +147,11 @@ Articles are tagged with one of these:
 ```yaml
 ---
 title: "Article Title Here"
-slug: article-slug-here
-category: "Category Name"
 description: "One-line description for card preview"
+category: "Category Name"
 date: 2026-01-15
-leadImage: "/images/writing/article-slug/lead.webp"
+leadImage: "/images/writing/article-slug/lead.webp"  # optional
+canonicalUrl: "https://example.com/original"  # optional
 ---
 ```
 
@@ -178,13 +190,16 @@ When adding a lead image to an article:
 
 | Content | Status |
 |---------|--------|
-| Article 1: Exceptional Managers | ✅ Ready |
-| Article 2: Presentation Hack | ✅ Ready |
-| Article 3: Audiobook Journey | ✅ Ready |
+| Article: What 10+ Bosses Taught Me About Exceptional Managers | ✅ Ready |
+| Article: From 7 Hours to 1: My AI Presentation Workflow | ✅ Ready |
+| Article: 38 Audiobooks in 3 Years | ✅ Ready |
+| Article: The Weekend Website: Planning in Claude, Executing in Claude Code | ✅ Ready |
 | About page narrative | ✅ Ready |
-| Speaking entries | ✅ Ready |
-| Headshot | ⏳ User will provide |
-| Projects | Placeholder for now |
+| Speaking entries (3) | ✅ Ready |
+| Projects: Office Survivors, Solar System Explorer | ✅ Live |
+| Headshot | ✅ Ready (headshot.webp) |
+| OG Image | ⏳ Needed (no site-wide og-image) |
+| Favicon | ✅ Ready (svg + ico) |
 
 ## Build Phases
 
