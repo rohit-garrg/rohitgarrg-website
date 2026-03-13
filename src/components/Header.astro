@@ -3,7 +3,7 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header>
-  <div class="container">
+  <div class="container-page">
     <nav>
       <a href="/" class="logo">RG</a>
       <ul class="nav-links">
@@ -16,14 +16,33 @@ const currentPath = Astro.url.pathname;
   </div>
 </header>
 
+<script>
+  const header = document.querySelector('header');
+  let scrolled = false;
+  function updateScroll() {
+    const isScrolled = window.scrollY > 0;
+    if (isScrolled !== scrolled) {
+      scrolled = isScrolled;
+      header?.toggleAttribute('data-scrolled', scrolled);
+    }
+  }
+  window.addEventListener('scroll', updateScroll, { passive: true });
+  updateScroll();
+</script>
+
 <style>
   header {
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid transparent;
     padding: var(--space-md) 0;
     background-color: var(--bg-primary);
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: border-color 0.15s ease;
+  }
+
+  header[data-scrolled] {
+    border-bottom-color: var(--border);
   }
 
   nav {
@@ -64,7 +83,6 @@ const currentPath = Astro.url.pathname;
     color: var(--accent);
   }
 
-  /* Mobile responsive */
   @media (max-width: 768px) {
     .nav-links {
       gap: var(--space-md);

@@ -3,23 +3,17 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 
-// Get articles from content collection, sorted by date (newest first), limit to 3
+// Get articles sorted by date (newest first), limit to 3
 const allArticles = await getCollection('writing');
+const sortedArticles = allArticles.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const latestArticles = sortedArticles.slice(0, 3);
 
-const latestArticles = allArticles
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3)
-  .map(article => {
-    const slug = article.id.replace(/\.md$/, '');
-    return {
-      title: article.data.title,
-      description: article.data.description,
-      category: article.data.category,
-      date: article.data.date,
-      slug,
-      leadImage: article.data.leadImage
-    };
-  });
+function getReadingTime(article: typeof latestArticles[0]): number {
+  return Math.ceil((article.body ?? '').split(/\s+/).length / 200);
+}
+
+const featuredArticle = latestArticles[0];
+const gridArticles = latestArticles.slice(1);
 
 // WebSite schema for homepage
 const websiteSchema = {
@@ -42,15 +36,17 @@ const websiteSchema = {
 
 <BaseLayout>
   <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
-  <div class="container">
+  <div class="container-page">
     <!-- Hero Section -->
     <section class="hero">
-      <h1>Rohit Garg</h1>
-      <p class="tagline">Product at scale. Built with AI.</p>
-      <p class="subtitle">Head of Product & Design at Times of India</p>
-      <div class="social-links">
-        <a href="https://www.linkedin.com/in/rohitgarrg/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:rohitgarrg@gmail.com">Email</a>
+      <div class="hero-content">
+        <h1>Rohit Garg</h1>
+        <p class="subtitle">Head of Product & Design, Times of India</p>
+        <p class="bio">14 years building products at scale.<br />Writing about what actually works.</p>
+        <div class="hero-links">
+          <a href="https://www.linkedin.com/in/rohitgarrg/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="mailto:rohitgarrg@gmail.com">Email</a>
+        </div>
       </div>
     </section>
 
@@ -60,51 +56,74 @@ const websiteSchema = {
         <h2>Latest Writing</h2>
         <a href="/writing" class="view-all">View all →</a>
       </div>
-      <div class="articles-grid">
-        {latestArticles.length > 0 ? (
-          latestArticles.map((article) => (
+      {featuredArticle && (
+        <ArticleCard
+          title={featuredArticle.data.title}
+          description={featuredArticle.data.description}
+          category={featuredArticle.data.category}
+          date={featuredArticle.data.date}
+          slug={featuredArticle.id.replace(/\.md$/, '')}
+          leadImage={featuredArticle.data.leadImage}
+          variant="featured"
+          readingTime={getReadingTime(featuredArticle)}
+        />
+      )}
+      {gridArticles.length > 0 && (
+        <div class="articles-grid">
+          {gridArticles.map((article) => (
             <ArticleCard
-              title={article.title}
-              description={article.description}
-              category={article.category}
-              date={article.date}
-              slug={article.slug}
-              leadImage={article.leadImage}
+              title={article.data.title}
+              description={article.data.description}
+              category={article.data.category}
+              date={article.data.date}
+              slug={article.id.replace(/\.md$/, '')}
+              leadImage={article.data.leadImage}
+              variant="grid"
+              readingTime={getReadingTime(article)}
             />
-          ))
-        ) : (
-          <p class="empty-state">Articles coming soon.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
 
     <!-- Projects Section -->
-    <section class="section section-projects">
+    <section class="section">
       <div class="section-header">
         <h2>Projects</h2>
         <a href="/projects" class="view-all">View all →</a>
       </div>
       <div class="projects-grid">
         <a href="/projects/solar-system" class="project-card">
-          <img src="/images/projects/solar-system-og.webp" alt="Solar System Explorer — interactive 3D solar system" class="project-thumb" loading="lazy" />
+          <div class="project-image">
+            <img src="/images/projects/solar-system-og.webp" alt="Solar System Explorer — interactive 3D solar system" loading="lazy" width="1120" height="630" />
+          </div>
           <div class="project-card-body">
             <h3>Solar System Explorer</h3>
             <p>An interactive 3D solar system for kids. Tap planets, discover fun facts, and fly a spacecraft between worlds.</p>
-            <div class="project-meta">
-              <span class="project-tag">React + Three.js</span>
-              <span class="project-tag">Built with AI</span>
+            <div class="project-tech">
+              <span class="tech-pill">React</span>
+              <span class="tech-pill">Three.js</span>
             </div>
+            <div class="project-process">
+              <span class="ai-pill">Built with AI</span>
+            </div>
+            <span class="project-link">View project →</span>
           </div>
         </a>
         <a href="/projects/office-survivors" class="project-card">
-          <img src="/images/projects/office-survivors-og.webp" alt="Office Survivors game screenshot" class="project-thumb" loading="lazy" />
+          <div class="project-image">
+            <img src="/images/projects/office-survivors-og.webp" alt="Office Survivors game screenshot" loading="lazy" width="1120" height="630" />
+          </div>
           <div class="project-card-body">
             <h3>Office Survivors</h3>
             <p>A satirical pixel-art browser game about surviving corporate life. Deliver tasks, dodge chaos agents, and climb from intern to CEO.</p>
-            <div class="project-meta">
-              <span class="project-tag">Phaser 3</span>
-              <span class="project-tag">Built with AI</span>
+            <div class="project-tech">
+              <span class="tech-pill">Phaser 3</span>
             </div>
+            <div class="project-process">
+              <span class="ai-pill">Built with AI</span>
+            </div>
+            <span class="project-link">View project →</span>
           </div>
         </a>
       </div>
@@ -113,12 +132,13 @@ const websiteSchema = {
 </BaseLayout>
 
 <style>
+  /* Hero */
   .hero {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: var(--space-lg) 0 var(--space-xl) 0;
+    padding: var(--space-3xl) 0 var(--space-2xl) 0;
+  }
+
+  .hero-content {
+    max-width: 66%;
   }
 
   h1 {
@@ -127,13 +147,7 @@ const websiteSchema = {
     font-weight: 600;
     letter-spacing: -0.02em;
     margin-bottom: var(--space-md);
-  }
-
-  .tagline {
-    font-size: 24px;
-    font-weight: 500;
-    color: var(--accent);
-    margin-bottom: var(--space-xs);
+    line-height: 1.1;
   }
 
   .subtitle {
@@ -143,18 +157,31 @@ const websiteSchema = {
     margin-bottom: var(--space-md);
   }
 
-  .social-links {
+  .bio {
+    font-size: var(--text-body);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+  }
+
+  .hero-links {
     display: flex;
     gap: var(--space-md);
   }
 
-  .social-links a {
+  .hero-links a {
     font-size: 15px;
     font-weight: 500;
+    text-decoration: none;
   }
 
+  .hero-links a:hover {
+    text-decoration: underline;
+  }
+
+  /* Sections */
   .section {
-    padding: var(--space-xl) 0;
+    padding: var(--space-2xl) 0;
     border-top: 1px solid var(--border);
   }
 
@@ -173,30 +200,24 @@ const websiteSchema = {
   }
 
   .view-all {
-    font-size: 14px;
+    font-size: var(--text-tag);
     font-weight: 500;
     white-space: nowrap;
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: 6px;
-    transition: background-color 0.2s ease;
   }
 
-  .view-all:hover {
-    background-color: var(--bg-tertiary);
-  }
-
+  /* Articles grid */
   .articles-grid {
     display: grid;
-    gap: var(--space-md);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
   }
 
+  /* Projects grid */
   .projects-grid {
     display: grid;
-    gap: var(--space-md);
-  }
-
-  .section-projects {
-    padding-bottom: var(--space-lg);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
   }
 
   .project-card {
@@ -206,21 +227,37 @@ const websiteSchema = {
     overflow: hidden;
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.2s;
+    background: var(--bg-secondary);
+    transition: border-color 0.2s ease;
   }
 
   .project-card:hover {
-    border-color: var(--text-primary);
+    border-color: var(--border-hover);
   }
 
-  .project-thumb {
+  .project-card:hover h3 {
+    color: var(--accent);
+  }
+
+  .project-image {
+    overflow: hidden;
+  }
+
+  .project-image img {
     width: 100%;
     height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
     display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .project-card:hover .project-image img {
+    transform: scale(1.03);
   }
 
   .project-card-body {
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-lg);
   }
 
   .project-card h3 {
@@ -229,6 +266,7 @@ const websiteSchema = {
     font-weight: 500;
     margin-bottom: var(--space-xs);
     color: var(--text-primary);
+    transition: color 0.2s ease;
   }
 
   .project-card p {
@@ -238,41 +276,63 @@ const websiteSchema = {
     line-height: 1.6;
   }
 
-  .project-meta {
+  .project-tech {
     display: flex;
     gap: var(--space-xs);
     flex-wrap: wrap;
+    margin-bottom: var(--space-sm);
   }
 
-  .project-tag {
+  .tech-pill {
     font-size: var(--text-tag);
-    padding: 2px 8px;
+    padding: 4px 8px;
     background: var(--bg-tertiary);
     border-radius: 4px;
     color: var(--text-secondary);
   }
 
+  .project-process {
+    margin-bottom: var(--space-sm);
+  }
+
+  .ai-pill {
+    font-size: var(--text-tag);
+    padding: 4px 10px;
+    background: var(--accent-subtle);
+    color: var(--accent);
+    border-radius: 4px;
+  }
+
+  .project-link {
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Mobile */
   @media (max-width: 768px) {
     .hero {
-      padding: var(--space-md) 0 var(--space-lg) 0;
+      padding: var(--space-3xl) 0 var(--space-2xl) 0;
     }
 
-    h1 {
-      font-size: 36px;
-      letter-spacing: -0.01em;
-    }
-
-    .tagline {
-      font-size: 20px;
+    .hero-content {
+      max-width: 100%;
     }
 
     .subtitle {
       font-size: 16px;
     }
 
+    .articles-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+
     .section-header {
-      flex-direction: column;
-      gap: var(--space-xs);
+      flex-direction: row;
     }
   }
 </style>

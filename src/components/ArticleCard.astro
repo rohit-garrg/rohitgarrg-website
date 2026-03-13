@@ -6,45 +6,56 @@ interface Props {
   date: Date;
   slug: string;
   leadImage?: string;
+  variant?: 'featured' | 'grid' | 'list';
+  readingTime?: number;
 }
 
-const { title, description, category, date, slug, leadImage } = Astro.props;
+const { title, description, category, date, slug, leadImage, variant = 'list', readingTime } = Astro.props;
 
-// Generate responsive image paths from lead image path
 const thumbImage = leadImage?.replace(/lead\.webp$/, 'lead-thumb.webp');
 const mediumImage = leadImage?.replace(/lead\.webp$/, 'lead-medium.webp');
+
+const imageConfig = {
+  featured: { src: leadImage, sizes: '(max-width: 768px) 100vw, 1120px', width: '1120', height: '630' },
+  grid:     { src: mediumImage, sizes: '(max-width: 768px) 100vw, 548px', width: '548', height: '365' },
+  list:     { src: thumbImage, sizes: '(max-width: 768px) 220px, 200px', width: '400', height: '200' },
+} as const;
+const imgCfg = imageConfig[variant];
 
 const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'short',
   day: 'numeric'
 });
+
+const metaText = readingTime ? `${formattedDate} · ${readingTime} min read` : formattedDate;
 ---
 
-<a href={`/writing/${slug}`} class={`article-card ${leadImage ? 'has-image' : ''}`}>
+<a href={`/writing/${slug}`} class={['article-card', `variant-${variant}`, leadImage && 'has-image'].filter(Boolean).join(' ')} aria-label={title}>
   {leadImage && (
     <div class="card-image">
       <img
-        src={thumbImage}
+        src={imgCfg.src}
         srcset={`${thumbImage} 400w, ${mediumImage} 600w, ${leadImage} 1400w`}
-        sizes="(max-width: 768px) 220px, 200px"
+        sizes={imgCfg.sizes}
         alt={title}
         loading="lazy"
         decoding="async"
-        width="400"
-        height="200"
+        width={imgCfg.width}
+        height={imgCfg.height}
       />
     </div>
   )}
   <div class="card-content">
     <span class="category">{category}</span>
     <h3>{title}</h3>
-    <p class="description">{description}</p>
-    <span class="date">{formattedDate}</span>
+    {variant !== 'grid' && <p class="description">{description}</p>}
+    <span class="meta">{metaText}</span>
   </div>
 </a>
 
 <style>
+  /* === List variant (default, backward-compatible) === */
   .article-card {
     display: block;
     padding: var(--space-lg);
@@ -55,7 +66,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
     transition: border-color 0.2s ease;
   }
 
-  .article-card.has-image {
+  .article-card.has-image.variant-list {
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: var(--space-lg);
@@ -69,7 +80,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
     color: var(--accent);
   }
 
-  .card-image {
+  .variant-list .card-image {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,14 +92,14 @@ const formattedDate = date.toLocaleDateString('en-US', {
     max-height: 140px;
   }
 
-  .card-image img {
+  .variant-list .card-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
   }
 
-  .article-card:hover .card-image img {
+  .article-card.variant-list:hover .card-image img {
     transform: scale(1.03);
   }
 
@@ -101,8 +112,13 @@ const formattedDate = date.toLocaleDateString('en-US', {
     display: inline-block;
     font-size: var(--text-tag);
     font-weight: 500;
+    font-family: var(--font-body);
     color: var(--accent);
-    margin-bottom: var(--space-xs);
+    background: var(--accent-subtle);
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: var(--space-sm);
+    width: fit-content;
   }
 
   h3 {
@@ -122,18 +138,66 @@ const formattedDate = date.toLocaleDateString('en-US', {
     flex-grow: 1;
   }
 
-  .date {
+  .meta {
     font-size: var(--text-meta);
     color: var(--text-tertiary);
   }
 
+  /* === Shared featured + grid === */
+  .variant-featured,
+  .variant-grid {
+    padding: 0;
+    background: var(--bg-secondary);
+    overflow: hidden;
+  }
+
+  .variant-featured .card-image,
+  .variant-grid .card-image {
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .variant-featured .card-image img,
+  .variant-grid .card-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .variant-featured:hover .card-image img,
+  .variant-grid:hover .card-image img {
+    transform: scale(1.03);
+  }
+
+  .variant-featured .card-content,
+  .variant-grid .card-content {
+    padding: var(--space-lg);
+  }
+
+  .variant-featured .category,
+  .variant-grid .category {
+    margin-bottom: 12px;
+  }
+
+  /* === Featured-specific === */
+  .variant-featured .card-image img { aspect-ratio: 16 / 9; }
+  .variant-featured h3 { font-size: var(--text-h2); line-height: 1.3; margin-bottom: var(--space-sm); }
+  .variant-featured .description { margin-bottom: 12px; }
+
+  /* === Grid-specific === */
+  .variant-grid .card-image img { aspect-ratio: 3 / 2; }
+  .variant-grid h3 { font-size: var(--text-h3); line-height: 1.35; margin-bottom: var(--space-sm); }
+
+  /* === Mobile === */
   @media (max-width: 768px) {
-    .article-card.has-image {
+    .article-card.has-image.variant-list {
       grid-template-columns: 1fr;
       gap: var(--space-md);
     }
 
-    .card-image {
+    .variant-list .card-image {
       height: 160px;
       min-height: 160px;
       max-height: 160px;

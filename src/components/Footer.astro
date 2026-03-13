@@ -3,21 +3,12 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer>
-  <div class="container">
-    <div class="footer-content">
-      <div class="footer-left">
-        <p>&copy; {currentYear} Rohit Garg</p>
-      </div>
-      <div class="footer-center">
-        <ul class="social-links">
-          <li><a href="https://www.linkedin.com/in/rohitgarrg/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-          <li><a href="mailto:rohitgarrg@gmail.com">Email</a></li>
-        </ul>
-      </div>
-      <div class="footer-right">
-        <p class="built-with">Built with <a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer">Claude Code</a></p>
-      </div>
-    </div>
+  <div class="container-page footer-inner">
+    <p class="copyright">&copy; {currentYear} Rohit Garg</p>
+    <ul class="social-links">
+      <li><a href="https://www.linkedin.com/in/rohitgarrg/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      <li><a href="mailto:rohitgarrg@gmail.com">Email</a></li>
+    </ul>
   </div>
 </footer>
 
@@ -29,32 +20,13 @@ const currentYear = new Date().getFullYear();
     background-color: var(--bg-primary);
   }
 
-  .footer-content {
+  .footer-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: var(--space-lg);
   }
 
-  .footer-left,
-  .footer-center,
-  .footer-right {
-    flex: 1;
-  }
-
-  .footer-left {
-    text-align: left;
-  }
-
-  .footer-center {
-    text-align: center;
-  }
-
-  .footer-right {
-    text-align: right;
-  }
-
-  .footer-content p {
+  .copyright {
     margin: 0;
     color: var(--text-tertiary);
     font-size: var(--text-meta);
@@ -64,7 +36,6 @@ const currentYear = new Date().getFullYear();
     display: flex;
     list-style: none;
     gap: var(--space-md);
-    justify-content: center;
   }
 
   .social-links a {
@@ -77,36 +48,4 @@ const currentYear = new Date().getFullYear();
     color: var(--accent);
   }
 
-  .footer-content .built-with {
-    font-size: var(--text-tag);
-    color: var(--text-tertiary);
-  }
-
-  .built-with a {
-    color: var(--text-tertiary);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .built-with a:hover {
-    color: var(--accent);
-  }
-
-  /* Mobile responsive */
-  @media (max-width: 768px) {
-    .footer-content {
-      flex-direction: column;
-      text-align: center;
-      gap: var(--space-md);
-    }
-
-    .footer-left,
-    .footer-right {
-      text-align: center;
-    }
-
-    .social-links {
-      justify-content: center;
-    }
-  }
 </style>
