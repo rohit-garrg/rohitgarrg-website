@@ -123,7 +123,7 @@ const breadcrumbSchema = {
     margin-bottom: var(--space-xl);
     border-radius: 12px;
     overflow: hidden;
-    background-color: var(--color-border);
+    background-color: var(--border);
   }
 
   .lead-image img {
@@ -136,26 +136,28 @@ const breadcrumbSchema = {
 
   .back-link {
     display: inline-block;
-    font-size: 0.875rem;
-    color: var(--color-text-light);
+    font-size: var(--text-meta);
+    color: var(--text-secondary);
     margin-bottom: var(--space-lg);
     transition: color 0.2s ease;
   }
 
   .back-link:hover {
-    color: var(--color-accent);
+    color: var(--accent);
   }
 
   .category {
     display: inline-block;
-    font-size: 0.8125rem;
+    font-size: var(--text-tag);
     font-weight: 500;
-    color: var(--color-accent);
+    color: var(--accent);
     margin-bottom: var(--space-sm);
   }
 
   .article-header h1 {
-    font-size: 2.5rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-h1);
+    font-weight: 600;
     line-height: 1.2;
     margin-bottom: var(--space-md);
   }
@@ -164,35 +166,37 @@ const breadcrumbSchema = {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    font-size: 0.9375rem;
-    color: var(--color-text-light);
+    font-size: var(--text-meta);
+    color: var(--text-tertiary);
   }
 
   .separator {
-    color: var(--color-border);
+    color: var(--border);
   }
 
   /* Prose styles for article content - optimized for reading */
   .prose {
-    font-size: 1.125rem;
-    line-height: 1.75;
-    color: var(--color-text);
-    max-width: 65ch;
+    font-size: var(--text-body);
+    line-height: 1.7;
+    color: var(--text-primary);
+    max-width: var(--max-content);
   }
 
   .prose :global(h2) {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin-top: var(--space-xl);
+    font-size: 24px;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    margin-top: 48px;
     margin-bottom: var(--space-md);
   }
 
   .prose :global(h3) {
-    font-size: 1.375rem;
-    font-weight: 600;
-    margin-top: 2rem;
-    margin-bottom: var(--space-sm);
-    color: var(--color-text);
+    font-size: var(--text-h3);
+    font-family: var(--font-heading);
+    font-weight: 500;
+    margin-top: 32px;
+    margin-bottom: 12px;
+    color: var(--text-primary);
   }
 
   .prose :global(p) {
@@ -208,13 +212,13 @@ const breadcrumbSchema = {
   }
 
   .prose :global(a) {
-    color: var(--color-accent);
+    color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
   .prose :global(a:hover) {
-    color: var(--color-accent-hover);
+    color: var(--accent-hover);
   }
 
   .prose :global(ul),
@@ -228,19 +232,19 @@ const breadcrumbSchema = {
   }
 
   .prose :global(blockquote) {
-    border-left: 3px solid var(--color-accent);
-    padding-left: var(--space-md);
+    border-left: 3px solid var(--accent);
+    padding-left: var(--space-lg);
     margin: var(--space-lg) 0;
+    font-family: var(--font-heading);
     font-style: italic;
-    color: var(--color-text-light);
+    color: var(--text-secondary);
   }
 
   .prose :global(hr) {
     border: none;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border);
     margin: var(--space-lg) auto var(--space-sm);
     max-width: 80px;
-    opacity: 0.4;
   }
 
   /* Remove extra top margin from h2 when it follows an hr */
@@ -251,13 +255,13 @@ const breadcrumbSchema = {
   .prose :global(code) {
     font-family: var(--font-mono);
     font-size: 0.9em;
-    background: #f4f4f5;
+    background: var(--bg-secondary);
     padding: 0.15em 0.4em;
     border-radius: 4px;
   }
 
   .prose :global(pre) {
-    background: #f4f4f5;
+    background: var(--bg-secondary);
     padding: var(--space-md);
     border-radius: 8px;
     overflow-x: auto;
@@ -273,9 +277,9 @@ const breadcrumbSchema = {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
-    margin: var(--space-sm) 0;
+    margin: 32px 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border);
     display: block;
   }
 
@@ -288,37 +292,37 @@ const breadcrumbSchema = {
   }
 
   .prose :global(figcaption) {
-    font-size: 0.875rem;
-    color: var(--color-text-light);
+    font-size: var(--text-meta);
+    color: var(--text-tertiary);
     text-align: center;
     font-style: italic;
   }
 
   /* First paragraph styling */
   .prose :global(p:first-of-type) {
-    font-size: 1.25rem;
-    color: var(--color-text-light);
+    font-size: 20px;
+    color: var(--text-secondary);
   }
 
   @media (max-width: 768px) {
     .article-header h1 {
-      font-size: 1.875rem;
+      font-size: 28px;
     }
 
     .prose {
-      font-size: 1rem;
+      font-size: 16px;
     }
 
     .prose :global(h2) {
-      font-size: 1.5rem;
+      font-size: 22px;
     }
 
     .prose :global(h3) {
-      font-size: 1.25rem;
+      font-size: 18px;
     }
 
     .prose :global(p:first-of-type) {
-      font-size: 1.125rem;
+      font-size: 18px;
     }
 
     .meta {

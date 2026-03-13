@@ -122,25 +122,24 @@ const websiteSchema = {
   }
 
   h1 {
-    font-size: 3.5rem;
-    font-weight: 800;
+    font-family: var(--font-heading);
+    font-size: var(--text-hero);
+    font-weight: 600;
     letter-spacing: -0.02em;
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
   }
 
   .tagline {
-    font-size: 1.5rem;
+    font-size: 24px;
     font-weight: 500;
-    background: linear-gradient(135deg, var(--color-accent) 0%, #7c3aed 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent);
     margin-bottom: var(--space-xs);
   }
 
   .subtitle {
-    font-size: 1.125rem;
-    color: var(--color-text-light);
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-secondary);
     margin-bottom: var(--space-md);
   }
 
@@ -150,13 +149,13 @@ const websiteSchema = {
   }
 
   .social-links a {
-    font-size: 0.9375rem;
+    font-size: 15px;
     font-weight: 500;
   }
 
   .section {
     padding: var(--space-xl) 0;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border);
   }
 
   .section-header {
@@ -168,11 +167,13 @@ const websiteSchema = {
   }
 
   .section-header h2 {
+    font-family: var(--font-heading);
+    font-weight: 500;
     margin-bottom: 0;
   }
 
   .view-all {
-    font-size: 0.875rem;
+    font-size: 14px;
     font-weight: 500;
     white-space: nowrap;
     padding: var(--space-xs) var(--space-sm);
@@ -181,7 +182,7 @@ const websiteSchema = {
   }
 
   .view-all:hover {
-    background-color: rgba(37, 99, 235, 0.08);
+    background-color: var(--bg-tertiary);
   }
 
   .articles-grid {
@@ -200,7 +201,7 @@ const websiteSchema = {
 
   .project-card {
     display: block;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border);
     border-radius: 8px;
     overflow: hidden;
     text-decoration: none;
@@ -209,7 +210,7 @@ const websiteSchema = {
   }
 
   .project-card:hover {
-    border-color: var(--color-text);
+    border-color: var(--text-primary);
   }
 
   .project-thumb {
@@ -223,15 +224,17 @@ const websiteSchema = {
   }
 
   .project-card h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-h3);
+    font-weight: 500;
     margin-bottom: var(--space-xs);
-    color: var(--color-text);
-    font-size: 1.125rem;
+    color: var(--text-primary);
   }
 
   .project-card p {
     margin-bottom: var(--space-sm);
-    font-size: 0.9375rem;
-    color: var(--color-text-light);
+    font-size: 15px;
+    color: var(--text-secondary);
     line-height: 1.6;
   }
 
@@ -242,11 +245,11 @@ const websiteSchema = {
   }
 
   .project-tag {
-    font-size: 0.8rem;
-    padding: 0.2em 0.6em;
-    background: var(--color-bg-alt, #f5f5f5);
+    font-size: var(--text-tag);
+    padding: 2px 8px;
+    background: var(--bg-tertiary);
     border-radius: 4px;
-    color: var(--color-text-light);
+    color: var(--text-secondary);
   }
 
   @media (max-width: 768px) {
@@ -255,16 +258,16 @@ const websiteSchema = {
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 36px;
       letter-spacing: -0.01em;
     }
 
     .tagline {
-      font-size: 1.25rem;
+      font-size: 20px;
     }
 
     .subtitle {
-      font-size: 1rem;
+      font-size: 16px;
     }
 
     .section-header {

@@ -47,26 +47,26 @@ const formattedDate = date.toLocaleDateString('en-US', {
 <style>
   .article-card {
     display: block;
-    padding: var(--space-md);
-    border: 1px solid var(--color-border);
+    padding: var(--space-lg);
+    border: 1px solid var(--border);
     border-radius: 8px;
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+    transition: border-color 0.2s ease;
   }
 
   .article-card.has-image {
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: var(--space-lg);
-    padding: var(--space-lg);
   }
 
   .article-card:hover {
-    border-color: var(--color-accent);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    transform: translateY(-2px);
-    background-color: rgba(37, 99, 235, 0.02);
+    border-color: var(--border-hover);
+  }
+
+  .article-card:hover h3 {
+    color: var(--accent);
   }
 
   .card-image {
@@ -74,16 +74,11 @@ const formattedDate = date.toLocaleDateString('en-US', {
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    background-color: var(--color-border);
+    background-color: var(--border);
     overflow: hidden;
     height: 140px;
     min-height: 140px;
     max-height: 140px;
-    transition: box-shadow 0.2s ease;
-  }
-
-  .article-card:hover .card-image {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   .card-image img {
@@ -104,29 +99,32 @@ const formattedDate = date.toLocaleDateString('en-US', {
 
   .category {
     display: inline-block;
-    font-size: 0.8125rem;
+    font-size: var(--text-tag);
     font-weight: 500;
-    color: var(--color-accent);
+    color: var(--accent);
     margin-bottom: var(--space-xs);
   }
 
   h3 {
-    font-size: 1.25rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-h3);
+    font-weight: 500;
     margin-bottom: var(--space-xs);
-    color: var(--color-text);
+    color: var(--text-primary);
+    transition: color 0.2s ease;
   }
 
   .description {
-    font-size: 0.9375rem;
-    color: var(--color-text-light);
+    font-size: 15px;
+    color: var(--text-secondary);
     margin-bottom: var(--space-sm);
     line-height: 1.5;
     flex-grow: 1;
   }
 
   .date {
-    font-size: 0.8125rem;
-    color: var(--color-text-light);
+    font-size: var(--text-meta);
+    color: var(--text-tertiary);
   }
 
   @media (max-width: 768px) {

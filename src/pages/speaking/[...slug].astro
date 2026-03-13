@@ -151,35 +151,37 @@ const breadcrumbSchema = {
   .detail-header {
     margin-bottom: var(--space-xl);
     padding-bottom: var(--space-xl);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border);
   }
 
   .back-link {
     display: inline-block;
-    font-size: 0.875rem;
-    color: var(--color-text-light);
+    font-size: var(--text-meta);
+    color: var(--text-secondary);
     margin-bottom: var(--space-lg);
     transition: color 0.2s ease;
   }
 
   .back-link:hover {
-    color: var(--color-accent);
+    color: var(--accent);
   }
 
   .event-date {
-    font-size: 0.9375rem;
-    color: var(--color-text-light);
+    font-size: 15px;
+    color: var(--text-secondary);
     margin-bottom: var(--space-xs);
   }
 
   .detail-header h1 {
-    font-size: 2.25rem;
-    margin-bottom: var(--space-sm);
+    font-family: var(--font-heading);
+    font-size: var(--text-h1);
+    font-weight: 600;
+    margin-bottom: var(--space-md);
   }
 
   .talk-title {
-    font-size: 1.25rem;
-    color: var(--color-accent);
+    font-size: 20px;
+    color: var(--accent);
     font-weight: 500;
     margin-bottom: 0;
   }
@@ -189,9 +191,9 @@ const breadcrumbSchema = {
   }
 
   .description {
-    font-size: 1.125rem;
+    font-size: 17px;
     line-height: 1.7;
-    color: var(--color-text);
+    color: var(--text-primary);
     margin-bottom: var(--space-lg);
   }
 
@@ -205,38 +207,38 @@ const breadcrumbSchema = {
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    padding: 0.75rem 1.25rem;
-    background-color: var(--color-accent);
-    color: white;
+    padding: 12px 20px;
+    background-color: var(--accent);
+    color: var(--bg-primary);
     border-radius: 8px;
     font-weight: 500;
     transition: background-color 0.2s ease;
   }
 
   .primary-link:hover {
-    background-color: var(--color-accent-hover);
-    color: white;
+    background-color: var(--accent-hover);
+    color: var(--bg-primary);
   }
 
   .secondary-link {
     display: inline-flex;
     align-items: center;
-    padding: 0.75rem 1.25rem;
-    border: 1px solid var(--color-border);
+    padding: 12px 20px;
+    border: 1px solid var(--border);
     border-radius: 8px;
-    color: var(--color-text);
+    color: var(--text-primary);
     font-weight: 500;
     transition: all 0.2s ease;
   }
 
   .secondary-link:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
+    border-color: var(--accent);
+    color: var(--accent);
   }
 
   .photo-gallery {
     padding-top: var(--space-xl);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border);
   }
 
   .photo-gallery h2 {
@@ -244,8 +246,8 @@ const breadcrumbSchema = {
   }
 
   .gallery-hint {
-    font-size: 0.875rem;
-    color: var(--color-text-light);
+    font-size: 14px;
+    color: var(--text-secondary);
     margin-bottom: var(--space-lg);
   }
 
@@ -267,7 +269,7 @@ const breadcrumbSchema = {
   .gallery-item {
     overflow: hidden;
     border-radius: 8px;
-    background-color: var(--color-border);
+    background-color: var(--border);
     cursor: pointer;
     aspect-ratio: 4/3;
     display: flex;
@@ -290,15 +292,15 @@ const breadcrumbSchema = {
 
   @media (max-width: 768px) {
     .detail-header h1 {
-      font-size: 1.75rem;
+      font-size: 28px;
     }
 
     .talk-title {
-      font-size: 1.125rem;
+      font-size: 18px;
     }
 
     .description {
-      font-size: 1rem;
+      font-size: 16px;
     }
 
     .detail-links {

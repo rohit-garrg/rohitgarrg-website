@@ -45,11 +45,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   </article>
 
   <style>
-    .project-page { max-width: 1040px; margin: 0 auto; padding: 2rem 1rem; }
-    .subtitle { font-size: 1.1rem; opacity: 0.7; margin-bottom: 2rem; }
+    .project-page { max-width: 1040px; margin: 0 auto; padding: 32px 16px; }
+    .subtitle { font-size: 17px; color: var(--text-secondary); margin-bottom: 32px; }
     .game-wrapper {
       position: relative; width: 960px; height: 540px;
-      margin: 2rem auto; background: #1a1a2e;
+      margin: 32px auto; background: #1a1a2e;
       border-radius: 8px; overflow: hidden;
     }
     .click-overlay {
@@ -78,8 +78,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     }
     .game-wrapper.fake-fullscreen iframe { width: 100%; height: 100%; }
     .game-wrapper.fake-fullscreen .fullscreen-btn { opacity: 1; }
-    .project-details { max-width: 720px; margin: 2rem auto; }
-    .credit { margin-top: 2rem; font-style: italic; opacity: 0.7; }
+    .project-details { max-width: 720px; margin: 32px auto; }
+    .credit { margin-top: 32px; font-style: italic; color: var(--text-tertiary); }
     @media (max-width: 1000px) {
       .game-wrapper { width: 100%; height: auto; aspect-ratio: 16/9; }
       .game-wrapper iframe { width: 100%; height: 100%; }

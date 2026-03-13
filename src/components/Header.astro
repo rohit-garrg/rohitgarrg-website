@@ -18,9 +18,9 @@ const currentPath = Astro.url.pathname;
 
 <style>
   header {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border);
     padding: var(--space-md) 0;
-    background-color: var(--color-bg);
+    background-color: var(--bg-primary);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -34,14 +34,15 @@ const currentPath = Astro.url.pathname;
   }
 
   .logo {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--color-text);
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
     letter-spacing: -0.02em;
   }
 
   .logo:hover {
-    color: var(--color-accent);
+    color: var(--accent);
   }
 
   .nav-links {
@@ -52,14 +53,15 @@ const currentPath = Astro.url.pathname;
   }
 
   .nav-links a {
-    color: var(--color-text-light);
-    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-size: var(--text-nav);
+    font-weight: 500;
     transition: color 0.2s ease;
   }
 
   .nav-links a:hover,
   .nav-links a.active {
-    color: var(--color-accent);
+    color: var(--accent);
   }
 
   /* Mobile responsive */
@@ -69,25 +71,25 @@ const currentPath = Astro.url.pathname;
     }
 
     .nav-links a {
-      font-size: 0.875rem;
+      font-size: 14px;
     }
   }
 
   @media (max-width: 480px) {
     nav {
-      gap: var(--space-sm);
+      gap: var(--space-md);
     }
 
     .logo {
-      font-size: 1.25rem;
+      font-size: 18px;
     }
 
     .nav-links {
-      gap: var(--space-sm);
+      gap: var(--space-md);
     }
 
     .nav-links a {
-      font-size: 0.8rem;
+      font-size: 13px;
     }
   }
 </style>
