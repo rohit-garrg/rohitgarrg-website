@@ -3,126 +3,90 @@ interface Props {
   slug: string;
   event: string;
   title: string;
-  date: Date;
+  month: string;
   description: string;
-  leadImage?: string;
-  hasGallery?: boolean;
 }
 
-const { slug, event, title, date, description, leadImage, hasGallery } = Astro.props;
-
-const formattedDate = date.toLocaleDateString('en-US', {
-  year: 'numeric',
-  month: 'long'
-});
+const { slug, event, title, month, description } = Astro.props;
 ---
 
-<a href={`/speaking/${slug}/`} class="speaking-entry">
-  {leadImage && (
-    <div class="entry-image">
-      <img src={leadImage} alt={`${event} - ${title}`} loading="lazy" decoding="async" />
-    </div>
-  )}
-  <div class="entry-content">
-    <div class="entry-date">{formattedDate}</div>
-    <h3 class="event-name">{event}</h3>
-    <p class="talk-title">{title}</p>
-    <p class="description">{description}</p>
-    <span class="view-details">
-      View details →
-    </span>
-  </div>
-</a>
+<div class="timeline-entry">
+  <div class="timeline-month">{month}</div>
+  <h3><a href={`/speaking/${slug}/`}>{event}</a></h3>
+  <p class="talk-title">{title}</p>
+  <p class="talk-desc">{description}</p>
+  <a href={`/speaking/${slug}/`} class="view-link">View details →</a>
+</div>
 
 <style>
-  .speaking-entry {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: var(--space-md);
-    padding: var(--space-md);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.2s ease;
-    margin-bottom: var(--space-md);
+  .timeline-entry {
+    position: relative;
+    padding-bottom: var(--space-xl);
   }
 
-  .speaking-entry:hover {
-    border-color: var(--border-hover);
+  .timeline-entry::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--space-lg) - 5px);
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    border: 2px solid var(--bg-primary);
   }
 
-  .entry-image {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    background-color: var(--border);
-    overflow: hidden;
-    max-height: 180px;
-  }
-
-  .entry-image img {
-    width: 100%;
-    height: auto;
-    max-height: 180px;
-    object-fit: contain;
-  }
-
-  .entry-content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-  }
-
-  .entry-date {
+  .timeline-month {
     font-size: var(--text-meta);
     color: var(--text-tertiary);
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
   }
 
-  .event-name {
+  h3 {
     font-family: var(--font-heading);
     font-size: var(--text-h3);
     font-weight: 500;
-    margin: 0;
+    margin-bottom: var(--space-xs);
     color: var(--text-primary);
+  }
+
+  h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h3 a:hover {
+    color: var(--accent);
   }
 
   .talk-title {
     font-size: 15px;
     color: var(--text-secondary);
-    margin: 0;
-    font-weight: 500;
-    font-style: italic;
+    margin-bottom: var(--space-xs);
   }
 
-  .description {
-    font-size: 15px;
-    color: var(--text-secondary);
-    margin: 0;
+  .talk-desc {
+    font-size: var(--text-meta);
+    color: var(--text-tertiary);
     line-height: 1.5;
-    flex-grow: 1;
+    margin-bottom: var(--space-sm);
   }
 
-  .view-details {
+  .view-link {
     font-size: 14px;
     font-weight: 500;
     color: var(--accent);
-    margin-top: var(--space-xs);
+    text-decoration: none;
+  }
+
+  .view-link:hover {
+    color: var(--accent-hover);
   }
 
   @media (max-width: 768px) {
-    .speaking-entry {
-      grid-template-columns: 1fr;
-      gap: var(--space-md);
-    }
-
-    .entry-image {
-      max-height: 200px;
-    }
-
-    .entry-image img {
-      max-height: 200px;
+    .timeline-entry::before {
+      left: calc(-1 * var(--space-md) - 5px);
     }
   }
 </style>

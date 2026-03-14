@@ -6,7 +6,7 @@ import ArticleCard from '../../components/ArticleCard.astro';
 // Get articles from content collection
 const allArticles = await getCollection('writing');
 
-// Transform to usable format - use leadImage from frontmatter
+// Transform to usable format with reading time
 const articles = allArticles.map(article => {
   const slug = article.id.replace(/\.md$/, '');
   return {
@@ -15,12 +15,10 @@ const articles = allArticles.map(article => {
     category: article.data.category,
     date: article.data.date,
     slug,
-    leadImage: article.data.leadImage
+    leadImage: article.data.leadImage,
+    readingTime: Math.ceil((article.body ?? '').split(/\s+/).length / 200),
   };
 });
-
-// Extract unique categories
-const categories = [...new Set(articles.map(a => a.category))];
 
 // Sort articles by date (newest first)
 const sortedArticles = articles.sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -30,63 +28,29 @@ const sortedArticles = articles.sort((a, b) => b.date.getTime() - a.date.getTime
   title="Writing - Rohit Garg"
   description="Articles on product management, leadership, AI tools, and personal development."
 >
-  <div class="container">
+  <div class="container-page">
     <header class="page-header">
       <h1>Writing</h1>
       <p class="page-description">Thoughts on product, leadership, AI tools, and personal growth.</p>
     </header>
 
-    <!-- Category Filter -->
-    <nav class="filter-nav" aria-label="Filter articles by category">
-      <button class="filter-btn active" data-category="all">All</button>
-      {categories.map((category) => (
-        <button class="filter-btn" data-category={category}>{category}</button>
-      ))}
-    </nav>
-
-    <!-- Articles List -->
+    <!-- Articles Grid -->
     <div class="articles-list">
       {sortedArticles.map((article) => (
-        <div class="article-item" data-category={article.category}>
-          <ArticleCard
-            title={article.title}
-            description={article.description}
-            category={article.category}
-            date={article.date}
-            slug={article.slug}
-            leadImage={article.leadImage}
-          />
-        </div>
+        <ArticleCard
+          title={article.title}
+          description={article.description}
+          category={article.category}
+          date={article.date}
+          slug={article.slug}
+          leadImage={article.leadImage}
+          variant="grid"
+          readingTime={article.readingTime}
+        />
       ))}
     </div>
   </div>
 </BaseLayout>
-
-<script>
-  // Category filtering
-  const filterButtons = document.querySelectorAll('.filter-btn');
-  const articleItems = document.querySelectorAll('.article-item');
-
-  filterButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const category = button.getAttribute('data-category');
-
-      // Update active button
-      filterButtons.forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-
-      // Filter articles
-      articleItems.forEach(item => {
-        const itemCategory = item.getAttribute('data-category');
-        if (category === 'all' || itemCategory === category) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    });
-  });
-</script>
 
 <style>
   .page-header {
@@ -107,45 +71,10 @@ const sortedArticles = articles.sort((a, b) => b.date.getTime() - a.date.getTime
     margin-bottom: 0;
   }
 
-  .filter-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: var(--space-lg);
-  }
-
-  .filter-btn {
-    padding: var(--space-sm) 20px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: var(--text-meta);
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .filter-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--bg-tertiary);
-  }
-
-  .filter-btn.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--bg-primary);
-  }
-
   .articles-list {
     display: grid;
-    gap: var(--space-md);
-  }
-
-  .article-item {
-    transition: opacity 0.2s ease;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
   }
 
   @media (max-width: 768px) {
@@ -153,13 +82,8 @@ const sortedArticles = articles.sort((a, b) => b.date.getTime() - a.date.getTime
       padding: var(--space-lg) 0;
     }
 
-    .filter-nav {
-      gap: var(--space-xs);
-    }
-
-    .filter-btn {
-      padding: 6px 12px;
-      font-size: 13px;
+    .articles-list {
+      grid-template-columns: 1fr;
     }
   }
 </style>

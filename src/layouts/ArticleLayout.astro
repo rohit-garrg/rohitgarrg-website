@@ -87,7 +87,11 @@ const breadcrumbSchema = {
   <article class="article">
     <div class="container">
       <header class="article-header">
-        <a href="/writing" class="back-link">← Back to Writing</a>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/writing">Writing</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>{title}</span>
+        </nav>
         <span class="category">{category}</span>
         <h1>{title}</h1>
         <div class="meta">
@@ -121,29 +125,40 @@ const breadcrumbSchema = {
 
   .lead-image {
     margin-bottom: var(--space-xl);
-    border-radius: 12px;
+    border-radius: 8px;
     overflow: hidden;
     background-color: var(--border);
+    aspect-ratio: 16 / 9;
   }
 
   .lead-image img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
-    max-height: 480px;
     object-fit: cover;
   }
 
-  .back-link {
-    display: inline-block;
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
     font-size: var(--text-meta);
     color: var(--text-secondary);
-    margin-bottom: var(--space-lg);
-    transition: color 0.2s ease;
+    margin-bottom: var(--space-md);
   }
 
-  .back-link:hover {
+  .breadcrumb a {
     color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-hover);
+  }
+
+  .breadcrumb-sep {
+    color: var(--text-tertiary);
   }
 
   .category {
@@ -200,7 +215,7 @@ const breadcrumbSchema = {
   }
 
   .prose :global(p) {
-    margin-bottom: var(--space-md);
+    margin-bottom: 1.5em;
   }
 
   .prose :global(strong) {
@@ -214,7 +229,8 @@ const breadcrumbSchema = {
   .prose :global(a) {
     color: var(--accent);
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
   }
 
   .prose :global(a:hover) {
@@ -278,8 +294,6 @@ const breadcrumbSchema = {
     height: auto;
     border-radius: 8px;
     margin: 32px 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border: 1px solid var(--border);
     display: block;
   }
 

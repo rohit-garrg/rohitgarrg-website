@@ -82,7 +82,10 @@ const breadcrumbSchema = {
         <p>
           Outside work, I'm based in Delhi-NCR, usually stuck in traffic between Gurgaon and Noida. I have twin toddlers, which means my reading happens via audiobooks during that commute. (<a href="/writing/audiobook-commute-reading-habit">38 books in the last three years</a> — I wrote about it.) When I'm not doing any of that, I'm probably tinkering with some side project that may or may not go anywhere.
         </p>
+      </section>
 
+      <!-- Mentoring Section -->
+      <section class="mentoring">
         <h2>Mentoring</h2>
         <p>
           I'm open to mentoring folks earlier in their product careers — especially those figuring out the craft, not just the job hunt. If you're working through a real problem and want a sounding board, feel free to reach out. I can't help with referrals or hiring at my current organization, but I'm happy to talk shop.
@@ -120,7 +123,7 @@ const breadcrumbSchema = {
 
   .about-header {
     display: flex;
-    gap: var(--space-xl);
+    gap: var(--space-lg);
     align-items: flex-start;
     margin-bottom: var(--space-xl);
     padding-bottom: var(--space-xl);
@@ -132,8 +135,8 @@ const breadcrumbSchema = {
   }
 
   .headshot {
-    width: 140px;
-    height: 140px;
+    width: 240px;
+    height: 240px;
     border-radius: 12px;
     object-fit: cover;
     background-color: var(--border);
@@ -157,8 +160,27 @@ const breadcrumbSchema = {
   /* Prose styles for narrative */
   .narrative {
     margin-bottom: var(--space-xl);
-    padding-bottom: var(--space-xl);
-    border-bottom: 1px solid var(--border);
+  }
+
+  .mentoring {
+    background: var(--bg-tertiary);
+    padding: var(--space-xl);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin-bottom: var(--space-xl);
+  }
+
+  .mentoring h2 {
+    font-size: var(--text-h2);
+    font-family: var(--font-heading);
+    font-weight: 500;
+    margin-bottom: var(--space-md);
+  }
+
+  .mentoring p {
+    font-size: var(--text-body);
+    line-height: 1.7;
+    margin-bottom: 0;
   }
 
   .prose {
@@ -232,8 +254,9 @@ const breadcrumbSchema = {
     }
 
     .headshot {
-      width: 120px;
-      height: 120px;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
     }
 
     .contact-links {

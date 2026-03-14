@@ -14,10 +14,17 @@ const sortedSpeaking = allSpeaking
     title: entry.data.title,
     date: entry.data.date,
     description: entry.data.description,
-    leadImage: entry.data.leadImage,
-    hasGallery: entry.data.gallery && entry.data.gallery.length > 0
   }))
   .sort((a, b) => b.date.getTime() - a.date.getTime());
+
+// Group by year
+const groupedByYear = sortedSpeaking.reduce((acc, entry) => {
+  const year = entry.date.getFullYear().toString();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(entry);
+  return acc;
+}, {} as Record<string, typeof sortedSpeaking>);
+const years = Object.keys(groupedByYear).sort((a, b) => Number(b) - Number(a));
 ---
 
 <BaseLayout
@@ -30,23 +37,29 @@ const sortedSpeaking = allSpeaking
       <p class="page-description">Talks and presentations at industry events and institutions.</p>
     </header>
 
-    <div class="speaking-list">
-      {sortedSpeaking.length > 0 ? (
-        sortedSpeaking.map((entry) => (
-          <SpeakingEntry
-            slug={entry.slug}
-            event={entry.event}
-            title={entry.title}
-            date={entry.date}
-            description={entry.description}
-            leadImage={entry.leadImage}
-            hasGallery={entry.hasGallery}
-          />
-        ))
-      ) : (
-        <p class="empty-state">Speaking engagements coming soon.</p>
-      )}
-    </div>
+    {years.length > 0 ? (
+      years.map((year) => (
+        <div class="year-group">
+          <h2>{year}</h2>
+          <div class="timeline">
+            {groupedByYear[year].map((entry) => {
+              const month = entry.date.toLocaleDateString('en-US', { month: 'long' });
+              return (
+                <SpeakingEntry
+                  slug={entry.slug}
+                  event={entry.event}
+                  title={entry.title}
+                  month={month}
+                  description={entry.description}
+                />
+              );
+            })}
+          </div>
+        </div>
+      ))
+    ) : (
+      <p class="empty-state">Speaking engagements coming soon.</p>
+    )}
   </div>
 </BaseLayout>
 
@@ -54,7 +67,7 @@ const sortedSpeaking = allSpeaking
   .page-header {
     padding: var(--space-xl) 0;
     border-bottom: 1px solid var(--border);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
   }
 
   .page-header h1 {
@@ -68,8 +81,20 @@ const sortedSpeaking = allSpeaking
     margin-bottom: 0;
   }
 
-  .speaking-list {
-    padding-bottom: var(--space-xl);
+  .year-group {
+    margin-bottom: var(--space-xl);
+  }
+
+  .year-group h2 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    margin-bottom: var(--space-lg);
+  }
+
+  .timeline {
+    border-left: 2px solid var(--border);
+    padding-left: var(--space-lg);
+    margin-left: var(--space-sm);
   }
 
   .empty-state {
@@ -81,6 +106,10 @@ const sortedSpeaking = allSpeaking
   @media (max-width: 768px) {
     .page-header {
       padding: var(--space-lg) 0;
+    }
+
+    .timeline {
+      padding-left: var(--space-md);
     }
   }
 </style>
