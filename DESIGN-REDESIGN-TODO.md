@@ -6,7 +6,7 @@ Read `docs/design-handoff.md` before starting any work. It contains the design d
 
 ## Current status
 
-Phase: IN PROGRESS (Phase 1)
+Phase: Phase 4 complete (pending OG image). Phases 1–4 done except noted gaps.
 
 ## Phase 1: Foundation
 
@@ -21,20 +21,20 @@ Phase: IN PROGRESS (Phase 1)
 
 ## Phase 2: Homepage
 
-- [ ] Redesign the hero section. Change from centered to left-aligned. New structure: name at 56px/Newsreader 600, role at 20px/IBM Plex Sans 300, two-line bio ("14 years building products at scale. / Writing about what actually works."), LinkedIn and Email as accent-colored text links. Remove the old tagline ("Product at scale. Built with AI."). See `docs/design-handoff.md` for the exact layout spec.
-- [ ] Implement the "Latest Writing" section with a featured card for the most recent post (full-width, 16:9 image, larger title) and a 2-column grid for older posts (3:2 images, smaller titles). Add reading time estimates to card metadata (format: "Jan 31, 2026 · 5 min read"). See `docs/design-handoff.md` for card structure details.
-- [ ] Update project cards: 2-column grid, 16:9 images, separate "Built with AI" pill from tech stack pills (different styling), add explicit "View project →" link in accent color. Whole card should also be clickable.
-- [ ] Clean up the footer. Remove the "Built with Claude Code" line entirely. Footer should contain only: © 2026 Rohit Garg, LinkedIn link, Email link.
-- [ ] Update the nav: "RG" in Newsreader 600 at 20px (no background shape). Nav links in IBM Plex Sans 500 at 15px. Active page indicated by accent-colored text. Sticky nav with a 1px bottom border that only appears on scroll.
+- [x] Redesign the hero section. Change from centered to left-aligned. New structure: name at 56px/Newsreader 600, role at 20px/IBM Plex Sans 300, two-line bio ("14 years building products at scale. / Writing about what actually works."), LinkedIn and Email as accent-colored text links. Remove the old tagline ("Product at scale. Built with AI."). See `docs/design-handoff.md` for the exact layout spec.
+- [x] Implement the "Latest Writing" section with a featured card for the most recent post (full-width, 16:9 image, larger title) and a 2-column grid for older posts (3:2 images, smaller titles). Add reading time estimates to card metadata (format: "Jan 31, 2026 · 5 min read"). See `docs/design-handoff.md` for card structure details.
+- [x] Update project cards: 2-column grid, 16:9 images, separate "Built with AI" pill from tech stack pills (different styling), add explicit "View project →" link in accent color. Whole card should also be clickable.
+- [x] Clean up the footer. Remove the "Built with Claude Code" line entirely. Footer should contain only: © 2026 Rohit Garg, LinkedIn link, Email link.
+- [x] Update the nav: "RG" in Newsreader 600 at 20px (no background shape). Nav links in IBM Plex Sans 500 at 15px. Active page indicated by accent-colored text. Sticky nav with a 1px bottom border that only appears on scroll.
 
 **QC before moving on:** Homepage should look distinctly different from before. Hero is left-aligned with clear hierarchy. Cards have editorial treatment with featured/grid distinction. Footer is clean. Nav feels considered.
 
 ## Phase 3: Content pages
 
-- [ ] **/writing page:** Remove the category filter tabs. All articles in a 2-column card grid, chronological order. Same card design as the homepage grid cards (not the featured card). No featured treatment here.
-- [ ] **/speaking page:** Replace the current card layout with a vertical timeline. Year as section header. Each entry shows: month, event/venue name (primary, bold), talk title (secondary), short description, "View details →" link. See `docs/design-handoff.md` for the timeline layout spec.
-- [ ] **/about page:** Side-by-side layout on desktop (headshot left, text right), stacked on mobile. Headshot: 240px wide, border-radius 12px (not circular). Give the Mentoring section a visual break (hr or bg-tertiary background). Don't change any of the existing copy.
-- [ ] **Article pages (/writing/[slug]):** Update typography and spacing per the spec in `docs/design-handoff.md`. Key changes: lead image at max 680px with 8px border-radius, body at 17px/1.7 line-height, H2 at 24px Newsreader with 48px top margin, blockquotes with left border in accent color, links accent-colored with underline on hover only. Replace "← Back to Writing" with a breadcrumb: "Writing / Article Title" where "Writing" is a link.
+- [x] **/writing page:** Remove the category filter tabs. All articles in a 2-column card grid, chronological order. Same card design as the homepage grid cards (not the featured card). No featured treatment here.
+- [x] **/speaking page:** Replace the current card layout with a vertical timeline. Year as section header. Each entry shows: month, event/venue name (primary, bold), talk title (secondary), short description, "View details →" link. See `docs/design-handoff.md` for the timeline layout spec.
+- [x] **/about page:** Side-by-side layout on desktop (headshot left, text right), stacked on mobile. Headshot: 240px wide, border-radius 12px (not circular). Give the Mentoring section a visual break (hr or bg-tertiary background). Don't change any of the existing copy.
+- [x] **Article pages (/writing/[slug]):** Update typography and spacing per the spec in `docs/design-handoff.md`. Key changes: lead image at max 680px with 8px border-radius, body at 17px/1.7 line-height, H2 at 24px Newsreader with 48px top margin, blockquotes with left border in accent color, links accent-colored with underline on hover only. Replace "← Back to Writing" with a breadcrumb: "Writing / Article Title" where "Writing" is a link.
 
 **QC before moving on:** Visit each page. Check that typography is consistent, layouts match the spec, and nothing is broken on mobile (375px viewport).
 
