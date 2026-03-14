@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page Not Found - Rohit Garg"
+  description="The page you're looking for doesn't exist."
+>
+  <div class="container">
+    <div class="not-found">
+      <h1 class="error-code">404</h1>
+      <p class="error-message">This page doesn't exist.</p>
+      <nav class="error-nav">
+        <a href="/">Home</a>
+        <a href="/writing">Writing</a>
+        <a href="/about">About</a>
+      </nav>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-3xl) 0;
+    min-height: 50vh;
+  }
+
+  .error-code {
+    font-family: var(--font-heading);
+    font-size: 80px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    line-height: 1;
+  }
+
+  .error-message {
+    color: var(--text-secondary);
+    font-size: var(--text-body);
+    margin-bottom: var(--space-xl);
+  }
+
+  .error-nav {
+    display: flex;
+    gap: var(--space-lg);
+  }
+
+  .error-nav a {
+    font-weight: 500;
+    font-size: var(--text-body);
+  }
+</style>

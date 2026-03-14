@@ -14,7 +14,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     <div class="projects-grid">
       <a href="/projects/solar-system" class="project-card">
-        <img src="/images/projects/solar-system-og.webp" alt="Solar System Explorer screenshot" class="project-thumb" loading="lazy" />
+        <div class="project-image">
+          <img src="/images/projects/solar-system-og.webp" alt="Solar System Explorer screenshot" loading="lazy" width="1200" height="675" />
+        </div>
         <div class="project-card-body">
           <h2>Solar System Explorer</h2>
           <p class="project-description">An interactive 3D solar system for kids. Tap planets, discover fun facts, fly a spacecraft between worlds, and explore all 22 celestial bodies.</p>
@@ -26,7 +28,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </a>
 
       <a href="/projects/office-survivors" class="project-card">
-        <img src="/images/projects/office-survivors-og.webp" alt="Office Survivors game screenshot" class="project-thumb" loading="lazy" />
+        <div class="project-image">
+          <img src="/images/projects/office-survivors-og.webp" alt="Office Survivors game screenshot" loading="lazy" width="1200" height="675" />
+        </div>
         <div class="project-card-body">
           <h2>Office Survivors</h2>
           <p class="project-description">A satirical pixel-art browser game about surviving corporate life. Deliver tasks, dodge chaos agents, and climb from intern to CEO.</p>
@@ -74,13 +78,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .project-card:hover {
-    border-color: var(--text-primary);
+    border-color: var(--border-hover);
   }
 
-  .project-thumb {
+  .project-image {
+    overflow: hidden;
+  }
+
+  .project-image img {
     width: 100%;
     height: auto;
     display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+  }
+
+  .project-card:hover .project-image img {
+    transform: scale(1.03);
   }
 
   .project-card-body {
@@ -92,6 +107,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     font-size: var(--text-h3);
     font-weight: 500;
     margin-bottom: var(--space-xs);
+    transition: color 0.2s ease;
+  }
+
+  .project-card:hover h2 {
+    color: var(--accent);
   }
 
   .project-description {

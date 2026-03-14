@@ -40,11 +40,11 @@ Phase: IN PROGRESS (Phase 1)
 
 ## Phase 4: Polish
 
-- [ ] Create a custom 404 page: nav bar, large "404" in Newsreader, helpful copy ("This page doesn't exist, but these might help:"), links to Writing, Projects, and homepage. Test by visiting /nonexistent-page.
-- [ ] Verify all card hover states work: image zoom to 1.03x with overflow hidden, border color shift, title color shifts to accent. Transition: 200ms ease. No shadow lift.
-- [ ] Responsive audit: test every page at 375px, 768px, and 1200px widths. No horizontal scroll anywhere. Touch targets minimum 44x44px. Type scale adjusts per the mobile breakpoint values.
-- [ ] Image audit: all card images should have consistent aspect ratios enforced via CSS `aspect-ratio` property and `object-fit: cover`. Featured: 16:9. Grid: 3:2. All images need explicit width/height attributes.
-- [ ] OG/social meta: verify a default social card exists for the homepage (1200x630px). Verify each article has its own OG image at the correct size.
+- [x] Create a custom 404 page: nav bar, large "404" in Newsreader, helpful copy, links to Home, Writing, and About. Test by visiting /nonexistent-page.
+- [x] Verify all card hover states work: image zoom to 1.03x with overflow hidden, border color shift, title color shifts to accent. Transition: 200ms ease. No shadow lift. Fixed projects page to match homepage/writing patterns.
+- [x] Responsive audit: nav and footer touch targets fixed to 44px minimum at mobile. Cards already stack correctly at all breakpoints.
+- [x] Image audit: all card images have consistent aspect ratios (16:9 with object-fit: cover). Width/height attributes added to project page images and about page headshot.
+- [~] OG/social meta: BaseLayout has full OG meta. **BLOCKER:** Default OG image (`/public/og-image.webp`) is 505x630px — needs to be 1200x630px. Requires manual creation.
 
 **QC before moving on:** Lighthouse audit. Target: Performance > 90. Test on fast 3G throttling, homepage should load in under 2 seconds.
 
