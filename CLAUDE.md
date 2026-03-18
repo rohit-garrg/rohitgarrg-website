@@ -37,7 +37,8 @@ rohitgarrg.com/
 │   │   │   ├── exceptional-managers.md
 │   │   │   ├── ai-presentation-workflow.md
 │   │   │   ├── audiobook-commute-reading-habit.md
-│   │   │   └── weekend-website-claude-workflow.md
+│   │   │   ├── weekend-website-claude-workflow.md
+│   │   │   └── not-your-job-title.md
 │   │   └── speaking/
 │   │       ├── inma-mumbai-2025.md
 │   │       ├── wan-ifra-2025.md
@@ -194,11 +195,12 @@ When adding a lead image to an article:
 | Article: From 7 Hours to 1: My AI Presentation Workflow | ✅ Ready |
 | Article: 38 Audiobooks in 3 Years | ✅ Ready |
 | Article: The Weekend Website: Planning in Claude, Executing in Claude Code | ✅ Ready |
+| Article: You Are Not Your Job Title | ✅ Ready |
 | About page narrative | ✅ Ready |
 | Speaking entries (3) | ✅ Ready |
 | Projects: Office Survivors, Solar System Explorer | ✅ Live |
 | Headshot | ✅ Ready (headshot.webp) |
-| OG Image | ⏳ Needed (no site-wide og-image) |
+| OG Image | ✅ Ready (og-image.webp) |
 | Favicon | ✅ Ready (svg + ico) |
 
 ## Build Phases
