@@ -51,6 +51,7 @@ rohitgarrg.com/
 │   ├── pages/
 │   │   ├── index.astro
 │   │   ├── about.astro
+│   │   ├── 404.astro
 │   │   ├── writing/
 │   │   │   ├── index.astro
 │   │   │   └── [...slug].astro
@@ -79,12 +80,25 @@ rohitgarrg.com/
 │   │   │   ├── exceptional-managers/
 │   │   │   ├── ai-presentation-workflow/
 │   │   │   ├── audiobook-commute-reading-habit/
-│   │   │   └── weekend-website-claude-workflow/
+│   │   │   ├── weekend-website-claude-workflow/
+│   │   │   └── not-your-job-title/
+│   │   ├── speaking/
+│   │   │   ├── inma-mumbai-2025/
+│   │   │   ├── wan-ifra-2025/
+│   │   │   └── iim-lucknow-2025/
 │   │   └── projects/
 │   │       ├── office-survivors-og.webp
 │   │       └── solar-system-og.webp
 │   ├── projects/
 │   │   └── office-survivors/
+│   ├── presentations/
+│   │   ├── inma-mumbai-2025.pdf
+│   │   └── wan-ifra-2025.pdf
+│   ├── planetia/
+│   │   ├── privacy/
+│   │   └── support/
+│   ├── og-image.webp
+│   ├── apple-touch-icon.png
 │   ├── favicon.svg
 │   ├── favicon.ico
 │   └── robots.txt
