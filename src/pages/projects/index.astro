@@ -13,6 +13,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </header>
 
     <div class="projects-grid">
+      <!-- Links to /planetia (root route, not /projects/planetia) — privacy and support pages live at /planetia/* as static HTML -->
+      <a href="/planetia" class="project-card">
+        <div class="project-image">
+          <!-- TODO: Add Planetia OG image at /images/planetia/planetia-og.webp (1200x675) -->
+          <img src="/og-image.webp" alt="Planetia — Solar System for Kids" loading="lazy" width="1200" height="675" />
+        </div>
+        <div class="project-card-body">
+          <h2>Planetia</h2>
+          <p class="project-description">An interactive 3D solar system for kids ages 5–9. Explore planets, take quizzes, paint Jupiter purple, and build your own solar system.</p>
+          <div class="project-meta">
+            <span class="project-tag">SwiftUI</span>
+            <span class="project-tag">RealityKit</span>
+            <span class="project-tag">Built with AI</span>
+          </div>
+        </div>
+      </a>
+
       <a href="/projects/solar-system" class="project-card">
         <div class="project-image">
           <img src="/images/projects/solar-system-og.webp" alt="Solar System Explorer screenshot" loading="lazy" width="1200" height="675" />

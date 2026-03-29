@@ -1,0 +1,265 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<!-- TODO: Replace ogImage with /images/planetia/planetia-og.webp when a real OG image is created (1200x675) -->
+<BaseLayout
+  title="Planetia — Solar System for Kids | Rohit Garg"
+  description="Planetia is a free iPad app that lets kids ages 5–9 explore, customize, and build 3D solar systems. No ads, no tracking. Built by a dad for his kids."
+  ogImage="/og-image.webp"
+>
+  <article class="planetia-page">
+
+    <!-- Hero -->
+    <section class="planetia-hero">
+      <h1>Planetia — Solar System for Kids</h1>
+      <p class="tagline">An interactive 3D solar system built for curious kids (and the parents who can't answer all their space questions).</p>
+      <div class="hero-intro">
+        <p>Planetia is an iPad app for children ages 5–9. Six modes to explore, compare, quiz, customize, and build their own solar systems. 3D planets rendered with RealityKit. No ads. No in-app purchases. No data collection. Just space.</p>
+      </div>
+      <a href="https://apps.apple.com/us/app/planetia/id6760576240" class="app-store-link" data-location="hero" target="_blank" rel="noopener">
+        <img src="/images/planetia/app-store-badge.svg" alt="Download Planetia on the App Store" width="120" height="40" />
+      </a>
+    </section>
+
+    <!-- Screenshots -->
+    <!-- TODO: Replace placeholders with actual iPad screenshots (WebP, ~750px wide, 3:4 portrait ratio) -->
+    <!-- Save as: public/images/planetia/screenshot-1.webp through screenshot-5.webp -->
+    <section class="screenshots">
+      <div class="screenshots-row">
+        <div class="screenshot-placeholder">Explore</div>
+        <div class="screenshot-placeholder">Compare</div>
+        <div class="screenshot-placeholder">Quiz</div>
+        <div class="screenshot-placeholder">What If?</div>
+        <div class="screenshot-placeholder">Build</div>
+      </div>
+    </section>
+
+    <!-- What kids can do -->
+    <section class="planetia-content">
+      <h2>What kids can do</h2>
+      <div class="features-prose">
+        <p><strong>Explore</strong> — Fly through an interactive 3D solar system. Tap any planet to see facts, stats, and details written for kids who ask "but why?" a lot.</p>
+        <p><strong>Compare</strong> — See all the planets lined up by size, or spread out by distance from the Sun. The kind of visual that makes Jupiter's scale actually click.</p>
+        <p><strong>Quiz</strong> — True or false, multiple choice, find-the-planet, and put-them-in-order challenges. Kids earn badges and climb ranks from Space Cadet to Admiral. A daily question builds a streak.</p>
+        <p><strong>Customize</strong> — Pick colors and paint any planet. Add stripes, polka dots, hearts, stars. Make Mars purple. Creative play meets space science.</p>
+        <p><strong>What If?</strong> — What happens if Jupiter disappears? What if Earth had two suns? Kids change the rules and watch what happens to the orbits. Real gravitational physics, made playful. They can also build custom experiments from scratch.</p>
+        <p><strong>Build Your Own</strong> — Place stars, planets, and moons wherever you want. Set colors, sizes, orbit speeds. Then switch to gravity mode and see if your creation survives real physics.</p>
+      </div>
+    </section>
+
+    <!-- Why I built this -->
+    <section class="planetia-content">
+      <h2>Why I built this</h2>
+      <p>My kids are obsessed with space. One of them asks questions I have to Google ("Dad, what happens if two planets crash?"). The other wants to paint Jupiter purple and give it three rings.</p>
+      <p>I couldn't find an app that did both — teach real science and let kids mess around creatively. So I built one. I had zero Swift experience when I started. The entire app was built using Claude Code as my primary development tool, with me writing specs and prompts and Claude writing the code. It took months of evenings and weekends. My kids were the test team. They're the harshest testers you'll find — if something's boring, they just walk away from the iPad.</p>
+    </section>
+
+    <!-- Details -->
+    <section class="planetia-content">
+      <h2>Details</h2>
+      <dl class="details-grid">
+        <div>
+          <dt>Platform</dt>
+          <dd>iPad only</dd>
+        </div>
+        <div>
+          <dt>Ages</dt>
+          <dd>5–9</dd>
+        </div>
+        <div>
+          <dt>Price</dt>
+          <dd>Free. Everything included, nothing locked.</dd>
+        </div>
+        <div>
+          <dt>Size</dt>
+          <dd>15.5 MB</dd>
+        </div>
+        <div>
+          <dt>Built with</dt>
+          <dd>SwiftUI, RealityKit</dd>
+        </div>
+        <div>
+          <dt>Data collection</dt>
+          <dd>None. No analytics, no tracking, no accounts. COPPA compliant.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="planetia-cta">
+      <a href="https://apps.apple.com/us/app/planetia/id6760576240" class="app-store-link" data-location="cta" target="_blank" rel="noopener">
+        <img src="/images/planetia/app-store-badge.svg" alt="Download Planetia on the App Store" width="120" height="40" />
+      </a>
+    </section>
+
+    <!-- Footer links -->
+    <nav class="planetia-links">
+      <a href="/planetia/privacy">Privacy Policy</a>
+      <span aria-hidden="true">&middot;</span>
+      <a href="/planetia/support">Support</a>
+    </nav>
+
+  </article>
+</BaseLayout>
+
+<style>
+  .planetia-page {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 32px 16px;
+  }
+
+  /* Hero */
+  .planetia-hero {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .tagline {
+    font-size: 17px;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-intro {
+    max-width: 720px;
+    margin: 0 auto var(--space-xl);
+    text-align: left;
+  }
+
+  .hero-intro p {
+    line-height: 1.7;
+  }
+
+  .app-store-link {
+    display: inline-block;
+  }
+
+  .app-store-link img {
+    height: 54px;
+    width: auto;
+  }
+
+  /* Screenshots */
+  .screenshots {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .screenshots-row {
+    display: flex;
+    gap: var(--space-md);
+    overflow-x: auto;
+    padding: var(--space-sm) 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .screenshot-placeholder {
+    flex: 0 0 auto;
+    width: 200px;
+    aspect-ratio: 3 / 4;
+    background: var(--bg-tertiary);
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    font-size: var(--text-meta);
+  }
+
+  /* Content sections */
+  .planetia-content {
+    max-width: 720px;
+    margin: 0 auto var(--space-2xl);
+  }
+
+  .planetia-content h2 {
+    margin-bottom: var(--space-lg);
+  }
+
+  .planetia-content p {
+    line-height: 1.7;
+    margin-bottom: var(--space-md);
+  }
+
+  /* Features prose */
+  .features-prose p strong {
+    color: var(--text-primary);
+  }
+
+  /* Details grid */
+  .details-grid {
+    display: grid;
+    gap: var(--space-sm);
+    margin: 0;
+    padding: 0;
+  }
+
+  .details-grid > div {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: var(--space-lg);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .details-grid > div:last-child {
+    border-bottom: none;
+  }
+
+  .details-grid dt {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .details-grid dd {
+    margin: 0;
+  }
+
+  /* Bottom CTA */
+  .planetia-cta {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* Footer links */
+  .planetia-links {
+    text-align: center;
+    font-size: var(--text-meta);
+    color: var(--text-tertiary);
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .planetia-links a {
+    color: var(--text-secondary);
+  }
+
+  .planetia-links a:hover {
+    color: var(--accent);
+  }
+
+  .planetia-links span {
+    margin: 0 var(--space-sm);
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .planetia-page {
+      padding: 24px 18px;
+    }
+
+    .screenshot-placeholder {
+      width: 160px;
+    }
+
+    .details-grid > div {
+      grid-template-columns: 1fr;
+      gap: var(--space-xs);
+    }
+  }
+</style>
