@@ -9,6 +9,7 @@ const currentPath = Astro.url.pathname;
       <ul class="nav-links">
         <li><a href="/writing" class={currentPath.startsWith('/writing') ? 'active' : ''}>Writing</a></li>
         <li><a href="/projects" class={currentPath.startsWith('/projects') ? 'active' : ''}>Projects</a></li>
+        <li><a href="/planetia" class={currentPath.startsWith('/planetia') ? 'active' : ''}>Planetia</a></li>
         <li><a href="/speaking" class={currentPath.startsWith('/speaking') ? 'active' : ''}>Speaking</a></li>
         <li><a href="/about" class={currentPath === '/about' ? 'active' : ''}>About</a></li>
       </ul>
@@ -103,7 +104,7 @@ const currentPath = Astro.url.pathname;
     }
 
     .nav-links {
-      gap: var(--space-md);
+      gap: var(--space-sm);
     }
 
     .nav-links li {

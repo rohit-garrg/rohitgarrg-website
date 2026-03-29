@@ -2,11 +2,10 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<!-- TODO: Replace ogImage with /images/planetia/planetia-og.webp when a real OG image is created (1200x675) -->
 <BaseLayout
   title="Planetia — Solar System for Kids | Rohit Garg"
   description="Planetia is a free iPad app that lets kids ages 5–9 explore, customize, and build 3D solar systems. No ads, no tracking. Built by a dad for his kids."
-  ogImage="/og-image.webp"
+  ogImage="/images/planetia/planetia-og.webp"
 >
   <article class="planetia-page">
 
@@ -23,15 +22,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </section>
 
     <!-- Screenshots -->
-    <!-- TODO: Replace placeholders with actual iPad screenshots (WebP, ~750px wide, 3:4 portrait ratio) -->
-    <!-- Save as: public/images/planetia/screenshot-1.webp through screenshot-5.webp -->
     <section class="screenshots">
-      <div class="screenshots-row">
-        <div class="screenshot-placeholder">Explore</div>
-        <div class="screenshot-placeholder">Compare</div>
-        <div class="screenshot-placeholder">Quiz</div>
-        <div class="screenshot-placeholder">What If?</div>
-        <div class="screenshot-placeholder">Build</div>
+      <div class="screenshots-grid">
+        <img src="/images/planetia/screenshot-explore.webp" alt="Planetia Explore mode — interactive 3D solar system with planet facts" width="700" height="525" loading="lazy" />
+        <img src="/images/planetia/screenshot-compare.webp" alt="Planetia Compare mode — planets lined up by size" width="700" height="525" loading="lazy" />
+        <img src="/images/planetia/screenshot-quiz.webp" alt="Planetia Quiz mode — space knowledge questions" width="700" height="525" loading="lazy" />
+        <img src="/images/planetia/screenshot-customize.webp" alt="Planetia Customize mode — painting Jupiter pink with hearts" width="700" height="525" loading="lazy" />
+        <img src="/images/planetia/screenshot-whatif.webp" alt="Planetia What If mode — physics experiments" width="700" height="525" loading="lazy" />
       </div>
     </section>
 
@@ -149,26 +146,25 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     margin-bottom: var(--space-2xl);
   }
 
-  .screenshots-row {
-    display: flex;
+  .screenshots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
-    overflow-x: auto;
-    padding: var(--space-sm) 0;
-    -webkit-overflow-scrolling: touch;
   }
 
-  .screenshot-placeholder {
-    flex: 0 0 auto;
-    width: 200px;
-    aspect-ratio: 3 / 4;
-    background: var(--bg-tertiary);
-    border: 2px dashed var(--border);
+  .screenshots-grid img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-tertiary);
-    font-size: var(--text-meta);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .screenshots-grid img {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
   }
 
   /* Content sections */
@@ -253,8 +249,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       padding: 24px 18px;
     }
 
-    .screenshot-placeholder {
-      width: 160px;
+    .screenshots-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
 
     .details-grid > div {
