@@ -3,6 +3,7 @@ title: "How I Actually Learned AI (From Someone Who Couldn't Code)"
 description: "A practical guide to learning AI — from curating your feed to shipping real projects — for people who can't code."
 category: "AI Tools / Productivity"
 date: 2026-03-23
+excerpt: "I couldn't code when I started learning AI. No CS degree, no engineering background. Here's the actual path — from curating my feed to cheap Udemy courses to shipping real projects — that got me from zero to building apps."
 leadImage: "/images/writing/how-i-learned-ai/lead.webp"
 ---
 

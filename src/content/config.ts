@@ -12,6 +12,7 @@ const writing = defineCollection({
       'Personal Development'
     ]),
     date: z.coerce.date(),
+    excerpt: z.string().optional(),
     leadImage: z.string().optional(),
     canonicalUrl: z.string().url().optional(),
   }),

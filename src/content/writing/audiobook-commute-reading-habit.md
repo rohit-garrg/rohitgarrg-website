@@ -3,6 +3,7 @@ title: "38 Audiobooks in 3 Years: How I Turned a 3-Hour Commute Into a Reading H
 description: "Turning dead time into productive learning with a simple shift in format."
 category: "Personal Development"
 date: 2026-01-05
+excerpt: "After having twins, I went two years without reading a single book. Then a three-hour daily commute and a shift to audiobooks turned dead time into 38 books in three years."
 leadImage: "/images/writing/audiobook-commute-reading-habit/lead.webp"
 ---
 

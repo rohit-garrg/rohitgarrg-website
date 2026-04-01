@@ -3,6 +3,7 @@ title: "You Are Not Your Job Title"
 description: "Why the real barrier to reinvention isn't the learning curve — it's the ego curve."
 category: "Leadership / Career"
 date: 2026-03-18
+excerpt: "The hardest part of reinvention isn't the learning curve — it's the ego curve. Starting over means losing status, and most people would rather defend an obsolete identity than build a new one."
 leadImage: "/images/writing/not-your-job-title/lead.webp"
 ---
 

@@ -3,6 +3,7 @@ title: "The Weekend Website: Planning in Claude, Executing in Claude Code"
 description: "The workflow that turned planning into copy-paste execution."
 category: "AI Tools / Productivity"
 date: 2026-01-31
+excerpt: "This website went from idea to live in three days. The trick wasn't coding skill — it was spending the first day planning everything in Claude AI, then feeding those plans to Claude Code as structured prompts."
 leadImage: "/images/writing/weekend-website-claude-workflow/lead.webp"
 ---
 
