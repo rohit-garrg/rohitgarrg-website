@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         'Authorization': `Token ${apiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email_address: email }),
     });
 
     if (response.ok) {
@@ -43,7 +43,12 @@ export default async function handler(req, res) {
       return res.status(409).json({ error: 'This email is already subscribed.' });
     }
 
-    const message = (data?.email?.[0]) || data?.detail || 'Subscription failed. Please try again.';
+    let message = 'Subscription failed. Please try again.';
+    if (data?.detail) {
+      message = typeof data.detail === 'string' ? data.detail : data.detail[0]?.msg || message;
+    } else if (data?.email_address) {
+      message = typeof data.email_address === 'string' ? data.email_address : data.email_address[0] || message;
+    }
     return res.status(response.status).json({ error: message });
   } catch (err) {
     console.error('Buttondown API error:', err);
