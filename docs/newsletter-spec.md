@@ -45,11 +45,11 @@ Write post → deploy to Vercel as usual → run the send script → subscribers
 
 - Buttondown account setup with double opt-in enabled (done)
 - Custom sending domain newsletter.rohitgarrg.com via managed DNS (done)
-- Signup form component (reusable across listing and post pages), styled to match current design system
-- Add an `excerpt` field to blog post frontmatter for preview generation (fall back to first paragraph if absent)
+- Signup form component (done) — reusable across listing and post pages, backed by Vercel serverless proxy
+- Add an `excerpt` field to blog post frontmatter (done) — all articles have excerpts
 - Send script with provider abstraction: content reading and email composition separated from the API call layer
 - Simple email template (clean, readable, table-based HTML for cross-client compatibility, loosely matching site branding)
-- RSS feed via @astrojs/rss (blog hygiene, not required for the send flow but trivial to add)
+- RSS feed via @astrojs/rss (done) — at `/rss.xml` with autodiscovery link in `<head>`
 - Confirmation prompt in the send script to prevent accidental re-sends
 
 ## Future Scope (Not in This Build)

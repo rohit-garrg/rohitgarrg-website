@@ -53,6 +53,11 @@ rohitgarrg.com/
 │   └── planetia/             # Planetia app support/privacy pages
 ├── api/
 │   └── subscribe.js          # Vercel serverless function: newsletter signup proxy
+├── scripts/
+│   ├── constants.js          # Shared SITE_URL constant
+│   ├── content-reader.js     # Reads blog markdown, parses frontmatter
+│   ├── email-composer.js     # Markdown → email-safe HTML with inline styles
+│   └── send-newsletter.js    # Entry point: generates preview or sends via provider
 ├── astro.config.mjs
 ├── package.json
 └── .gitignore
@@ -113,7 +118,7 @@ Spec files for a blog subscription feature (Buttondown backend):
 - `docs/newsletter-implementation.md` — Phased implementation checklist
 - `docs/email-template-spec.md` — Email template design spec
 
-Key architecture: signup form component on blog pages → Vercel serverless proxy (`api/subscribe.js`) → Buttondown API. A Node send script with provider abstraction (content reader → email composer → sender module), custom domain newsletter@rohitgarrg.com. Provider-specific code is isolated to `api/subscribe.js` (signups) and `scripts/providers/buttondown.js` (send script).
+Key architecture: signup form component on blog pages → Vercel serverless proxy (`api/subscribe.js`) → Buttondown API. RSS feed at `/rss.xml` with autodiscovery. A Node send script with provider abstraction (content reader → email composer → sender module), custom domain newsletter@rohitgarrg.com. Provider-specific code is isolated to `api/subscribe.js` (signups) and `scripts/providers/buttondown.js` (send script).
 
 **Email HTML constraints (non-negotiable):** Table-based layout only. Inline styles only (Gmail strips `<style>` blocks). No CSS grid, flexbox, or custom properties. No web fonts. 600px max width. All images use absolute URLs. See `docs/email-template-spec.md` for the full template design.
 

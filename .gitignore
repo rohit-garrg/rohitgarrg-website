@@ -28,3 +28,6 @@ pnpm-debug.log*
 game-title.png
 .vercel
 .env*.local
+
+# newsletter preview output
+scripts/preview-email.html
