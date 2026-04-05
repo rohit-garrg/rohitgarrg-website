@@ -1,31 +1,21 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in this repository.
 
 ---
 
-# Project Reference for rohitgarrg.com
-
 ## Development Commands
 
-- `npm install` - Install dependencies
-- `npm run dev` - Start development server (http://localhost:4321)
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build locally
+- `npm install` — Install dependencies
+- `npm run dev` — Start dev server (http://localhost:4321)
+- `npm run build` — Build for production
+- `npm run preview` — Preview production build locally
 
-## Project Overview
+## What This Project Is
 
-Building a personal branding website for Rohit Garg, Head of Product & Design at Times of India. The site showcases expertise through writing, demonstrates AI-assisted development ("vibe coding"), and serves as a professional home base for career advancement.
+Personal branding site for Rohit Garg, Head of Product & Design at Times of India. Showcases writing, projects, and speaking. Tagline: "Product at scale. Built with AI."
 
-**Tagline:** "Product at scale. Built with AI."
-
-## Technical Stack
-
-- **Framework:** Astro (content-first, good for static sites)
-- **Hosting:** Vercel (free tier)
-- **Content:** Markdown files with frontmatter
-- **Styling:** CSS (clean, minimal, mobile-responsive)
-- **Domains:** rohitgarrg.com (primary), rohitgarrg.in (redirect)
+**Stack:** Astro static site, CSS (no Tailwind), Markdown content with frontmatter, hosted on Vercel (free tier) with one serverless function for newsletter signups. Domains: rohitgarrg.com (primary), rohitgarrg.in (redirect).
 
 ## Project Structure
 
@@ -33,28 +23,18 @@ Building a personal branding website for Rohit Garg, Head of Product & Design at
 rohitgarrg.com/
 ├── src/
 │   ├── content/
-│   │   ├── writing/
-│   │   │   ├── exceptional-managers.md
-│   │   │   ├── ai-presentation-workflow.md
-│   │   │   ├── audiobook-commute-reading-habit.md
-│   │   │   ├── weekend-website-claude-workflow.md
-│   │   │   └── not-your-job-title.md
-│   │   └── speaking/
-│   │       ├── inma-mumbai-2025.md
-│   │       ├── wan-ifra-2025.md
-│   │       └── iim-lucknow-2025.md
-│   │
+│   │   ├── writing/          # Blog posts as markdown
+│   │   └── speaking/         # Speaking entries as markdown
 │   ├── layouts/
 │   │   ├── BaseLayout.astro
 │   │   └── ArticleLayout.astro
-│   │
 │   ├── pages/
 │   │   ├── index.astro
 │   │   ├── about.astro
 │   │   ├── 404.astro
 │   │   ├── writing/
-│   │   │   ├── index.astro
-│   │   │   └── [...slug].astro
+│   │   │   ├── index.astro       # Blog listing with category filter
+│   │   │   └── [...slug].astro   # Dynamic article pages
 │   │   ├── projects/
 │   │   │   ├── index.astro
 │   │   │   ├── office-survivors.astro
@@ -62,102 +42,40 @@ rohitgarrg.com/
 │   │   └── speaking/
 │   │       ├── index.astro
 │   │       └── [...slug].astro
-│   │
-│   ├── components/
-│   │   ├── Header.astro
-│   │   ├── Footer.astro
-│   │   ├── ArticleCard.astro
-│   │   ├── SpeakingEntry.astro
-│   │   └── Lightbox.astro
-│   │
+│   ├── components/           # Header, Footer, ArticleCard, SpeakingEntry, Lightbox, NewsletterSignup
 │   └── styles/
 │       └── global.css
-│
 ├── public/
-│   ├── images/
-│   │   ├── headshot.webp
-│   │   ├── writing/
-│   │   │   ├── exceptional-managers/
-│   │   │   ├── ai-presentation-workflow/
-│   │   │   ├── audiobook-commute-reading-habit/
-│   │   │   ├── weekend-website-claude-workflow/
-│   │   │   └── not-your-job-title/
-│   │   ├── speaking/
-│   │   │   ├── inma-mumbai-2025/
-│   │   │   ├── wan-ifra-2025/
-│   │   │   └── iim-lucknow-2025/
-│   │   └── projects/
-│   │       ├── office-survivors-og.webp
-│   │       └── solar-system-og.webp
+│   ├── images/               # All images: writing/, speaking/, projects/ subdirs
 │   ├── projects/
-│   │   └── office-survivors/
-│   ├── presentations/
-│   │   ├── inma-mumbai-2025.pdf
-│   │   └── wan-ifra-2025.pdf
-│   ├── planetia/
-│   │   ├── privacy/
-│   │   └── support/
-│   ├── og-image.webp
-│   ├── apple-touch-icon.png
-│   ├── favicon.svg
-│   ├── favicon.ico
-│   └── robots.txt
-│
+│   │   └── office-survivors/ # Built game files (static, iframe-embedded)
+│   ├── presentations/        # PDF slide decks for speaking entries
+│   └── planetia/             # Planetia app support/privacy pages
+├── api/
+│   └── subscribe.js          # Vercel serverless function: newsletter signup proxy
 ├── astro.config.mjs
 ├── package.json
-├── tsconfig.json
 └── .gitignore
 ```
 
-## Pages to Build
+## Architecture
 
-### 1. Home (/)
-- Hero: Name + Tagline + One-liner about role at TOI
-- Latest Writing: 3 most recent article cards
-- Projects: 2-3 cards (placeholder for now)
-- Social links: LinkedIn, Email
+- **Content Collections:** Astro content collections (`src/content/`) for type-safe writing and speaking entries.
+- **Dynamic Routes:** `[...slug].astro` pattern generates pages from markdown at build time.
+- **Static Generation:** All pages are statically generated. No client-side JS unless a component explicitly needs interactivity.
+- **Markdown Workflow:** New posts are added by creating a markdown file in `src/content/writing/` with correct frontmatter. No code changes required.
+- **Office Survivors:** A Phaser.js browser game built as a separate project. The compiled static output lives in `public/projects/office-survivors/` and is embedded via iframe on its project page. Do not mix the Phaser/Vite build pipeline with Astro's build.
 
-### 2. Writing (/writing)
-- List of all articles as cards
-- Filterable by category
-- Each card shows: title, description, category, date
+## Conventions
 
-### 3. Individual Article (/writing/[slug])
-- Full article with good typography
-- Category tag, date, estimated read time
-- Back link to /writing
+- **Frontmatter is the source of truth.** Pages read data from frontmatter fields (e.g., `leadImage`, `category`, `date`). Never hardcode lists of articles or their attributes in page files.
+- **Content categories:** Product Management, Leadership / Career, AI Tools / Productivity, Personal Development.
+- **Date field:** When adding a new article, always use today's actual calendar date.
+- **Minimal dependencies.** Don't add packages unless genuinely needed.
+- **CSS only.** No Tailwind, no CSS-in-JS. Keep styles in `global.css` and scoped Astro component styles.
+- **Mobile-first.** Everything must be fully responsive.
 
-### 4. Projects (/projects)
-- Grid of hobby builds
-- Placeholder state for launch
-
-### 5. Speaking (/speaking)
-- Reverse chronological list
-- Each entry: event name, date, description, external link
-
-### 6. About (/about)
-- Photo (headshot.jpg)
-- Career narrative
-- Mentoring note
-- Contact: LinkedIn + Email
-
-## Design Guidelines
-
-- **Aesthetic:** Clean, minimal, professional. Subtle, not flashy.
-- **Typography:** Readable for long-form articles. Good hierarchy.
-- **Mobile:** Fully responsive. Test on phone screens.
-- **Dark mode:** Nice to have, not required for launch.
-- **No excessive styling:** Avoid gradients, shadows, animations unless they serve a purpose.
-
-## Content Categories
-
-Articles are tagged with one of these:
-- Product Management
-- Leadership / Career
-- AI Tools / Productivity
-- Personal Development
-
-## Article Frontmatter Format
+## Article Frontmatter
 
 ```yaml
 ---
@@ -165,79 +83,42 @@ title: "Article Title Here"
 description: "One-line description for card preview"
 category: "Category Name"
 date: 2026-01-15
+excerpt: "1-2 sentence summary for newsletter previews and SEO. Optional but preferred."
 leadImage: "/images/writing/article-slug/lead.webp"  # optional
-canonicalUrl: "https://example.com/original"  # optional
+canonicalUrl: "https://example.com/original"          # optional
 ---
 ```
 
-**Important:** When adding a new article, always use today's actual calendar date for the `date` field.
-
-## Adding Lead Images to Articles
+## Lead Images
 
 When adding a lead image to an article:
 
-1. **Add to frontmatter** - The `leadImage` field in frontmatter is the source of truth. Pages read from `article.data.leadImage`, not hardcoded lists.
-
-2. **Create responsive variants** - Each article with a lead image needs 3 files in `public/images/writing/[slug]/`:
-   - `lead.webp` (1400px width, main image)
+1. Set `leadImage` in frontmatter (this is the source of truth).
+2. Create three responsive variants in `public/images/writing/[slug]/`:
+   - `lead.webp` (1400px width)
    - `lead-medium.webp` (600px width)
    - `lead-thumb.webp` (400px width)
+3. If the image should also appear inside the article body, add it separately as markdown: `![alt text](/images/writing/slug/lead.webp)`
 
-3. **Image in article body is separate** - If you also want the lead image in the article body, add it as markdown: `![alt text](/images/writing/slug/lead.webp)`
+## Design
 
-**Never use hardcoded lists** of articles with images in page files. Always read from frontmatter.
+Clean, minimal, editorial. Optimized for long-form reading.
 
-## Footer
+A comprehensive redesign spec exists in `docs/design-handoff.md` covering typography (Newsreader + IBM Plex Sans), full CSS custom properties system with light/dark mode, spacing, and component specs. Refer to that file for all design decisions during implementation.
 
-- © Rohit Garg 2025
-- Social links (LinkedIn, Email)
-- "Built with Claude Code" (small text)
+## Newsletter Feature
 
-## Success Criteria
+Spec files for a blog subscription feature (Buttondown backend):
+- `docs/newsletter-spec.md` — Full feature spec
+- `docs/newsletter-implementation.md` — Phased implementation checklist
+- `docs/email-template-spec.md` — Email template design spec
 
-- [ ] Recruiter understands value prop within 10 seconds of landing
-- [ ] Site looks professional and adds credibility
-- [ ] Can publish new blog posts by adding markdown files (no code changes)
-- [ ] Site loads fast (<3 seconds)
-- [ ] Fully responsive on mobile
+Key architecture: signup form component on blog pages → Vercel serverless proxy (`api/subscribe.js`) → Buttondown API. A Node send script with provider abstraction (content reader → email composer → sender module), custom domain newsletter@rohitgarrg.com. Provider-specific code is isolated to `api/subscribe.js` (signups) and `scripts/providers/buttondown.js` (send script).
 
-## Content Status
+**Email HTML constraints (non-negotiable):** Table-based layout only. Inline styles only (Gmail strips `<style>` blocks). No CSS grid, flexbox, or custom properties. No web fonts. 600px max width. All images use absolute URLs. See `docs/email-template-spec.md` for the full template design.
 
-| Content | Status |
-|---------|--------|
-| Article: What 10+ Bosses Taught Me About Exceptional Managers | ✅ Ready |
-| Article: From 7 Hours to 1: My AI Presentation Workflow | ✅ Ready |
-| Article: 38 Audiobooks in 3 Years | ✅ Ready |
-| Article: The Weekend Website: Planning in Claude, Executing in Claude Code | ✅ Ready |
-| Article: You Are Not Your Job Title | ✅ Ready |
-| About page narrative | ✅ Ready |
-| Speaking entries (3) | ✅ Ready |
-| Projects: Office Survivors, Solar System Explorer | ✅ Live |
-| Headshot | ✅ Ready (headshot.webp) |
-| OG Image | ✅ Ready (og-image.webp) |
-| Favicon | ✅ Ready (svg + ico) |
+## Analytics and SEO
 
-## Build Phases
-
-1. **Scaffolding:** Base layout, header, footer, global styles
-2. **Home + Writing list:** Hero section, article cards, category filter
-3. **Articles:** Add all three articles as markdown, create article template
-4. **About + Speaking:** Static pages with provided content
-5. **Projects:** Placeholder page
-6. **Polish:** Mobile testing, dark mode (optional)
-7. **Deploy:** Vercel setup, custom domain configuration
-
-## Notes
-
-- Keep dependencies minimal
-- Prefer CSS over Tailwind for this project (simpler)
-- Articles are the main attraction — optimize for reading experience
-- Projects section can be sparse at launch; better to ship than wait
-
-## Architecture Notes
-
-- **Content Collections:** Astro's content collections (`src/content/`) provide type-safe content management for writing, projects, and speaking entries
-- **Dynamic Routes:** Use `[...slug].astro` pattern for dynamic article pages that pull from markdown content
-- **Static Generation:** All pages are statically generated at build time for optimal performance and SEO
-- **Content-First:** Astro is optimized for content-heavy sites with minimal JavaScript; only hydrate components that need interactivity
-- **Markdown Workflow:** New blog posts are added by creating markdown files in `src/content/writing/` with proper frontmatter—no code changes required
+- Google Analytics: GA4, measurement ID `G-X6LXZDSYG8`
+- Google Search Console: configured for www.rohitgarrg.com
+- OG images and meta tags are set per-page via BaseLayout

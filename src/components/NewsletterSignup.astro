@@ -1,0 +1,224 @@
+---
+/**
+ * Reusable newsletter signup form.
+ * Submits to a Vercel serverless proxy (/api/subscribe) which calls Buttondown's API.
+ * To migrate providers: update api/subscribe.js — this component doesn't need to change.
+ */
+const SUBSCRIBE_API_URL = '/api/subscribe';
+
+interface Props {
+  variant?: 'listing' | 'article';
+}
+
+const { variant = 'listing' } = Astro.props;
+
+const copy = {
+  listing: {
+    heading: 'Stay in the loop',
+    description: 'A periodic email on product, leadership, and the tools I\'m building with.',
+  },
+  article: {
+    heading: 'Enjoyed this?',
+    description: 'I write about product, leadership, and AI tools. Subscribe to get new posts by email.',
+  },
+};
+
+const { heading, description } = copy[variant];
+---
+
+<section class="newsletter" aria-label="Newsletter signup">
+  <div class="newsletter-content" data-state="default">
+    <h2>{heading}</h2>
+    <p class="newsletter-desc">{description}</p>
+    <form class="newsletter-form" data-api={SUBSCRIBE_API_URL}>
+      <div style="position:absolute;left:-5000px;" aria-hidden="true">
+        <input type="text" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+      <div class="form-row">
+        <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+        <button type="submit">Subscribe</button>
+      </div>
+    </form>
+    <noscript>
+      <p class="newsletter-desc">
+        <a href="https://buttondown.com/rohitgarrg">Subscribe via Buttondown</a>
+      </p>
+    </noscript>
+  </div>
+
+  <div class="newsletter-content newsletter-status" data-state="loading" hidden>
+    <p>Subscribing...</p>
+  </div>
+
+  <div class="newsletter-content newsletter-status" data-state="success" hidden>
+    <p>Check your inbox to confirm your subscription.</p>
+  </div>
+
+  <div class="newsletter-content newsletter-status" data-state="error" hidden>
+    <p class="error-text"></p>
+    <button class="retry-link" type="button">Try again</button>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.newsletter').forEach(section => {
+    const form = section.querySelector('.newsletter-form') as HTMLFormElement | null;
+    if (!form) return;
+
+    const states = section.querySelectorAll('[data-state]');
+
+    function setState(name: string) {
+      states.forEach(el => {
+        (el as HTMLElement).hidden = (el as HTMLElement).dataset.state !== name;
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const honeypot = form.querySelector('input[name="website"]') as HTMLInputElement | null;
+      if (honeypot && honeypot.value) {
+        setState('success');
+        return;
+      }
+
+      setState('loading');
+
+      try {
+        const email = new FormData(form).get('email') as string;
+
+        const res = await fetch(form.dataset.api!, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+
+        if (res.ok) {
+          setState('success');
+        } else {
+          let msg = 'Something went wrong. Please try again.';
+          try {
+            const json = await res.json();
+            if (json.error) msg = json.error;
+          } catch { /* response wasn't JSON */ }
+          section.querySelector('.error-text')!.textContent = msg;
+          setState('error');
+        }
+      } catch {
+        section.querySelector('.error-text')!.textContent =
+          'Something went wrong. Please check your connection and try again.';
+        setState('error');
+      }
+    });
+
+    section.querySelector('.retry-link')?.addEventListener('click', () => {
+      setState('default');
+    });
+  });
+</script>
+
+<style>
+  .newsletter {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: var(--space-xl) 0;
+    margin: var(--space-xl) auto;
+    max-width: var(--max-content);
+  }
+
+  .newsletter h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-h3);
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+    color: var(--text-primary);
+  }
+
+  .newsletter-desc {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+  }
+
+  .form-row {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .form-row input[type="email"] {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .form-row input[type="email"]:focus {
+    border-color: var(--accent);
+  }
+
+  .form-row input[type="email"]::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  .form-row button[type="submit"] {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    padding: var(--space-sm) var(--space-lg);
+    color: var(--bg-primary);
+    background: var(--text-primary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .form-row button[type="submit"]:hover {
+    opacity: 0.85;
+  }
+
+  .newsletter-status p {
+    color: var(--text-secondary);
+    font-size: 15px;
+  }
+
+  .error-text {
+    color: var(--accent) !important;
+  }
+
+  .retry-link {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-family: var(--font-body);
+    font-size: 15px;
+    cursor: pointer;
+    padding: 0;
+    margin-top: var(--space-sm);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .retry-link:hover {
+    color: var(--accent-hover);
+  }
+
+  @media (max-width: 768px) {
+    .form-row {
+      flex-direction: column;
+    }
+
+    .form-row button[type="submit"] {
+      width: 100%;
+      padding: 12px var(--space-lg);
+    }
+  }
+</style>

@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
 
 // Get articles from content collection
 const allArticles = await getCollection('writing');
@@ -49,6 +50,8 @@ const sortedArticles = articles.sort((a, b) => b.date.getTime() - a.date.getTime
         />
       ))}
     </div>
+
+    <NewsletterSignup variant="listing" />
   </div>
 </BaseLayout>
 
