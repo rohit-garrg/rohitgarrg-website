@@ -66,6 +66,8 @@ const canonicalURL = canonicalUrl || new URL(Astro.url.pathname, Astro.site);
     <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1C1917" media="(prefers-color-scheme: dark)" />
 
+    <link rel="alternate" type="application/rss+xml" title="Rohit Garg — Writing" href={new URL('/rss.xml', Astro.site)} />
+
     <title>{title}</title>
   </head>
   <body>

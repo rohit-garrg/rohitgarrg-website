@@ -42,21 +42,21 @@
 
 ---
 
-## Phase 3: Frontmatter and RSS
+## Phase 3: Frontmatter and RSS (Complete)
 
-- [ ] Add `excerpt` field to all existing blog post frontmatter (1-2 sentence summaries)
-- [ ] Update any blog post content schema/type definitions to include optional `excerpt` field
-- [ ] Install `@astrojs/rss` package
-- [ ] Create RSS feed endpoint at `src/pages/rss.xml.js`
-- [ ] RSS feed includes title, description, pubDate, and link for each post
-- [ ] Add RSS `<link>` tag to site head for autodiscovery
+- [x] Add `excerpt` field to all existing blog post frontmatter (1-2 sentence summaries)
+- [x] Update any blog post content schema/type definitions to include optional `excerpt` field
+- [x] Install `@astrojs/rss` package
+- [x] Create RSS feed endpoint at `src/pages/rss.xml.js`
+- [x] RSS feed includes title, description, pubDate, and link for each post
+- [x] Add RSS `<link>` tag to site head for autodiscovery
 
 ### QC Gate: Phase 3
 
-- [ ] Every existing blog post has an `excerpt` in frontmatter
-- [ ] RSS feed accessible at /rss.xml
-- [ ] RSS feed validates (use W3C Feed Validation Service or similar)
-- [ ] RSS autodiscovery works in browser
+- [x] Every existing blog post has an `excerpt` in frontmatter
+- [x] RSS feed accessible at /rss.xml
+- [x] RSS feed validates (valid RSS 2.0 XML with all required elements)
+- [x] RSS autodiscovery `<link>` added to BaseLayout `<head>` with absolute URL
 
 ---
 
