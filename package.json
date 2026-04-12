@@ -6,7 +6,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "send": "node --env-file=.env.local scripts/send-newsletter.js",
+    "send:preview": "node --env-file=.env.local scripts/send-newsletter.js --preview",
+    "send:dry-run": "node --env-file=.env.local scripts/send-newsletter.js --dry-run"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
