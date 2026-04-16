@@ -9,7 +9,8 @@ const writing = defineCollection({
       'Product Management',
       'Leadership / Career',
       'AI Tools / Productivity',
-      'Personal Development'
+      'Personal Development',
+      'Reading / Reviews'
     ]),
     date: z.coerce.date(),
     excerpt: z.string().optional(),

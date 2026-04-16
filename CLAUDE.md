@@ -74,7 +74,7 @@ rohitgarrg.com/
 ## Conventions
 
 - **Frontmatter is the source of truth.** Pages read data from frontmatter fields (e.g., `leadImage`, `category`, `date`). Never hardcode lists of articles or their attributes in page files.
-- **Content categories:** Product Management, Leadership / Career, AI Tools / Productivity, Personal Development.
+- **Content categories:** Product Management, Leadership / Career, AI Tools / Productivity, Personal Development, Reading / Reviews.
 - **Date field:** When adding a new article, always use today's actual calendar date.
 - **Minimal dependencies.** Don't add packages unless genuinely needed.
 - **CSS only.** No Tailwind, no CSS-in-JS. Keep styles in `global.css` and scoped Astro component styles.
