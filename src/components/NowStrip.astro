@@ -1,0 +1,112 @@
+---
+import { nowStrip } from '../config/meta';
+
+const BEAD_COLORS: Record<string, string> = {
+  peri: 'var(--color-peri)',
+  sage: 'var(--color-sage)',
+  clay: 'var(--color-clay)',
+  butter: 'var(--color-butter)',
+  berry: 'var(--color-berry)',
+  slate: 'var(--color-slate)',
+};
+---
+
+<section class="now-strip" aria-label="Current status">
+  <div class="now-inner container-wide">
+    <span class="now-label mono-xs">Currently</span>
+    <div class="now-items">
+      {nowStrip.map((item, i) => (
+        <>
+          {i > 0 && <span class="dot-sep" aria-hidden="true"></span>}
+          <span class="now-item">
+            <span
+              class="bead"
+              style={`background: ${BEAD_COLORS[item.beadColor] || 'var(--color-slate)'}`}
+              aria-hidden="true"
+            ></span>
+            <span class="now-text" set:html={item.text} />
+          </span>
+        </>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .now-strip {
+    background: var(--color-paper-2);
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .now-inner {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  .now-label {
+    color: var(--color-mute);
+    flex-shrink: 0;
+  }
+
+  .now-items {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .dot-sep {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-line);
+    flex-shrink: 0;
+  }
+
+  .now-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bead {
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-organic-bead);
+    flex-shrink: 0;
+  }
+
+  .now-text {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--color-ink-2);
+  }
+
+  .now-text :global(em) {
+    font-style: italic;
+    font-family: var(--font-serif);
+  }
+
+  @media (max-width: 767px) {
+    .now-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .now-items {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .dot-sep {
+      display: none;
+    }
+  }
+</style>

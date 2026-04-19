@@ -1,0 +1,87 @@
+---
+interface Props {
+  name: string;
+  blurb: string;
+  stack: string[];
+  image?: string;
+  url?: string;
+}
+
+const { name, blurb, stack, image, url } = Astro.props;
+
+const shortName = name.includes(',') ? name.split(',')[0].trim() : name;
+---
+
+<a href={url ?? '#'} class="project-card card-surface" aria-label={shortName} {...(!url && { 'aria-disabled': 'true', tabindex: '-1' })}>
+  {image && (
+    <div class="card-visual">
+      <img src={image} alt={shortName} loading="lazy" decoding="async" />
+    </div>
+  )}
+  <div class="card-body">
+    <h3>{shortName}</h3>
+    <p class="card-blurb">{blurb}</p>
+    <div class="stack-pills">
+      {stack.map((tech) => (
+        <span class="pill">{tech}</span>
+      ))}
+    </div>
+  </div>
+</a>
+
+<style>
+  .card-visual {
+    overflow: hidden;
+  }
+
+  .card-visual img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 5 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-card-p);
+    flex: 1;
+  }
+
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--color-ink);
+    margin-bottom: 8px;
+  }
+
+  .card-blurb {
+    font-family: var(--font-sans);
+    font-size: 15.5px;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+    margin-bottom: 14px;
+    flex: 1;
+  }
+
+  .stack-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--color-paper-2);
+    border-radius: var(--radius-pill);
+    padding: 5px 10px;
+    color: var(--color-mute);
+  }
+</style>

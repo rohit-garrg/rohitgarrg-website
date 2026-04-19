@@ -1,19 +1,28 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ArticleCard from '../components/ArticleCard.astro';
+import HeroBlock from '../components/HeroBlock.astro';
+import NowStrip from '../components/NowStrip.astro';
+import WritingCard from '../components/WritingCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
 
-// Get articles sorted by date (newest first), limit to 3
-const allArticles = await getCollection('writing');
-const sortedArticles = allArticles.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const latestArticles = sortedArticles.slice(0, 3);
+// Writing: 3 most recent
+const allWriting = await getCollection('writing');
+const latestWriting = allWriting
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
 
-function getReadingTime(article: typeof latestArticles[0]): number {
+function getReadingTime(article: typeof latestWriting[0]): number {
   return Math.ceil((article.body ?? '').split(/\s+/).length / 200);
 }
 
-const featuredArticle = latestArticles[0];
-const gridArticles = latestArticles.slice(1);
+// Projects: ordered by `order` field
+const allProjects = await getCollection('projects');
+const orderedProjects = allProjects
+  .filter((p) => p.data.order !== undefined)
+  .sort((a, b) => a.data.order! - b.data.order!)
+  .slice(0, 3);
 
 // WebSite schema for homepage
 const websiteSchema = {
@@ -36,303 +45,324 @@ const websiteSchema = {
 
 <BaseLayout>
   <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
-  <div class="container-page">
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-content">
-        <h1>Rohit Garg</h1>
-        <p class="subtitle">Head of Product & Design, Times of India</p>
-        <p class="bio">14 years building products at scale.<br />Writing about what actually works.</p>
-        <div class="hero-links">
-          <a href="https://www.linkedin.com/in/rohitgarrg/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href="mailto:rohitgarrg@gmail.com">Email</a>
-        </div>
-      </div>
-    </section>
 
-    <!-- Latest Writing Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2>Latest Writing</h2>
-        <a href="/writing" class="view-all">View all →</a>
-      </div>
-      {featuredArticle && (
-        <ArticleCard
-          title={featuredArticle.data.title}
-          description={featuredArticle.data.description}
-          category={featuredArticle.data.category}
-          date={featuredArticle.data.date}
-          slug={featuredArticle.id.replace(/\.md$/, '')}
-          leadImage={featuredArticle.data.leadImage}
-          variant="featured"
-          readingTime={getReadingTime(featuredArticle)}
-        />
-      )}
-      {gridArticles.length > 0 && (
-        <div class="articles-grid">
-          {gridArticles.map((article) => (
-            <ArticleCard
-              title={article.data.title}
-              description={article.data.description}
-              category={article.data.category}
-              date={article.data.date}
-              slug={article.id.replace(/\.md$/, '')}
-              leadImage={article.data.leadImage}
-              variant="grid"
-              readingTime={getReadingTime(article)}
-            />
-          ))}
-        </div>
-      )}
-    </section>
+  <HeroBlock />
+  <NowStrip />
 
-    <!-- Projects Section -->
-    <section class="section">
+  <section class="section-writing" aria-label="Recent writing">
+    <div class="container-wide">
       <div class="section-header">
-        <h2>Projects</h2>
-        <a href="/projects" class="view-all">View all →</a>
+        <div class="section-header-text">
+          <p class="section-eyebrow mono-xxs">
+            <span class="pebble pebble-peri" aria-hidden="true"></span>
+            Writing
+          </p>
+          <h2 class="type-h2">Essays on product, AI, leadership, and the occasional book review.</h2>
+        </div>
+        <a href="/writing" class="section-cta">See all writing &rarr;</a>
       </div>
+
+      <div class="writing-grid">
+        {latestWriting.map((article, i) => (
+          <WritingCard
+            title={article.data.title}
+            excerpt={article.data.excerpt ?? article.data.description}
+            date={article.data.date}
+            readingTime={getReadingTime(article)}
+            leadImage={article.data.leadImage}
+            category={article.data.category}
+            slug={article.id.replace(/\.md$/, '')}
+            featured={i === 0}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-projects" aria-label="Projects">
+    <div class="container-wide">
+      <div class="section-header">
+        <div class="section-header-text">
+          <p class="section-eyebrow mono-xxs">
+            <span class="pebble pebble-sage" aria-hidden="true"></span>
+            Projects
+          </p>
+          <h2 class="type-h2">Side projects, experiments, and things I'm tinkering with.</h2>
+        </div>
+        <a href="/projects" class="section-cta">All projects &rarr;</a>
+      </div>
+
       <div class="projects-grid">
-        <a href="/projects/solar-system" class="project-card">
-          <div class="project-image">
-            <img src="/images/projects/solar-system-og.webp" alt="Solar System Explorer — interactive 3D solar system" loading="lazy" width="1120" height="630" />
-          </div>
-          <div class="project-card-body">
-            <h3>Solar System Explorer</h3>
-            <p>An interactive 3D solar system for kids. Tap planets, discover fun facts, and fly a spacecraft between worlds.</p>
-            <div class="project-tech">
-              <span class="tech-pill">React</span>
-              <span class="tech-pill">Three.js</span>
-            </div>
-            <div class="project-process">
-              <span class="ai-pill">Built with AI</span>
-            </div>
-            <span class="project-link">View project →</span>
-          </div>
-        </a>
-        <a href="/projects/office-survivors" class="project-card">
-          <div class="project-image">
-            <img src="/images/projects/office-survivors-og.webp" alt="Office Survivors game screenshot" loading="lazy" width="1120" height="630" />
-          </div>
-          <div class="project-card-body">
-            <h3>Office Survivors</h3>
-            <p>A satirical pixel-art browser game about surviving corporate life. Deliver tasks, dodge chaos agents, and climb from intern to CEO.</p>
-            <div class="project-tech">
-              <span class="tech-pill">Phaser 3</span>
-            </div>
-            <div class="project-process">
-              <span class="ai-pill">Built with AI</span>
-            </div>
-            <span class="project-link">View project →</span>
-          </div>
-        </a>
+        {orderedProjects.map((project) => (
+          <ProjectCard
+            name={project.data.name ?? project.data.title}
+            blurb={project.data.blurb ?? project.data.description}
+            stack={project.data.stack ?? []}
+            image={project.data.image}
+            url={project.data.url}
+          />
+        ))}
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
+
+  <section class="section-newsletter" id="newsletter" aria-label="Newsletter signup">
+    <div class="newsletter-card">
+      <div class="nl-blob nl-blob-peri" aria-hidden="true"></div>
+      <div class="nl-blob nl-blob-sage" aria-hidden="true"></div>
+
+      <div class="newsletter-content">
+        <p class="nl-eyebrow mono-xs">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+          </svg>
+          The newsletter
+        </p>
+
+        <h2 class="display-md">A short note in your inbox most <em class="nl-italic">Sundays</em>.</h2>
+
+        <p class="nl-body body-md">
+          One essay, roughly weekly. Product, AI, leadership, and the occasional book I could not shut up about. No ads, no course funnels, no five-part email sequences. Unsubscribe with one click.
+        </p>
+
+        <NewsletterForm />
+
+        <p class="nl-proof caption">Free forever. One click to unsubscribe.</p>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  /* Hero */
-  .hero {
-    padding: var(--space-3xl) 0 var(--space-2xl) 0;
-  }
-
-  .hero-content {
-    max-width: 66%;
-  }
-
-  h1 {
-    font-family: var(--font-heading);
-    font-size: var(--text-hero);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--space-md);
-    line-height: 1.1;
-  }
-
-  .subtitle {
-    font-size: 20px;
-    font-weight: 300;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-md);
-  }
-
-  .bio {
-    font-size: var(--text-body);
-    color: var(--text-secondary);
-    margin-bottom: var(--space-lg);
-    line-height: 1.6;
-  }
-
-  .hero-links {
-    display: flex;
-    gap: var(--space-md);
-  }
-
-  .hero-links a {
-    font-size: 15px;
-    font-weight: 500;
-    text-decoration: none;
-  }
-
-  .hero-links a:hover {
-    text-decoration: underline;
-  }
-
-  /* Sections */
-  .section {
-    padding: var(--space-2xl) 0;
-    border-top: 1px solid var(--border);
+  /* ── Shared section styles ── */
+  .section-writing,
+  .section-projects {
+    padding: var(--spacing-section-y) 0;
   }
 
   .section-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-lg);
-    gap: var(--space-md);
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 36px;
   }
 
+  .section-header-text {
+    max-width: 620px;
+  }
+
+  .section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-mute);
+    margin-bottom: 10px;
+  }
+
+  .pebble {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-organic-bead);
+    flex-shrink: 0;
+  }
+
+  .pebble-peri { background: var(--color-peri); }
+  .pebble-sage { background: var(--color-sage); }
+
   .section-header h2 {
-    font-family: var(--font-heading);
-    font-weight: 500;
     margin-bottom: 0;
   }
 
-  .view-all {
-    font-size: var(--text-tag);
+  .section-cta {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: 14px;
     font-weight: 500;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    color: var(--color-ink);
+    text-decoration: none;
     white-space: nowrap;
+    flex-shrink: 0;
+    transition: border-color 200ms ease;
   }
 
-  /* Articles grid */
-  .articles-grid {
+  .section-cta:hover {
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  .section-cta:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  /* ── Writing grid ── */
+  .writing-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-lg);
-    margin-top: var(--space-lg);
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 24px;
   }
 
-  /* Projects grid */
+  /* ── Projects grid ── */
   .projects-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-lg);
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
   }
 
-  .project-card {
-    display: block;
-    border: 1px solid var(--border);
-    border-radius: 8px;
+  /* ── Newsletter CTA ── */
+  .section-newsletter {
+    padding: 30px var(--spacing-page-x-desktop) 100px;
+  }
+
+  .newsletter-card {
+    position: relative;
     overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    background: var(--bg-secondary);
-    transition: border-color 0.2s ease;
+    background: linear-gradient(145deg, var(--color-peri-pale) 0%, var(--color-sage-pale) 120%);
+    border: 1px solid oklch(0.90 0.04 260);
+    border-radius: var(--radius-organic-a);
+    padding: 70px;
   }
 
-  .project-card:hover {
-    border-color: var(--border-hover);
+  .nl-blob {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
   }
 
-  .project-card:hover h3 {
-    color: var(--accent);
+  .nl-blob-peri {
+    width: 200px;
+    height: 200px;
+    background: var(--color-peri-pale);
+    opacity: 0.6;
+    top: -40px;
+    right: -40px;
   }
 
-  .project-image {
-    overflow: hidden;
+  .nl-blob-sage {
+    width: 160px;
+    height: 160px;
+    background: var(--color-sage-pale);
+    opacity: 0.5;
+    bottom: -30px;
+    left: -30px;
   }
 
-  .project-image img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.2s ease;
-  }
-
-  .project-card:hover .project-image img {
-    transform: scale(1.03);
-  }
-
-  .project-card-body {
-    padding: var(--space-lg);
-  }
-
-  .project-card h3 {
-    font-family: var(--font-heading);
-    font-size: var(--text-h3);
-    font-weight: 500;
-    margin-bottom: var(--space-xs);
-    color: var(--text-primary);
-    transition: color 0.2s ease;
-  }
-
-  .project-card p {
-    margin-bottom: var(--space-sm);
-    font-size: 15px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  .project-tech {
+  .newsletter-content {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
     display: flex;
-    gap: var(--space-xs);
-    flex-wrap: wrap;
-    margin-bottom: var(--space-sm);
+    flex-direction: column;
+    align-items: center;
   }
 
-  .tech-pill {
-    font-size: var(--text-tag);
-    padding: 4px 8px;
-    background: var(--bg-tertiary);
-    border-radius: 4px;
-    color: var(--text-secondary);
+  .nl-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-peri-ink);
+    margin-bottom: 18px;
   }
 
-  .project-process {
-    margin-bottom: var(--space-sm);
+  .newsletter-content h2 {
+    margin-bottom: 18px;
+    color: var(--color-ink);
   }
 
-  .ai-pill {
-    font-size: var(--text-tag);
-    padding: 4px 10px;
-    background: var(--accent-subtle);
-    color: var(--accent);
-    border-radius: 4px;
+  .nl-italic {
+    font-style: italic;
+    color: var(--color-peri-ink);
   }
 
-  .project-link {
-    font-size: 14px;
-    color: var(--accent);
-    font-weight: 500;
+  .nl-body {
+    color: var(--color-ink-2);
+    max-width: 560px;
+    margin-bottom: 28px;
   }
 
-  /* Mobile */
-  @media (max-width: 768px) {
-    .hero {
-      padding: var(--space-3xl) 0 var(--space-2xl) 0;
+  .nl-proof {
+    color: var(--color-mute);
+    margin-top: 14px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1023px) {
+    .writing-grid {
+      grid-template-columns: 1fr 1fr;
     }
 
-    .hero-content {
-      max-width: 100%;
+    /* Hide third card on tablet */
+    .writing-grid > :global(:nth-child(3)) {
+      display: none;
     }
 
-    .subtitle {
-      font-size: 16px;
+    .projects-grid {
+      grid-template-columns: 1fr 1fr;
     }
 
-    .articles-grid {
+    .projects-grid > :global(:nth-child(3)) {
+      display: none;
+    }
+
+    .section-newsletter {
+      padding-left: var(--spacing-page-x-tablet);
+      padding-right: var(--spacing-page-x-tablet);
+    }
+
+    .newsletter-card {
+      padding: 50px 40px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .section-writing,
+    .section-projects {
+      padding: var(--spacing-section-y-mobile) 0;
+    }
+
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .writing-grid {
       grid-template-columns: 1fr;
+    }
+
+    /* Show all cards on mobile (single column) */
+    .writing-grid > :global(:nth-child(3)) {
+      display: flex;
     }
 
     .projects-grid {
       grid-template-columns: 1fr;
     }
 
-    .section-header {
-      flex-direction: row;
+    .projects-grid > :global(:nth-child(3)) {
+      display: flex;
+    }
+
+    .section-newsletter {
+      padding: 20px var(--spacing-page-x-mobile) 60px;
+    }
+
+    .newsletter-card {
+      padding: 40px 24px;
+      border-radius: 28px 32px 28px 36px / 32px 28px 36px 28px;
+    }
+
+    .newsletter-content h2 {
+      font-size: 32px;
     }
   }
 </style>

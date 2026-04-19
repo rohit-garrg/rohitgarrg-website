@@ -338,11 +338,36 @@
       padding: 0 var(--spacing-page-x-desktop);
     }
   }
+
+  /* ── Shared card surface ── */
+  .card-surface {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  @media (hover: hover) {
+    .card-surface:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card-hover);
+    }
+  }
+
+  .card-surface:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
 }
 
 /* ═══════════════════════════════════════════
    Legacy variable aliases
-   TODO(phase-2): Remove when pages are rebuilt
+   TODO(phase-3+): Remove when all pages are rebuilt
    ═══════════════════════════════════════════ */
 
 :root {

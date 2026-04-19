@@ -1,0 +1,157 @@
+---
+interface Props {
+  title: string;
+  excerpt?: string;
+  date: Date;
+  readingTime?: number;
+  leadImage?: string;
+  category: string;
+  slug: string;
+  featured?: boolean;
+}
+
+const { title, excerpt, date, readingTime, leadImage, category, slug, featured = false } = Astro.props;
+
+const thumbImage = leadImage?.replace(/lead\.webp$/, 'lead-thumb.webp');
+const mediumImage = leadImage?.replace(/lead\.webp$/, 'lead-medium.webp');
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+});
+
+const metaText = readingTime ? `${formattedDate} · ${readingTime} min read` : formattedDate;
+
+const TAG_MAP: Record<string, { label: string; color: string }> = {
+  'AI Tools / Productivity': { label: 'AI', color: 'var(--color-sage)' },
+  'Leadership / Career': { label: 'Leadership', color: 'var(--color-peri)' },
+  'Product Management': { label: 'Product', color: 'var(--color-butter)' },
+  'Personal Development': { label: 'Leadership', color: 'var(--color-peri)' }, // grouped with Leadership per tag taxonomy
+  'Reading / Reviews': { label: 'Books', color: 'var(--color-clay)' },
+};
+const tag = TAG_MAP[category] ?? { label: category, color: 'var(--color-slate)' };
+---
+
+<a href={`/writing/${slug}`} class:list={['writing-card', 'card-surface', { featured }]} aria-label={title}>
+  {leadImage && (
+    <div class="card-cover">
+      <img
+        src={featured ? leadImage : mediumImage}
+        srcset={`${thumbImage} 400w, ${mediumImage} 600w, ${leadImage} 1400w`}
+        sizes={featured ? '(max-width: 767px) 100vw, 600px' : '(max-width: 767px) 100vw, 400px'}
+        alt={title}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )}
+  <div class="card-body">
+    <span class="card-meta mono-xs">{metaText}</span>
+    <h3>{title}</h3>
+    {excerpt && <p class="card-excerpt">{excerpt}</p>}
+    <div class="card-tag">
+      <span class="tag-bead" style={`background: ${tag.color}`}></span>
+      <span class="tag-label mono-xs">{tag.label}</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  /* Cover image */
+  .card-cover {
+    overflow: hidden;
+  }
+
+  .card-cover img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 5 / 4;
+  }
+
+  .featured .card-cover img {
+    aspect-ratio: 16 / 11;
+  }
+
+  /* Card body */
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-card-p);
+    flex: 1;
+  }
+
+  .card-meta {
+    color: var(--color-mute);
+    margin-bottom: 10px;
+  }
+
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--color-ink);
+    margin-bottom: 10px;
+  }
+
+  .featured h3 {
+    font-size: 28px;
+  }
+
+  .card-excerpt {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+    margin-bottom: 14px;
+    flex: 1;
+  }
+
+  .featured .card-excerpt {
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  /* Tag chip */
+  .card-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-paper-2);
+    border-radius: var(--radius-pill);
+    padding: 6px 12px;
+    width: fit-content;
+    margin-top: auto;
+  }
+
+  .tag-bead {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-organic-bead);
+    flex-shrink: 0;
+  }
+
+  .tag-label {
+    color: var(--color-mute);
+  }
+
+  /* Mobile */
+  @media (max-width: 767px) {
+    .featured h3 {
+      font-size: 22px;
+    }
+
+    .featured .card-excerpt {
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+
+    .featured .card-cover img {
+      aspect-ratio: 5 / 4;
+    }
+  }
+</style>

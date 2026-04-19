@@ -26,6 +26,13 @@ const projects = defineCollection({
     description: z.string(),
     url: z.string().optional(),
     image: z.string().optional(),
+    name: z.string().optional(),
+    kind: z.string().optional(),
+    year: z.coerce.number().optional(),
+    blurb: z.string().optional(),
+    stack: z.array(z.string()).optional(),
+    stat: z.string().optional(),
+    order: z.number().optional(),
   }),
 });
 

@@ -1,0 +1,369 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/rohit-portrait.png';
+import { heroStats, currentlyLine } from '../config/meta';
+---
+
+<section class="hero" aria-label="Introduction">
+  <div class="hero-grid container-wide">
+    <!-- Decorative blobs -->
+    <div class="decor-blob decor-sage" aria-hidden="true"></div>
+    <div class="decor-blob decor-peri" aria-hidden="true"></div>
+
+    <!-- Left: text column -->
+    <div class="hero-text">
+      <p class="eyebrow mono-xs">
+        <span class="eyebrow-dot" aria-hidden="true"></span>
+        Head of Product &amp; Design · Times of India
+      </p>
+
+      <h1 class="display-xl">
+        Building <span class="blob-wrap"><em>products</em></span> for 240M readers. Tinkering with AI at night.
+      </h1>
+
+      <p class="lede body-lg">
+        I'm Rohit. I lead Product and Design at Times of India, India's largest digital news publisher, with a team of 60+. On the side I build little things, read a lot, and write here about what actually happens inside a product org at scale.
+      </p>
+
+      <div class="meta-row">
+        {heroStats.map((stat) => (
+          <span class="stat">
+            <span class="stat-number">{stat.number}</span>
+            <span class="stat-label">{stat.label}</span>
+          </span>
+        ))}
+      </div>
+
+      <div class="hero-actions">
+        <a href="/writing" class="btn-primary">Read the writing</a>
+        <a href="/planetia" class="btn-ghost">See Planetia</a>
+      </div>
+    </div>
+
+    <!-- Right: portrait column -->
+    <div class="hero-portrait">
+      <div class="portrait-frame">
+        <Image
+          src={portrait}
+          alt="Rohit Garg"
+          widths={[400, 600, 900]}
+          sizes="(max-width: 767px) 280px, (max-width: 1023px) 360px, 450px"
+          format="webp"
+          quality={80}
+          class="portrait-img"
+        />
+      </div>
+
+      <div class="floating-card">
+        <div class="floating-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z" />
+          </svg>
+        </div>
+        <div class="floating-content">
+          <span class="mono-xs floating-eyebrow">Currently</span>
+          <p class="floating-text">{currentlyLine}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 80px 0 90px;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.9fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+  }
+
+  /* Decorative blobs */
+  .decor-blob {
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .decor-sage {
+    width: 280px;
+    height: 280px;
+    background: var(--color-sage-pale);
+    opacity: 0.7;
+    top: -60px;
+    left: -80px;
+  }
+
+  .decor-peri {
+    width: 200px;
+    height: 200px;
+    background: var(--color-peri-pale);
+    opacity: 0.8;
+    bottom: -40px;
+    right: -40px;
+  }
+
+  /* Eyebrow */
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-peri-ink);
+    margin-bottom: 22px;
+  }
+
+  .eyebrow-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-peri);
+    flex-shrink: 0;
+  }
+
+  /* H1 with blob */
+  h1 {
+    color: var(--color-ink);
+    margin-bottom: 28px;
+  }
+
+  .blob-wrap {
+    position: relative;
+    display: inline;
+    white-space: nowrap;
+  }
+
+  .blob-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -6px -14px;
+    background: var(--color-peri-pale);
+    border-radius: 60% 70% 50% 80% / 60% 55% 70% 50%;
+    z-index: -1;
+  }
+
+  .blob-wrap em {
+    font-style: italic;
+    position: relative;
+  }
+
+  /* Lede */
+  .lede {
+    max-width: 46ch;
+    color: var(--color-ink-2);
+    margin-bottom: 36px;
+  }
+
+  /* Meta row */
+  .meta-row {
+    display: flex;
+    gap: 26px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+  }
+
+  .stat-number {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--color-ink);
+  }
+
+  .stat-label {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    color: var(--color-mute);
+  }
+
+  /* Action buttons */
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    transition: opacity 200ms ease;
+  }
+
+  .btn-primary {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-ink);
+    border: 1px solid var(--color-line);
+  }
+
+  .btn-primary:hover,
+  .btn-ghost:hover {
+    opacity: 0.85;
+    color: inherit;
+  }
+
+  .btn-primary:hover {
+    color: var(--color-paper);
+  }
+
+  .btn-primary:focus-visible,
+  .btn-ghost:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  /* Portrait */
+  .hero-portrait {
+    position: relative;
+  }
+
+  .portrait-frame {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-organic-portrait);
+    overflow: hidden;
+    box-shadow: var(--shadow-portrait);
+  }
+
+  .portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 15%;
+  }
+
+  /* Floating "Currently" card */
+  .floating-card {
+    position: absolute;
+    left: -22px;
+    bottom: 22px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    max-width: 260px;
+    box-shadow: 0 4px 12px oklch(0.22 0.02 250 / 0.08);
+  }
+
+  .floating-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-organic-bead);
+    background: var(--color-sage-pale);
+    color: var(--color-sage);
+    flex-shrink: 0;
+  }
+
+  .floating-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .floating-eyebrow {
+    color: var(--color-mute);
+  }
+
+  .floating-text {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--color-ink-2);
+    margin: 0;
+  }
+
+  /* Tablet: single column, portrait above */
+  @media (max-width: 1023px) {
+    .hero {
+      padding: 70px 0;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .hero-portrait {
+      order: -1;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .floating-card {
+      left: auto;
+      right: -10px;
+      bottom: 16px;
+    }
+
+    .lede {
+      max-width: 100%;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 767px) {
+    .hero {
+      padding: 56px 0;
+    }
+
+    .hero-grid {
+      gap: 32px;
+    }
+
+    .hero-portrait {
+      max-width: 280px;
+    }
+
+    .meta-row {
+      gap: 18px;
+    }
+
+    .floating-card {
+      max-width: 220px;
+      padding: 10px 14px;
+      right: -6px;
+      bottom: 12px;
+    }
+
+    .floating-icon {
+      width: 28px;
+      height: 28px;
+    }
+
+    .floating-icon svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .floating-text {
+      font-size: 12px;
+    }
+  }
+</style>
