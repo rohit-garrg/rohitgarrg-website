@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>rohitgarrg.com — design reference</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink: oklch(0.22 0.02 250);
+    --ink-2: oklch(0.35 0.02 250);
+    --mute: oklch(0.55 0.01 250);
+    --line: oklch(0.90 0.008 250);
+    --line-2: oklch(0.94 0.006 250);
+    --paper: oklch(0.985 0.004 240);
+    --paper-2: oklch(0.97 0.006 240);
+    --paper-3: oklch(0.945 0.008 240);
+  }
+  html,body{margin:0;padding:0;background:#0c0f14;color:#e7ebf2;}
+  body{font-family: 'Geist', -apple-system, system-ui, sans-serif; font-feature-settings:"ss01","cv11"; -webkit-font-smoothing:antialiased;}
+  *{box-sizing:border-box;}
+  a{color:inherit;}
+
+  /* ========== CHROME ========== */
+  .chrome{
+    position:fixed; inset:0;
+    display:grid;
+    grid-template-rows: auto 1fr;
+    pointer-events:none;
+    z-index: 50;
+  }
+  .topbar{
+    pointer-events:auto;
+    display:flex; align-items:center; gap:14px;
+    padding:12px 18px;
+    background: rgba(12,15,20,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-family:'Geist Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.02em;
+    color:#cfd6e2;
+  }
+  .topbar .title{color:#f1f4fa; font-weight:500;}
+  .topbar .sep{opacity:.3;}
+  .topbar .seg{
+    display:inline-flex; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    border-radius:6px; padding:2px; gap:2px;
+  }
+  .topbar .seg button{
+    all:unset; cursor:pointer; padding:5px 10px; border-radius:4px; color:#9aa3b2;
+    font-family:inherit; font-size:11px; letter-spacing:0.02em;
+  }
+  .topbar .seg button.on{ background:#e7ebf2; color:#0c0f14;}
+  .topbar .spacer{flex:1;}
+  .topbar .hint{color:#6b7486;}
+
+  /* ========== STAGE ========== */
+  .stage{
+    pointer-events:auto;
+    height:100%;
+    overflow:auto;
+    padding: 62px 0 60px;
+    background: #0c0f14;
+    scroll-behavior:auto;
+  }
+  .stage-inner{
+    margin: 0 auto;
+    transition: max-width .2s ease;
+  }
+  .device-desktop .stage-inner{ max-width: 1440px; }
+  .device-mobile  .stage-inner{ max-width: 390px; }
+
+  .screen-shell{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 14px;
+    overflow:hidden;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
+    margin: 24px;
+    position:relative;
+  }
+
+  /* hide default scrollbar noise */
+  .stage::-webkit-scrollbar{width:10px;}
+  .stage::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08); border-radius: 6px;}
+  .stage::-webkit-scrollbar-track{background:transparent;}
+
+  .boot{
+    padding:60px 40px; color:#9aa3b2; font-family:'Geist Mono', monospace; font-size:12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="chrome">
+  <div class="topbar">
+    <span class="title">rohitgarrg.com</span>
+    <span class="sep">·</span>
+    <span>design reference</span>
+    <span class="sep">·</span>
+
+    <div class="seg" id="screenTabs">
+      <button data-screen="home" class="on">Home</button>
+      <button data-screen="index">Writing</button>
+      <button data-screen="post">Post</button>
+      <button data-screen="projects">Projects</button>
+      <button data-screen="planetia">Planetia</button>
+      <button data-screen="speaking">Speaking</button>
+      <button data-screen="about">About</button>
+    </div>
+
+    <span class="sep">·</span>
+
+    <div class="seg" id="deviceTabs">
+      <button data-device="desktop" class="on">Desktop</button>
+      <button data-device="mobile">Mobile</button>
+    </div>
+
+    <span class="spacer"></span>
+    <span class="hint">Direction A · Soft / Organic</span>
+  </div>
+</div>
+
+<main class="stage device-desktop" id="stage">
+  <div class="stage-inner" id="stageInner">
+    <div class="boot">Loading…</div>
+  </div>
+</main>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Shared content / data -->
+<script type="text/babel" src="shared/data.jsx"></script>
+<script type="text/babel" src="shared/icons.jsx"></script>
+
+<!-- Direction A (Soft / Organic) — the only direction shipping -->
+<script type="text/babel" src="directions/soft.jsx"></script>
+
+<!-- App shell -->
+<script type="text/babel">
+  const { useState, useEffect } = React;
+
+  const DEFAULTS = {
+    "screen": "home",
+    "device": "desktop"
+  };
+
+  function readState(){
+    try {
+      const saved = JSON.parse(localStorage.getItem('rg_state') || 'null');
+      return { ...DEFAULTS, ...(saved||{}) };
+    } catch { return { ...DEFAULTS }; }
+  }
+
+  function App(){
+    const [state, setState] = useState(readState);
+
+    useEffect(() => {
+      localStorage.setItem('rg_state', JSON.stringify(state));
+    }, [state]);
+
+    // reflect seg tabs
+    useEffect(() => {
+      const apply = (id, key) => {
+        document.querySelectorAll(`#${id} button`).forEach(b => {
+          b.classList.toggle('on', b.dataset[key] === state[key]);
+        });
+      };
+      apply('screenTabs','screen');
+      apply('deviceTabs','device');
+      const stage = document.getElementById('stage');
+      stage.classList.toggle('device-desktop', state.device==='desktop');
+      stage.classList.toggle('device-mobile', state.device==='mobile');
+      stage.scrollTop = 0;
+    }, [state]);
+
+    // wire chrome tabs
+    useEffect(() => {
+      const handlers = [];
+      const wire = (id, key) => {
+        document.querySelectorAll(`#${id} button`).forEach(b => {
+          const fn = () => setState(s => ({...s, [key]: b.dataset[key]}));
+          b.addEventListener('click', fn);
+          handlers.push([b,fn]);
+        });
+      };
+      wire('screenTabs','screen');
+      wire('deviceTabs','device');
+      return () => handlers.forEach(([el,fn])=>el.removeEventListener('click',fn));
+    }, []);
+
+    if(!window.DirectionSoft){
+      return <div className="boot">Loading design…</div>;
+    }
+
+    return <window.DirectionSoft screen={state.screen} device={state.device} />;
+  }
+
+  const root = ReactDOM.createRoot(document.getElementById('stageInner'));
+  root.render(<App />);
+</script>
+
+</body>
+</html>

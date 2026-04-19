@@ -15,7 +15,7 @@ Guidance for Claude Code when working in this repository.
 
 Personal branding site for Rohit Garg, Head of Product & Design at Times of India. Showcases writing, projects, and speaking. Tagline: "Product at scale. Built with AI."
 
-**Stack:** Astro static site, CSS (no Tailwind), Markdown content with frontmatter, hosted on Vercel (free tier) with one serverless function for newsletter signups. Domains: rohitgarrg.com (primary), rohitgarrg.in (redirect).
+**Stack:** Astro static site, Tailwind CSS v4 (via @tailwindcss/vite), Markdown content with frontmatter, hosted on Vercel (free tier) with one serverless function for newsletter signups. Domains: rohitgarrg.com (primary), rohitgarrg.in (redirect).
 
 ## Project Structure
 
@@ -42,7 +42,7 @@ rohitgarrg.com/
 │   │   └── speaking/
 │   │       ├── index.astro
 │   │       └── [...slug].astro
-│   ├── components/           # Header, Footer, ArticleCard, SpeakingEntry, Lightbox, NewsletterSignup
+│   ├── components/           # Nav, Footer, ArticleCard, SpeakingEntry, Lightbox, NewsletterSignup
 │   └── styles/
 │       └── global.css
 ├── public/
@@ -77,7 +77,7 @@ rohitgarrg.com/
 - **Content categories:** Product Management, Leadership / Career, AI Tools / Productivity, Personal Development, Reading / Reviews.
 - **Date field:** When adding a new article, always use today's actual calendar date.
 - **Minimal dependencies.** Don't add packages unless genuinely needed.
-- **CSS only.** No Tailwind, no CSS-in-JS. Keep styles in `global.css` and scoped Astro component styles.
+- **Tailwind CSS v4.** Design tokens defined via `@theme` in `global.css`. Scoped Astro component styles for component-specific CSS. Organic radii as CSS custom properties in `:root`.
 - **Mobile-first.** Everything must be fully responsive.
 
 ## Article Frontmatter
@@ -109,21 +109,11 @@ When adding a lead image to an article:
 
 Clean, minimal, editorial. Optimized for long-form reading.
 
-A comprehensive redesign spec exists in `docs/design-handoff.md` covering typography (Newsreader + IBM Plex Sans), full CSS custom properties system with light/dark mode, spacing, and component specs. Refer to that file for all design decisions during implementation.
-
-## Newsletter Feature
-
-Spec files for a blog subscription feature (Buttondown backend):
-- `docs/newsletter-spec.md` — Full feature spec
-- `docs/newsletter-implementation.md` — Phased implementation checklist
-- `docs/email-template-spec.md` — Email template design spec
-
-Key architecture: signup form component on blog pages → Vercel serverless proxy (`api/subscribe.js`) → Buttondown API. RSS feed at `/rss.xml` with autodiscovery. A Node send script with provider abstraction (content reader → email composer → sender module), custom domain newsletter@rohitgarrg.com. Provider-specific code is isolated to `api/subscribe.js` (signups) and `scripts/providers/buttondown.js` (send script).
-
-**Email HTML constraints (non-negotiable):** Table-based layout only. Inline styles only (Gmail strips `<style>` blocks). No CSS grid, flexbox, or custom properties. No web fonts. 600px max width. All images use absolute URLs. See `docs/email-template-spec.md` for the full template design.
+Before starting any design work, read DESIGN-TODO.md in the project root and docs/design-spec.md for full specs.
 
 ## Analytics and SEO
 
 - Google Analytics: GA4, measurement ID `G-X6LXZDSYG8`
 - Google Search Console: configured for www.rohitgarrg.com
 - OG images and meta tags are set per-page via BaseLayout
+

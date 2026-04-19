@@ -1,0 +1,335 @@
+---
+const currentPath = Astro.url.pathname;
+
+const links = [
+  { href: '/writing', label: 'Writing' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/planetia', label: 'Planetia' },
+  { href: '/speaking', label: 'Speaking' },
+  { href: '/about', label: 'About' },
+];
+
+function isActive(href: string): boolean {
+  if (currentPath === '/') return false;
+  return currentPath === href || currentPath === href + '/' || currentPath.startsWith(href + '/');
+}
+---
+
+<a href="#main" class="skip-to-content">Skip to content</a>
+
+<header class="site-header">
+  <nav class="nav-inner">
+    <a href="/" class="brand">
+      <span class="brand-mark" aria-hidden="true">r</span>
+      <span class="brand-name">Rohit Garg</span>
+    </a>
+
+    <ul class="nav-links" role="list">
+      {links.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class:list={[{ active: isActive(href) }]}
+            aria-current={isActive(href) ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <a href="/#newsletter" class="subscribe-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect width="20" height="16" x="2" y="4" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </svg>
+      Subscribe
+    </a>
+
+    <button class="hamburger" aria-label="Open menu" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <ul role="list">
+        {links.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class:list={[{ active: isActive(href) }]}
+              aria-current={isActive(href) ? 'page' : undefined}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/#newsletter" class="subscribe-pill mobile-subscribe">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+        Subscribe
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hamburger = document.querySelector('.hamburger');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  const header = document.querySelector('.site-header');
+
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', () => {
+      const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', String(!expanded));
+      mobileMenu.setAttribute('aria-hidden', String(expanded));
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = expanded ? '' : 'hidden';
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
+  // Scroll border
+  let scrolled = false;
+  function updateScroll() {
+    const isScrolled = window.scrollY > 0;
+    if (isScrolled !== scrolled) {
+      scrolled = isScrolled;
+      header?.toggleAttribute('data-scrolled', scrolled);
+    }
+  }
+  window.addEventListener('scroll', updateScroll, { passive: true });
+  updateScroll();
+</script>
+
+<style>
+  .site-header {
+    --nav-height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in oklch, var(--color-paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+
+  .site-header[data-scrolled] {
+    border-bottom-color: var(--color-line);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 22px 40px;
+    height: var(--nav-height);
+  }
+
+  /* Brand */
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--color-ink);
+    flex-shrink: 0;
+  }
+
+  .brand:hover {
+    color: var(--color-ink);
+  }
+
+  .brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 10px 14px 10px 14px;
+    background: linear-gradient(135deg, var(--color-peri), var(--color-sage));
+    color: var(--color-paper);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  /* Nav links */
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 22px;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .nav-links a {
+    position: relative;
+    color: var(--color-ink-2);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: none;
+    padding-bottom: 6px;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--color-peri-ink);
+  }
+
+  .nav-links a.active {
+    color: var(--color-peri-ink);
+  }
+
+  .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--color-sage);
+    opacity: 0.55;
+    border-radius: 4px;
+  }
+
+  /* Subscribe pill */
+  .subscribe-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    font-weight: 400;
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .subscribe-pill:hover {
+    color: var(--color-paper);
+    opacity: 0.85;
+  }
+
+  /* Hamburger */
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: var(--color-ink);
+    min-height: 44px;
+    min-width: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    height: calc(100dvh - var(--nav-height));
+    background: var(--color-paper);
+    z-index: 99;
+    overflow-y: auto;
+  }
+
+  .mobile-menu.open {
+    display: block;
+  }
+
+  .mobile-menu-inner {
+    padding: 32px var(--spacing-page-x-mobile);
+  }
+
+  .mobile-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px 0;
+  }
+
+  .mobile-menu li + li {
+    border-top: 1px solid var(--color-line);
+  }
+
+  .mobile-menu a {
+    display: block;
+    padding: 16px 0;
+    font-family: var(--font-sans);
+    font-size: 18px;
+    color: var(--color-ink-2);
+    text-decoration: none;
+    min-height: 44px;
+  }
+
+  .mobile-menu a.active {
+    color: var(--color-peri-ink);
+  }
+
+  .mobile-subscribe {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+    .nav-inner {
+      padding: 16px var(--spacing-page-x-mobile);
+    }
+
+    .nav-links,
+    .subscribe-pill:not(.mobile-subscribe) {
+      display: none;
+    }
+
+    .hamburger {
+      display: flex;
+      margin-left: auto;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .nav-inner {
+      padding: 22px var(--spacing-page-x-tablet);
+    }
+  }
+</style>

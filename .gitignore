@@ -28,6 +28,11 @@ pnpm-debug.log*
 game-title.png
 .vercel
 .env*.local
+.claude/worktrees/
+
+# temporary design QC assets
+/*.png
+/*.mov
 
 # newsletter preview output
 scripts/preview-email.html
