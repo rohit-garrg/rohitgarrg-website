@@ -283,8 +283,8 @@ const breadcrumbSchema = {
     btn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(window.location.href);
-        btn.setAttribute('title', 'Copied!');
-        setTimeout(() => btn.setAttribute('title', 'Copy link'), 2000);
+        btn.classList.add('copied');
+        setTimeout(() => btn.classList.remove('copied'), 2000);
       } catch {}
     });
   });
@@ -296,7 +296,7 @@ const breadcrumbSchema = {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
-    padding: 70px 80px 40px;
+    padding: 48px 80px 40px;
     border-bottom: 1px solid var(--color-line);
     max-width: 1440px;
     margin: 0 auto;
@@ -386,18 +386,18 @@ const breadcrumbSchema = {
   .hero-cover img {
     width: 100%;
     height: auto;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 3 / 2;
     object-fit: cover;
-    border-radius: var(--radius-organic-portrait);
+    border-radius: 52% 48% 50% 50% / 42% 58% 44% 56%;
     box-shadow: var(--shadow-portrait);
     display: block;
   }
 
   .cover-fallback {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 3 / 2;
     background: var(--color-peri-pale);
-    border-radius: var(--radius-organic-portrait);
+    border-radius: 52% 48% 50% 50% / 42% 58% 44% 56%;
   }
 
   /* ── Article grid ── */
@@ -728,6 +728,24 @@ const breadcrumbSchema = {
   .share-btn:focus-visible {
     outline: 2px solid var(--color-peri-ink);
     outline-offset: 2px;
+  }
+
+  .share-btn.copied {
+    background: var(--color-sage-pale);
+    border-color: var(--color-sage);
+    color: var(--color-sage);
+    position: relative;
+  }
+
+  .share-btn.copied::after {
+    content: 'Copied!';
+    position: absolute;
+    left: calc(100% + 8px);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-sage);
+    white-space: nowrap;
   }
 
   /* Share (mobile) */

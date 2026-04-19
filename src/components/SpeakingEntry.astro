@@ -21,8 +21,12 @@ const detailUrl = `/speaking/${slug}/`;
   </div>
   <div class="entry-content">
     <p class="entry-when mono-xs">{month} · {dateStr}</p>
-    <h3 class="entry-venue">{event}</h3>
-    <p class="entry-title">{title}</p>
+    <h3 class="entry-venue"><a href={detailUrl}>{event}</a></h3>
+    {url ? (
+      <p class="entry-title"><a href={url} target="_blank" rel="noopener">{title}</a></p>
+    ) : (
+      <p class="entry-title">{title}</p>
+    )}
     <p class="entry-blurb">{description}</p>
     <a href={detailUrl} class="entry-link">View details →</a>
   </div>
@@ -84,12 +88,30 @@ const detailUrl = `/speaking/${slug}/`;
     margin-bottom: 4px;
   }
 
+  .entry-venue a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .entry-venue a:hover {
+    color: var(--color-peri-ink);
+  }
+
   .entry-title {
     font-family: var(--font-sans);
     font-size: 16px;
     font-weight: 600;
     color: var(--color-peri-ink);
     margin-bottom: 6px;
+  }
+
+  .entry-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .entry-title a:hover {
+    text-decoration: underline;
   }
 
   .entry-blurb {
