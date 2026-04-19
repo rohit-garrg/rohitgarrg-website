@@ -1,10 +1,10 @@
 ---
 title: "From a Kid's Question to the App Store"
-description: "How watching my kids play led to building an iPad app with AI — and what was actually hard about it."
-category: "AI Tools / Productivity"
 date: 2026-03-29
+tag: "AI"
 excerpt: "My son's space questions led to a browser prototype, which led to an iPad app built entirely with AI tools. Four weekends, zero prior Swift experience — and the code turned out to be the easy part."
-leadImage: "/images/writing/kids-question-to-app-store/lead.webp"
+readMin: 6
+cover: "/images/writing/kids-question-to-app-store/lead.webp"
 ---
 
 My son asked me what would happen if an asteroid hit Earth. I was working on my laptop.

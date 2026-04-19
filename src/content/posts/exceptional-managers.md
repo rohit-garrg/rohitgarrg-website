@@ -1,10 +1,10 @@
 ---
 title: "What 10+ Bosses Taught Me About Exceptional Managers"
-description: "Leadership lessons from fifteen years of observing what makes managers truly effective."
-category: "Leadership / Career"
 date: 2026-01-30
+tag: "Leadership"
 excerpt: "After fifteen years and ten-plus managers, the pattern is clear: the best ones share an emotional security that frees them from needing to prove themselves. Here's what that looks like in practice — from giving credit to handling mistakes to fighting for their team."
-leadImage: "/images/writing/exceptional-managers/lead.webp"
+readMin: 7
+cover: "/images/writing/exceptional-managers/lead.webp"
 canonicalUrl: "https://timesofindia.indiatimes.com/blogs/rohits-rationale/what-10-bosses-taught-me-about-exceptional-managers/"
 ---
 

@@ -1,10 +1,10 @@
 ---
 title: "From 7 Hours to 1: My AI Presentation Workflow"
-description: "How I use NotebookLM and Gamma to create compelling presentations in a fraction of the time."
-category: "AI Tools / Productivity"
 date: 2026-01-10
+tag: "AI"
 excerpt: "I used to spend six or seven hours building a single presentation deck. Then I found a two-tool workflow — NotebookLM for research synthesis, Gamma for slide generation — that cut it to under an hour."
-leadImage: "/images/writing/ai-presentation-workflow/lead.webp"
+readMin: 7
+cover: "/images/writing/ai-presentation-workflow/lead.webp"
 ---
 
 **Confession: presentations used to be my time sink.**

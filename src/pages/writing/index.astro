@@ -1,92 +1,519 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ArticleCard from '../../components/ArticleCard.astro';
-import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import WritingCard from '../../components/WritingCard.astro';
+import { TAG_COLORS, TAG_ORDER } from '../../utils/tags';
 
-// Get articles from content collection
-const allArticles = await getCollection('writing');
+// Get all posts sorted by date
+const allPosts = await getCollection('posts');
+const sortedPosts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-// Transform to usable format with reading time
-const articles = allArticles.map(article => {
-  const slug = article.id.replace(/\.md$/, '');
-  return {
-    title: article.data.title,
-    description: article.data.description,
-    category: article.data.category,
-    date: article.data.date,
-    slug,
-    leadImage: article.data.leadImage,
-    readingTime: Math.ceil((article.body ?? '').split(/\s+/).length / 200),
-  };
-});
+// Featured post (most recent)
+const featured = sortedPosts[0];
+const remainingPosts = sortedPosts.slice(1);
 
-// Sort articles by date (newest first)
-const sortedArticles = articles.sort((a, b) => b.date.getTime() - a.date.getTime());
+// Tag counts (single pass)
+const tagCounts = new Map<string, number>();
+for (const post of sortedPosts) {
+  tagCounts.set(post.data.tag, (tagCounts.get(post.data.tag) || 0) + 1);
+}
+
+// Group remaining posts by year
+const yearGroups = new Map<number, typeof remainingPosts>();
+for (const post of remainingPosts) {
+  const year = post.data.date.getFullYear();
+  if (!yearGroups.has(year)) yearGroups.set(year, []);
+  yearGroups.get(year)!.push(post);
+}
+const sortedYears = [...yearGroups.keys()].sort((a, b) => b - a);
+
+// Search index for client-side filter/search
+const searchIndex = sortedPosts.map(p => ({
+  s: p.id.replace(/\.md$/, ''),
+  t: p.data.title,
+  e: p.data.excerpt,
+  g: p.data.tag,
+  y: p.data.date.getFullYear(),
+}));
 ---
 
 <BaseLayout
   title="Writing - Rohit Garg"
-  description="Articles on product management, leadership, AI tools, and personal development."
+  description="Essays on product, AI, leadership, and the occasional book review."
 >
-  <div class="container-page">
-    <header class="page-header">
-      <h1>Writing</h1>
-      <p class="page-description">Thoughts on product, leadership, AI tools, and personal growth.</p>
+  <div class="writing-page container-wide">
+    <!-- Page header -->
+    <header class="writing-header">
+      <h1 class="display-lg">Notes on <em>product</em>, AI, leadership, and the occasional book review.</h1>
+      <p class="writing-sub body-md">Roughly weekly essays. A mix of the craft of product management, AI as a coworker, and whatever audiobook I finished that week.</p>
     </header>
 
-    <!-- Articles Grid -->
-    <div class="articles-list">
-      {sortedArticles.map((article) => (
-        <ArticleCard
-          title={article.title}
-          description={article.description}
-          category={article.category}
-          date={article.date}
-          slug={article.slug}
-          leadImage={article.leadImage}
-          variant="grid"
-          readingTime={article.readingTime}
-        />
-      ))}
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <div class="chip-group" id="chip-group">
+        <button class="chip active" data-tag="all" type="button">All writing</button>
+        {TAG_ORDER.map(tag => {
+          const count = tagCounts.get(tag);
+          return count ? (
+            <button class="chip" data-tag={tag} type="button">
+              <span class="chip-bead" style={`background: ${TAG_COLORS[tag]}`}></span>
+              {tag}
+              <span class="chip-count">&middot; {count.toString().padStart(2, '0')}</span>
+            </button>
+          ) : null;
+        })}
+      </div>
+      <div class="search-pill">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="search" placeholder="Search essays..." id="search-input" aria-label="Search essays" />
+      </div>
     </div>
 
-    <NewsletterSignup variant="listing" />
+    <!-- Featured block -->
+    <section class="featured-block" id="featured-block" data-slug={featured.id.replace(/\.md$/, '')}>
+      <a href={`/writing/${featured.id.replace(/\.md$/, '')}`} class="featured-link">
+        <div class="featured-cover">
+          <img
+            src={featured.data.cover}
+            alt={featured.data.title}
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <div class="featured-text">
+          <p class="featured-eyebrow mono-xs">
+            <span class="chip-bead" style={`background: ${TAG_COLORS[featured.data.tag]}`}></span>
+            Featured &middot; {featured.data.tag} &middot; {featured.data.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
+          </p>
+          <h2 class="display-md">{featured.data.title}</h2>
+          <p class="featured-excerpt body-md">{featured.data.excerpt}</p>
+          <span class="featured-cta">Read the essay &rarr;</span>
+        </div>
+      </a>
+    </section>
+
+    <!-- Result label (hidden by default, shown by JS) -->
+    <p class="result-label mono-xs" id="result-label" hidden></p>
+
+    <!-- Year groups -->
+    {sortedYears.map(year => {
+      const posts = yearGroups.get(year)!;
+      return (
+        <section class="year-group" data-year={year}>
+          <h2 class="year-label mono-xxs">{year} &middot; <span class="year-count">{posts.length}</span> {posts.length === 1 ? 'essay' : 'essays'}</h2>
+          <div class="year-grid">
+            {posts.map(post => (
+              <div class="card-wrapper" data-slug={post.id.replace(/\.md$/, '')} data-tag={post.data.tag} data-year={post.data.date.getFullYear()}>
+                <WritingCard
+                  title={post.data.title}
+                  excerpt={post.data.excerpt}
+                  date={post.data.date}
+                  readingTime={post.data.readMin}
+                  cover={post.data.cover}
+                  tag={post.data.tag}
+                  slug={post.id.replace(/\.md$/, '')}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+
+    <!-- Empty state -->
+    <div class="empty-state" id="empty-state" hidden>
+      <p class="body-md">No essays matching that. Try a broader term, or <button type="button" id="clear-filter" class="clear-link">browse all essays</button>.</p>
+    </div>
   </div>
 </BaseLayout>
 
-<style>
-  .page-header {
-    padding: var(--space-xl) 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: var(--space-lg);
-  }
+<script define:vars={{ searchIndex }}>
+  const INDEX = searchIndex;
+  const chips = document.querySelectorAll('#chip-group .chip');
+  const searchInput = document.getElementById('search-input');
+  const featuredBlock = document.getElementById('featured-block');
+  const emptyState = document.getElementById('empty-state');
+  const resultLabel = document.getElementById('result-label');
+  const clearBtn = document.getElementById('clear-filter');
+  const cards = document.querySelectorAll('.card-wrapper');
+  const yearGroups = document.querySelectorAll('.year-group');
 
-  .page-header h1 {
-    margin-bottom: var(--space-xs);
-  }
+  let activeTag = 'all';
+  let query = '';
+  let debounceTimer = null;
 
-  .page-description {
-    color: var(--text-secondary);
-    font-size: 20px;
-    font-weight: 300;
-    line-height: 1.5;
-    margin-bottom: 0;
-  }
+  function applyFilter() {
+    const lowerQuery = query.toLowerCase();
+    let visibleCount = 0;
 
-  .articles-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-lg);
-  }
-
-  @media (max-width: 768px) {
-    .page-header {
-      padding: var(--space-lg) 0;
+    const matchingSlugs = new Set();
+    for (const item of INDEX) {
+      const tagMatch = activeTag === 'all' || item.g === activeTag;
+      const queryMatch = !lowerQuery || item.t.toLowerCase().includes(lowerQuery) || item.e.toLowerCase().includes(lowerQuery);
+      if (tagMatch && queryMatch) matchingSlugs.add(item.s);
     }
 
-    .articles-list {
+    cards.forEach(card => {
+      const slug = card.getAttribute('data-slug');
+      const visible = matchingSlugs.has(slug);
+      card.hidden = !visible;
+      if (visible) visibleCount++;
+    });
+
+    yearGroups.forEach(group => {
+      const visibleCards = group.querySelectorAll('.card-wrapper:not([hidden])');
+      group.hidden = visibleCards.length === 0;
+      const countEl = group.querySelector('.year-count');
+      if (countEl) countEl.textContent = visibleCards.length;
+    });
+
+    const isFiltering = activeTag !== 'all' || lowerQuery;
+    if (featuredBlock) {
+      featuredBlock.hidden = !!isFiltering;
+    }
+
+    // Result label
+    if (isFiltering && visibleCount > 0) {
+      let label = '';
+      if (activeTag !== 'all' && lowerQuery) {
+        label = `${visibleCount} ${visibleCount === 1 ? 'essay' : 'essays'} tagged ${activeTag} matching "${query}"`;
+      } else if (activeTag !== 'all') {
+        label = `${visibleCount} ${visibleCount === 1 ? 'essay' : 'essays'} tagged ${activeTag}`;
+      } else if (lowerQuery) {
+        label = `${visibleCount} ${visibleCount === 1 ? 'essay' : 'essays'} matching "${query}"`;
+      }
+      resultLabel.textContent = label;
+      resultLabel.hidden = false;
+    } else {
+      resultLabel.hidden = true;
+    }
+
+    // Empty state
+    emptyState.hidden = visibleCount > 0 || !isFiltering;
+  }
+
+  // Chip clicks
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeTag = chip.getAttribute('data-tag');
+      applyFilter();
+    });
+  });
+
+  // Search input
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      query = e.target.value.trim();
+      applyFilter();
+    }, 200);
+  });
+
+  // Clear filter
+  clearBtn.addEventListener('click', () => {
+    activeTag = 'all';
+    query = '';
+    searchInput.value = '';
+    chips.forEach(c => c.classList.remove('active'));
+    chips[0].classList.add('active');
+    applyFilter();
+  });
+</script>
+
+<style>
+  /* Page layout */
+  .writing-page {
+    padding-top: 40px;
+    padding-bottom: var(--spacing-section-y);
+  }
+
+  /* Header */
+  .writing-header {
+    max-width: 760px;
+    margin-bottom: 40px;
+  }
+
+  .writing-header h1 {
+    margin-bottom: 18px;
+  }
+
+  .writing-header em {
+    font-style: italic;
+    color: var(--color-peri-ink);
+  }
+
+  .writing-sub {
+    color: var(--color-ink-2);
+    max-width: 560px;
+  }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 0;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+    margin-bottom: 40px;
+  }
+
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    background: transparent;
+    color: var(--color-ink-2);
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+    white-space: nowrap;
+  }
+
+  .chip:hover {
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  .chip.active {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+
+  .chip-bead {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-organic-bead);
+    flex-shrink: 0;
+  }
+
+  .chip.active .chip-bead {
+    display: none;
+  }
+
+  .chip-count {
+    opacity: 0.6;
+    font-size: 11px;
+  }
+
+  .chip.active .chip-count {
+    opacity: 0.7;
+  }
+
+  .search-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    background: var(--color-paper-2);
+    color: var(--color-mute);
+    flex-shrink: 0;
+  }
+
+  .search-pill input {
+    border: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--color-ink);
+    outline: none;
+    width: 140px;
+  }
+
+  .search-pill input::placeholder {
+    color: var(--color-mute);
+  }
+
+  .search-pill:focus-within {
+    border-color: var(--color-peri-ink);
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  /* Featured block */
+  .featured-block {
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .featured-link {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .featured-cover {
+    overflow: hidden;
+    border-radius: var(--radius-organic-b);
+  }
+
+  .featured-cover img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    display: block;
+  }
+
+  .featured-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .featured-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-peri-ink);
+    margin-bottom: 16px;
+  }
+
+  .featured-text h2 {
+    margin-bottom: 14px;
+    color: var(--color-ink);
+  }
+
+  .featured-excerpt {
+    color: var(--color-ink-2);
+    margin-bottom: 20px;
+    line-height: 1.55;
+  }
+
+  .featured-cta {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: var(--radius-pill);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    width: fit-content;
+    transition: opacity 200ms ease;
+  }
+
+  .featured-link:hover .featured-cta {
+    opacity: 0.85;
+  }
+
+  .featured-link:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 4px;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Result label */
+  .result-label {
+    color: var(--color-peri-ink);
+    margin-bottom: 24px;
+  }
+
+  /* Year groups */
+  .year-group {
+    margin-bottom: 48px;
+  }
+
+  .year-label {
+    color: var(--color-mute);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .year-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 80px 0;
+    color: var(--color-ink-2);
+  }
+
+  .clear-link {
+    background: none;
+    border: none;
+    color: var(--color-peri-ink);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 1023px) {
+    .filter-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .search-pill {
+      width: 100%;
+    }
+
+    .search-pill input {
+      width: 100%;
+    }
+
+    .featured-link {
       grid-template-columns: 1fr;
+    }
+
+    .featured-text h2 {
+      font-size: 32px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .writing-page {
+      padding-top: 28px;
+    }
+
+    .writing-header h1 {
+      font-size: 36px;
+    }
+
+    .year-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-text h2 {
+      font-size: 28px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chip,
+    .featured-cta {
+      transition: none !important;
     }
   }
 </style>

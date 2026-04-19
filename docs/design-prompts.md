@@ -310,7 +310,7 @@ Goal: production-ready site.
    - If template via @vercel/og: build src/pages/og/[slug].png.ts using site palette and typography. Input: post title + tag.
    - If site-wide: public/og/default.png linked from every page.
 
-8. Analytics — Decision is swap to cookieless. Remove GA4 script and measurement ID `G-X6LXZDSYG8` from the base layout. Install GoatCounter: sign up at goatcounter.com, add the single script tag (`<script data-goatcounter="https://[code].goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>`) to the base layout before `</body>`. No consent banner needed. Verify tracking fires on a deployed Vercel preview before ticking Phase 5.
+8. Analytics — Decision is swap to cookieless. Remove GA4 script and measurement ID `G-X6LXZDSYG8` from the base layout. Install GoatCounter: sign up at goatcounter.com, add the single script tag (`<script data-goatcounter="https://rohitgarrg.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>`) to the base layout before `</body>`. No consent banner needed. Verify tracking fires on a deployed Vercel preview before ticking Phase 5.
 
 9. Print styles — a @media print block in global CSS:
    - Hide Nav, Footer, TOC, share column, all CTAs.

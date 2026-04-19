@@ -1,20 +1,18 @@
 import { defineCollection, z } from 'astro:content';
 
-const writing = defineCollection({
+const posts = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    description: z.string(),
-    category: z.enum([
-      'Product Management',
-      'Leadership / Career',
-      'AI Tools / Productivity',
-      'Personal Development',
-      'Reading / Reviews'
-    ]),
     date: z.coerce.date(),
-    excerpt: z.string().optional(),
-    leadImage: z.string().optional(),
+    tag: z.enum(['AI', 'Leadership', 'Product', 'Design', 'Books', 'Projects']),
+    excerpt: z.string(),
+    readMin: z.number(),
+    cover: z.string(),
+    nextPosts: z.array(z.string()).optional(),
+    series: z.object({ name: z.string(), order: z.number() }).optional(),
+    seoTitle: z.string().optional(),
+    seoDescription: z.string().optional(),
     canonicalUrl: z.string().url().optional(),
   }),
 });
@@ -51,4 +49,4 @@ const speaking = defineCollection({
   }),
 });
 
-export const collections = { writing, projects, speaking };
+export const collections = { posts, projects, speaking };

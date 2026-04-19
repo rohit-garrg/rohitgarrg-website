@@ -23,18 +23,19 @@ Personal branding site for Rohit Garg, Head of Product & Design at Times of Indi
 rohitgarrg.com/
 ├── src/
 │   ├── content/
-│   │   ├── writing/          # Blog posts as markdown
+│   │   ├── posts/            # Blog posts as markdown (6-tag enum)
 │   │   └── speaking/         # Speaking entries as markdown
 │   ├── layouts/
-│   │   ├── BaseLayout.astro
-│   │   └── ArticleLayout.astro
+│   │   └── BaseLayout.astro
+│   ├── plugins/
+│   │   └── remark-inline-cta.mjs  # Injects subscribe CTA after 5th paragraph
 │   ├── pages/
 │   │   ├── index.astro
 │   │   ├── about.astro
 │   │   ├── 404.astro
 │   │   ├── writing/
-│   │   │   ├── index.astro       # Blog listing with category filter
-│   │   │   └── [...slug].astro   # Dynamic article pages
+│   │   │   ├── index.astro       # Writing index with tag filter + search
+│   │   │   └── [...slug].astro   # Post template with sticky TOC
 │   │   ├── projects/
 │   │   │   ├── index.astro
 │   │   │   ├── office-survivors.astro
@@ -42,7 +43,7 @@ rohitgarrg.com/
 │   │   └── speaking/
 │   │       ├── index.astro
 │   │       └── [...slug].astro
-│   ├── components/           # Nav, Footer, ArticleCard, SpeakingEntry, Lightbox, NewsletterSignup
+│   ├── components/           # Nav, Footer, WritingCard, ProjectCard, NewsletterForm, SpeakingEntry, Lightbox
 │   └── styles/
 │       └── global.css
 ├── public/
@@ -68,13 +69,13 @@ rohitgarrg.com/
 - **Content Collections:** Astro content collections (`src/content/`) for type-safe writing and speaking entries.
 - **Dynamic Routes:** `[...slug].astro` pattern generates pages from markdown at build time.
 - **Static Generation:** All pages are statically generated. No client-side JS unless a component explicitly needs interactivity.
-- **Markdown Workflow:** New posts are added by creating a markdown file in `src/content/writing/` with correct frontmatter. No code changes required.
+- **Markdown Workflow:** New posts are added by creating a markdown file in `src/content/posts/` with correct frontmatter. No code changes required.
 - **Office Survivors:** A Phaser.js browser game built as a separate project. The compiled static output lives in `public/projects/office-survivors/` and is embedded via iframe on its project page. Do not mix the Phaser/Vite build pipeline with Astro's build.
 
 ## Conventions
 
-- **Frontmatter is the source of truth.** Pages read data from frontmatter fields (e.g., `leadImage`, `category`, `date`). Never hardcode lists of articles or their attributes in page files.
-- **Content categories:** Product Management, Leadership / Career, AI Tools / Productivity, Personal Development, Reading / Reviews.
+- **Frontmatter is the source of truth.** Pages read data from frontmatter fields (e.g., `cover`, `tag`, `date`). Never hardcode lists of articles or their attributes in page files.
+- **Content tags:** AI, Leadership, Product, Design, Books, Projects (six-value enum, validated by Zod).
 - **Date field:** When adding a new article, always use today's actual calendar date.
 - **Minimal dependencies.** Don't add packages unless genuinely needed.
 - **Tailwind CSS v4.** Design tokens defined via `@theme` in `global.css`. Scoped Astro component styles for component-specific CSS. Organic radii as CSS custom properties in `:root`.
@@ -85,12 +86,18 @@ rohitgarrg.com/
 ```yaml
 ---
 title: "Article Title Here"
-description: "One-line description for card preview"
-category: "Category Name"
 date: 2026-01-15
-excerpt: "1-2 sentence summary for newsletter previews and SEO. Optional but preferred."
-leadImage: "/images/writing/article-slug/lead.webp"  # optional
-canonicalUrl: "https://example.com/original"          # optional
+tag: "AI"  # AI | Leadership | Product | Design | Books | Projects
+excerpt: "1-2 sentence summary for cards, newsletter, and SEO."
+readMin: 7
+cover: "/images/writing/article-slug/lead.webp"
+nextPosts: ["slug-1", "slug-2"]  # optional, falls back to 2 most recent
+series:                          # optional
+  name: "Series Name"
+  order: 1
+seoTitle: "Custom SEO title"     # optional, falls back to title
+seoDescription: "Custom meta"   # optional, falls back to excerpt
+canonicalUrl: "https://..."      # optional
 ---
 ```
 
@@ -98,7 +105,7 @@ canonicalUrl: "https://example.com/original"          # optional
 
 When adding a lead image to an article:
 
-1. Set `leadImage` in frontmatter (this is the source of truth).
+1. Set `cover` in frontmatter (this is the source of truth).
 2. Create three responsive variants in `public/images/writing/[slug]/`:
    - `lead.webp` (1400px width)
    - `lead-medium.webp` (600px width)

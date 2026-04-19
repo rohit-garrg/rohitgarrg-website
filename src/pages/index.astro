@@ -7,13 +7,13 @@ import ProjectCard from '../components/ProjectCard.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
 
 // Writing: 3 most recent
-const allWriting = await getCollection('writing');
+const allWriting = await getCollection('posts');
 const latestWriting = allWriting
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 
 function getReadingTime(article: typeof latestWriting[0]): number {
-  return Math.ceil((article.body ?? '').split(/\s+/).length / 200);
+  return article.data.readMin;
 }
 
 // Projects: ordered by `order` field
@@ -64,11 +64,11 @@ const websiteSchema = {
         {latestWriting.map((article, i) => (
           <WritingCard
             title={article.data.title}
-            excerpt={article.data.excerpt ?? article.data.description}
+            excerpt={article.data.excerpt}
             date={article.data.date}
             readingTime={getReadingTime(article)}
-            leadImage={article.data.leadImage}
-            category={article.data.category}
+            cover={article.data.cover}
+            tag={article.data.tag}
             slug={article.id.replace(/\.md$/, '')}
             featured={i === 0}
           />

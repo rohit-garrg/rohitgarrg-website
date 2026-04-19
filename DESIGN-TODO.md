@@ -14,8 +14,8 @@ Living doc for the redesign. Read at the start of every session involving design
 Each phase is one Claude Code session. Clear context between phases. Run the QC check at the end of each phase's prompt before moving on.
 
 - [x] **Phase 1: Foundation** — tokens, fonts, Nav, Footer, base layout, contrast verification
-- [ ] **Phase 2: Home** — hero, now-strip, writing teaser, projects teaser, newsletter CTA, shared card components
-- [ ] **Phase 3: Writing** — posts content collection, index with filter/search, post template with sticky TOC, RSS feed
+- [x] **Phase 2: Home** — hero, now-strip, writing teaser, projects teaser, newsletter CTA, shared card components
+- [x] **Phase 3: Writing** — posts content collection, index with filter/search, post template with sticky TOC, RSS feed
 - [ ] **Phase 4: Other pages** — Projects, Planetia, Speaking, About
 - [ ] **Phase 5: Polish** — 404/500, sitemap, robots, OG images, favicons, a11y pass, responsive pass, print styles, Lighthouse
 

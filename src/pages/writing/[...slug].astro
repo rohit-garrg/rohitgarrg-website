@@ -1,27 +1,966 @@
 ---
 import { getCollection } from 'astro:content';
-import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
+import { TAG_COLORS } from '../../utils/tags';
 
 export async function getStaticPaths() {
-  const articles = await getCollection('writing');
-  return articles.map((article) => ({
-    params: { slug: article.id.replace(/\.md$/, '') },
-    props: { article },
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.md$/, '') },
+    props: { post },
   }));
 }
 
-const { article } = Astro.props;
-const { Content } = await article.render();
-const leadImage = article.data.leadImage;
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+const slug = post.id.replace(/\.md$/, '');
+
+// All posts for next-up and series
+const allPosts = await getCollection('posts');
+const sortedPosts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Next posts
+let nextPosts: typeof sortedPosts;
+if (post.data.nextPosts?.length) {
+  nextPosts = post.data.nextPosts
+    .map((s: string) => allPosts.find(p => p.id.replace(/\.md$/, '') === s))
+    .filter(Boolean) as typeof sortedPosts;
+} else {
+  nextPosts = sortedPosts
+    .filter(p => p.id !== post.id)
+    .slice(0, 2);
+}
+
+// Series info
+let seriesInfo: { name: string; current: number; total: number; prev?: typeof post; next?: typeof post } | null = null;
+if (post.data.series) {
+  const seriesPosts = allPosts
+    .filter(p => p.data.series?.name === post.data.series!.name)
+    .sort((a, b) => a.data.series!.order - b.data.series!.order);
+  seriesInfo = {
+    name: post.data.series.name,
+    current: post.data.series.order,
+    total: seriesPosts.length,
+    prev: seriesPosts.find(p => p.data.series!.order === post.data.series!.order - 1),
+    next: seriesPosts.find(p => p.data.series!.order === post.data.series!.order + 1),
+  };
+}
+
+// TOC (H2 and H3 only)
+const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
+
+// Tag colors imported from shared utils
+
+const formattedDate = post.data.date.toLocaleDateString('en-US', {
+  month: 'short',
+  day: '2-digit',
+  year: 'numeric',
+});
+
+// Schema markup
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = new URL(post.data.cover, Astro.site).toString();
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.data.seoTitle || post.data.title,
+  "description": post.data.seoDescription || post.data.excerpt,
+  "image": imageURL,
+  "datePublished": post.data.date.toISOString(),
+  "dateModified": post.data.date.toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": "Rohit Garg",
+    "url": "https://www.rohitgarrg.com/about"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Rohit Garg",
+    "url": "https://www.rohitgarrg.com"
+  },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalURL.toString() },
+  "wordCount": (post.body ?? '').split(/\s+/).length,
+  "articleSection": post.data.tag,
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.rohitgarrg.com" },
+    { "@type": "ListItem", "position": 2, "name": "Writing", "item": "https://www.rohitgarrg.com/writing" },
+    { "@type": "ListItem", "position": 3, "name": post.data.title, "item": canonicalURL.toString() },
+  ],
+};
 ---
 
-<ArticleLayout
-  title={article.data.title}
-  description={article.data.description}
-  category={article.data.category}
-  date={article.data.date}
-  leadImage={leadImage}
-  canonicalUrl={article.data.canonicalUrl}
+<BaseLayout
+  title={`${post.data.seoTitle || post.data.title} - Rohit Garg`}
+  description={post.data.seoDescription || post.data.excerpt}
+  canonicalUrl={post.data.canonicalUrl}
+  ogImage={post.data.cover}
 >
-  <Content />
-</ArticleLayout>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <article>
+    <!-- Post hero -->
+    <header class="post-hero">
+      <div class="hero-text">
+        {seriesInfo && (
+          <div class="series-bar mono-xs">
+            {seriesInfo.prev && (
+              <a href={`/writing/${seriesInfo.prev.id.replace(/\.md$/, '')}`} class="series-link">&larr; Prev</a>
+            )}
+            <span>{seriesInfo.name} &middot; Part {seriesInfo.current} of {seriesInfo.total === 1 ? 'an ongoing series' : seriesInfo.total}</span>
+            {seriesInfo.next && (
+              <a href={`/writing/${seriesInfo.next.id.replace(/\.md$/, '')}`} class="series-link">Next &rarr;</a>
+            )}
+          </div>
+        )}
+
+        <div class="post-meta mono-xs">
+          <span class="meta-dot" style={`background: ${TAG_COLORS[post.data.tag] || 'var(--color-slate)'}`}></span>
+          {post.data.tag} &middot; {formattedDate} &middot; {post.data.readMin} min read
+        </div>
+
+        <h1>{post.data.title}</h1>
+
+        <p class="standfirst">{post.data.excerpt}</p>
+
+        <div class="byline">
+          <img src="/images/headshot.webp" alt="Rohit Garg" class="byline-avatar" width="42" height="42" loading="eager" />
+          <div>
+            <p class="byline-name">Rohit Garg</p>
+            <p class="byline-role caption">Head of Product & Design, Times of India</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-cover">
+        {post.data.cover ? (
+          <img
+            src={post.data.cover}
+            alt={post.data.title}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        ) : (
+          <div class="cover-fallback"></div>
+        )}
+      </div>
+    </header>
+
+    <!-- Article grid -->
+    <div class="article-grid">
+      <!-- Left: TOC (desktop) -->
+      {toc.length > 0 && (
+        <aside class="toc-sidebar" aria-label="Table of contents">
+          <p class="toc-label mono-xxs">On this page</p>
+          <nav>
+            <ul class="toc-list">
+              {toc.map(h => (
+                <li class:list={['toc-item', { 'toc-sub': h.depth === 3 }]}>
+                  <a href={`#${h.slug}`} class="toc-link caption">{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div class="toc-reading-time mono-xxs">
+            <span>{post.data.readMin} min read</span>
+          </div>
+        </aside>
+      )}
+
+      <!-- Center: Article body -->
+      <div class="article-center">
+        <!-- TOC accordion (tablet/mobile) -->
+        {toc.length > 0 && (
+          <details class="toc-accordion">
+            <summary class="mono-xs">On this page</summary>
+            <nav>
+              <ul class="toc-accordion-list">
+                {toc.map(h => (
+                  <li class:list={[{ 'toc-sub': h.depth === 3 }]}>
+                    <a href={`#${h.slug}`} class="toc-link caption">{h.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </details>
+        )}
+
+        <div class="article-body">
+          <Content />
+        </div>
+
+        <!-- Share buttons (tablet/mobile, shown at end) -->
+        <div class="share-mobile">
+          <button class="share-btn" data-action="copy" title="Copy link" type="button" aria-label="Copy link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
+          </button>
+          <a href="/rss.xml" class="share-btn" title="RSS feed" aria-label="RSS feed">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9" /><path d="M4 4a16 16 0 0 1 16 16" /><circle cx="5" cy="19" r="1" /></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: Share (desktop) -->
+      <aside class="share-sidebar" aria-label="Share">
+        <div class="share-buttons">
+          <button class="share-btn" data-action="copy" title="Copy link" type="button" aria-label="Copy link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
+          </button>
+          <a href="/rss.xml" class="share-btn" title="RSS feed" aria-label="RSS feed">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9" /><path d="M4 4a16 16 0 0 1 16 16" /><circle cx="5" cy="19" r="1" /></svg>
+          </a>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Post-end CTA -->
+    <section class="post-end-cta" id="newsletter" aria-label="Newsletter signup">
+      <div class="end-cta-left">
+        <p class="end-cta-eyebrow mono-xs">Before you go</p>
+        <h3>One essay like this. Most Sundays. Nothing else.</h3>
+        <div class="end-cta-signature">
+          <img src="/images/headshot.webp" alt="Rohit Garg" class="byline-avatar" width="36" height="36" loading="lazy" />
+          <span class="caption">Rohit Garg</span>
+        </div>
+      </div>
+      <div class="end-cta-right">
+        <NewsletterForm />
+      </div>
+    </section>
+
+    <!-- Next up -->
+    {nextPosts.length > 0 && (
+      <section class="next-up" aria-label="Keep reading">
+        <p class="next-up-label mono-xxs">Keep reading</p>
+        <div class="next-up-grid">
+          {nextPosts.map(np => (
+            <a href={`/writing/${np.id.replace(/\.md$/, '')}`} class="next-card">
+              <p class="next-meta mono-xs">
+                <span class="meta-dot" style={`background: ${TAG_COLORS[np.data.tag] || 'var(--color-slate)'}`}></span>
+                {np.data.tag} &middot; {np.data.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
+              </p>
+              <h4>{np.data.title}</h4>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>
+
+<script>
+  // TOC scroll-spy via IntersectionObserver
+  const tocLinks = document.querySelectorAll('.toc-sidebar .toc-link');
+  if (tocLinks.length > 0) {
+    const headings = document.querySelectorAll('.article-body h2, .article-body h3');
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(l => l.classList.remove('active'));
+          const id = entry.target.id;
+          const activeLink = document.querySelector(`.toc-sidebar .toc-link[href="#${id}"]`);
+          if (activeLink) activeLink.classList.add('active');
+        }
+      }
+    }, {
+      rootMargin: '-90px 0px -80% 0px',
+      threshold: 0,
+    });
+
+    headings.forEach(h => observer.observe(h));
+  }
+
+  // Copy link button
+  document.querySelectorAll('[data-action="copy"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        btn.setAttribute('title', 'Copied!');
+        setTimeout(() => btn.setAttribute('title', 'Copy link'), 2000);
+      } catch {}
+    });
+  });
+</script>
+
+<style>
+  /* ── Post hero ── */
+  .post-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    padding: 70px 80px 40px;
+    border-bottom: 1px solid var(--color-line);
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .series-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-peri-ink);
+    padding: 10px 16px;
+    background: var(--color-peri-pale);
+    border-radius: var(--radius-pill);
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+
+  .series-link {
+    color: var(--color-peri-ink);
+    text-decoration: underline;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-peri-ink);
+    margin-bottom: 20px;
+  }
+
+  .meta-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-organic-bead);
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 56px;
+    line-height: 1.03;
+    letter-spacing: -0.025em;
+    color: var(--color-ink);
+    margin-bottom: 20px;
+  }
+
+  .standfirst {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+    max-width: 44ch;
+    margin-bottom: 28px;
+  }
+
+  .byline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .byline-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-organic-bead);
+    object-fit: cover;
+  }
+
+  .byline-name {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  .byline-role {
+    color: var(--color-mute);
+  }
+
+  .hero-cover img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-organic-portrait);
+    box-shadow: var(--shadow-portrait);
+    display: block;
+  }
+
+  .cover-fallback {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: var(--color-peri-pale);
+    border-radius: var(--radius-organic-portrait);
+  }
+
+  /* ── Article grid ── */
+  .article-grid {
+    display: grid;
+    grid-template-columns: minmax(160px, 200px) minmax(560px, 680px) minmax(160px, 200px);
+    gap: 40px;
+    padding: 60px 80px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  /* ── Sticky TOC (desktop) ── */
+  .toc-sidebar {
+    position: sticky;
+    top: 90px;
+    align-self: start;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+
+  .toc-label {
+    color: var(--color-mute);
+    margin-bottom: 14px;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-item {
+    margin-bottom: 6px;
+  }
+
+  .toc-sub {
+    padding-left: 14px;
+  }
+
+  .toc-link {
+    color: var(--color-mute);
+    text-decoration: none;
+    display: block;
+    padding: 3px 0;
+    transition: color 150ms ease;
+  }
+
+  .toc-link:hover {
+    color: var(--color-ink-2);
+  }
+
+  .toc-link.active {
+    color: var(--color-peri-ink);
+    font-weight: 500;
+  }
+
+  .toc-reading-time {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-mute);
+  }
+
+  /* ── TOC accordion (tablet/mobile) ── */
+  .toc-accordion {
+    display: none;
+    margin-bottom: 32px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+  }
+
+  .toc-accordion summary {
+    cursor: pointer;
+    color: var(--color-peri-ink);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .toc-accordion summary::before {
+    content: '▸';
+    font-size: 12px;
+    transition: transform 150ms ease;
+  }
+
+  .toc-accordion[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  .toc-accordion-list {
+    list-style: none;
+    padding: 10px 0 0;
+    margin: 0;
+  }
+
+  .toc-accordion-list li {
+    margin-bottom: 4px;
+  }
+
+  /* ── Article body ── */
+  .article-body {
+    max-width: 680px;
+  }
+
+  .article-body :global(p) {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    line-height: 1.62;
+    color: var(--color-ink-2);
+    margin-bottom: 1.5em;
+  }
+
+  /* Lede: first paragraph */
+  .article-body :global(p:first-of-type) {
+    font-size: 24px;
+    line-height: 1.48;
+  }
+
+  .article-body :global(h2) {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--color-ink);
+    margin-top: 2.5em;
+    margin-bottom: 0.75em;
+  }
+
+  .article-body :global(h3) {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
+    color: var(--color-ink);
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+  }
+
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    line-height: 1.62;
+    color: var(--color-ink-2);
+    padding-left: 20px;
+    margin-bottom: 1.5em;
+  }
+
+  .article-body :global(li) {
+    margin-bottom: 0.5em;
+  }
+
+  .article-body :global(blockquote) {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 28px;
+    line-height: 1.3;
+    color: var(--color-peri-ink);
+    border-left: 3px solid var(--color-peri);
+    padding-left: 24px;
+    margin: 2em 0;
+  }
+
+  .article-body :global(blockquote p) {
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    font-style: inherit;
+  }
+
+  .article-body :global(a) {
+    color: var(--color-peri-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .article-body :global(a:hover) {
+    opacity: 0.8;
+  }
+
+  .article-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    margin: 2em 0;
+    display: block;
+  }
+
+  .article-body :global(strong) {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  .article-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--color-paper-2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .article-body :global(pre) {
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    overflow-x: auto;
+    margin: 2em 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .article-body :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .article-body :global(hr) {
+    border: none;
+    border-top: 1px solid var(--color-line);
+    margin: 2.5em 0;
+  }
+
+  /* ── Inline CTA (injected by remark plugin) ── */
+  .article-body :global(.inline-cta) {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 32px;
+    background: var(--color-peri-pale);
+    border: 1px solid oklch(0.88 0.05 270);
+    border-radius: 26px;
+    margin: 2em 0;
+  }
+
+  .article-body :global(.inline-cta-icon) {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-peri);
+    color: white;
+    border-radius: var(--radius-organic-chip);
+    flex-shrink: 0;
+  }
+
+  .article-body :global(.inline-cta-body) {
+    flex: 1;
+  }
+
+  .article-body :global(.inline-cta .inline-cta-heading) {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.3;
+    color: var(--color-ink);
+    margin-bottom: 2px;
+  }
+
+  .article-body :global(.inline-cta .inline-cta-sub) {
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: var(--color-ink-2);
+    margin-bottom: 0;
+  }
+
+  .article-body :global(.inline-cta-btn) {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .article-body :global(.inline-cta-btn:hover) {
+    opacity: 0.85;
+  }
+
+  /* ── Sticky share (desktop) ── */
+  .share-sidebar {
+    position: sticky;
+    top: 90px;
+    align-self: start;
+  }
+
+  .share-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .share-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-organic-bead);
+    color: var(--color-ink-2);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 200ms ease, color 200ms ease;
+  }
+
+  .share-btn:hover {
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  .share-btn:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  /* Share (mobile) */
+  .share-mobile {
+    display: none;
+    gap: 10px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  /* ── Post-end CTA ── */
+  .post-end-cta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 56px 60px;
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-organic-a);
+    max-width: 1000px;
+    margin: 0 auto 60px;
+  }
+
+  .end-cta-eyebrow {
+    color: var(--color-peri-ink);
+    margin-bottom: 14px;
+  }
+
+  .end-cta-left h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: 24px;
+  }
+
+  .end-cta-signature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .end-cta-signature .byline-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .end-cta-right {
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── Next up ── */
+  .next-up {
+    max-width: 1000px;
+    margin: 0 auto 80px;
+    padding: 0 80px;
+  }
+
+  .next-up-label {
+    color: var(--color-mute);
+    margin-bottom: 20px;
+  }
+
+  .next-up-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .next-card {
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-line);
+    border-radius: 26px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .next-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .next-card:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  .next-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-mute);
+    margin-bottom: 12px;
+  }
+
+  .next-card h4 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--color-ink);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1023px) {
+    .post-hero {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 40px 48px 32px;
+    }
+
+    .hero-cover {
+      order: -1;
+    }
+
+    .hero-cover img {
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius-organic-b);
+    }
+
+    h1 {
+      font-size: 40px;
+    }
+
+    .article-grid {
+      display: block;
+      padding: 40px 48px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .toc-sidebar {
+      display: none;
+    }
+
+    .toc-accordion {
+      display: block;
+    }
+
+    .share-sidebar {
+      display: none;
+    }
+
+    .share-mobile {
+      display: flex;
+    }
+
+    .post-end-cta {
+      margin-left: 48px;
+      margin-right: 48px;
+    }
+
+    .next-up {
+      padding: 0 48px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .post-hero {
+      padding: 28px 24px 24px;
+    }
+
+    h1 {
+      font-size: 32px;
+    }
+
+    .standfirst {
+      font-size: 16px;
+    }
+
+    .article-grid {
+      padding: 28px 24px;
+    }
+
+    .article-body :global(p) {
+      font-size: 17px;
+    }
+
+    .article-body :global(p:first-of-type) {
+      font-size: 19px;
+    }
+
+    .article-body :global(h2) {
+      font-size: 24px;
+    }
+
+    .article-body :global(h3) {
+      font-size: 20px;
+    }
+
+    .article-body :global(blockquote) {
+      font-size: 22px;
+    }
+
+    .article-body :global(.inline-cta) {
+      flex-direction: column;
+      text-align: center;
+      padding: 24px 20px;
+    }
+
+    .post-end-cta {
+      grid-template-columns: 1fr;
+      padding: 36px 28px;
+      margin-left: 24px;
+      margin-right: 24px;
+    }
+
+    .end-cta-left h3 {
+      font-size: 28px;
+    }
+
+    .next-up {
+      padding: 0 24px;
+    }
+
+    .next-up-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .next-card h4 {
+      font-size: 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .next-card {
+      transition: none !important;
+    }
+    .next-card:hover {
+      transform: none !important;
+    }
+  }
+</style>

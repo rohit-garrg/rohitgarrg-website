@@ -1,10 +1,10 @@
 ---
 title: "How I Actually Use Claude"
-description: "The actual workflow I use to build with Claude — across Claude.ai, Claude Code, and Cowork."
-category: "AI Tools / Productivity"
 date: 2026-04-15
+tag: "AI"
 excerpt: "Most people use Claude like a search engine with better grammar. That's about 20% of what it can do. Here's the system I've settled into after months of building — planning, adversarial review, phased execution — and the habits that make it work."
-leadImage: "/images/writing/how-i-actually-use-claude/lead.webp"
+readMin: 9
+cover: "/images/writing/how-i-actually-use-claude/lead.webp"
 ---
 
 Most people use Claude like a search engine with better grammar. Type a question, get an answer, move on. That works for quick tasks. But it's about 20% of what Claude can actually do, and it's the least interesting 20%.

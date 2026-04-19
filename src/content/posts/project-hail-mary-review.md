@@ -1,10 +1,10 @@
 ---
 title: "Project Hail Mary: A Book Review"
-description: "I watched the movie, then listened to the audiobook. The sixteen-hour version is better."
-category: "Reading / Reviews"
 date: 2026-04-16
+tag: "Books"
 excerpt: "A review of Andy Weir's Project Hail Mary — the science, the friendship, and why the sixteen-hour audiobook is better than the movie."
-leadImage: "/images/writing/project-hail-mary-review/lead.webp"
+readMin: 9
+cover: "/images/writing/project-hail-mary-review/lead.webp"
 ---
 
 I watched the movie first. Loved it. Ryan Gosling was charming, the visuals were great, and I walked out of the theater thinking I'd gotten the full story.
