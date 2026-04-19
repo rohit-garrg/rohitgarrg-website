@@ -17,7 +17,7 @@ Each phase is one Claude Code session. Clear context between phases. Run the QC 
 - [x] **Phase 2: Home** — hero, now-strip, writing teaser, projects teaser, newsletter CTA, shared card components
 - [x] **Phase 3: Writing** — posts content collection, index with filter/search, post template with sticky TOC, RSS feed
 - [x] **Phase 4: Other pages** — Projects, Planetia, Speaking, About
-- [ ] **Phase 5: Polish** — 404/500, sitemap, robots, OG images, favicons, a11y pass, responsive pass, print styles, Lighthouse
+- [x] **Phase 5: Polish** — 404/500, sitemap, robots, OG images, favicons, a11y pass, responsive pass, print styles, Lighthouse
 
 Estimated: 14–18 engineer-days for first pass, plus 3–4 days for revisions after Rohit reviews.
 

@@ -120,7 +120,7 @@ Before starting any design work, read DESIGN-TODO.md in the project root and doc
 
 ## Analytics and SEO
 
-- Google Analytics: GA4, measurement ID `G-X6LXZDSYG8`
+- Analytics: GoatCounter (cookieless, no consent banner needed) — `rohitgarrg.goatcounter.com`
 - Google Search Console: configured for www.rohitgarrg.com
 - OG images and meta tags are set per-page via BaseLayout
 

@@ -299,6 +299,11 @@ const searchIndex = sortedPosts.map(p => ({
     color: var(--color-ink);
   }
 
+  .chip:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
   .chip.active {
     background: var(--color-ink);
     color: var(--color-paper);
@@ -473,6 +478,11 @@ const searchIndex = sortedPosts.map(p => ({
     text-decoration: underline;
     cursor: pointer;
     padding: 0;
+  }
+
+  .clear-link:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
   }
 
   /* Responsive */

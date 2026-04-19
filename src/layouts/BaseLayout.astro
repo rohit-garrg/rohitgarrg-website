@@ -23,15 +23,6 @@ const canonicalURL = canonicalUrl || new URL(Astro.url.pathname, Astro.site);
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6LXZDSYG8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-X6LXZDSYG8');
-    </script>
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
@@ -62,6 +53,9 @@ const canonicalURL = canonicalUrl || new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#fcfbfd" />
 
     <link rel="alternate" type="application/rss+xml" title="Rohit Garg — Writing" href={new URL('/rss.xml', Astro.site)} />
@@ -74,5 +68,7 @@ const canonicalURL = canonicalUrl || new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer />
+    <div class="print-footer" aria-hidden="true">www.rohitgarrg.com</div>
+    <script data-goatcounter="https://rohitgarrg.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   </body>
 </html>

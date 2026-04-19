@@ -14,6 +14,7 @@ const posts = defineCollection({
     seoTitle: z.string().optional(),
     seoDescription: z.string().optional(),
     canonicalUrl: z.string().url().optional(),
+    ogImage: z.string().optional(),
   }),
 });
 

@@ -50,7 +50,6 @@ if (post.data.series) {
 // TOC (H2 and H3 only)
 const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
 
-// Tag colors imported from shared utils
 
 const formattedDate = post.data.date.toLocaleDateString('en-US', {
   month: 'short',
@@ -100,7 +99,7 @@ const breadcrumbSchema = {
   title={`${post.data.seoTitle || post.data.title} - Rohit Garg`}
   description={post.data.seoDescription || post.data.excerpt}
   canonicalUrl={post.data.canonicalUrl}
-  ogImage={post.data.cover}
+  ogImage={post.data.ogImage}
 >
   <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
@@ -247,7 +246,7 @@ const breadcrumbSchema = {
                 <span class="meta-dot" style={`background: ${TAG_COLORS[np.data.tag] || 'var(--color-slate)'}`}></span>
                 {np.data.tag} &middot; {np.data.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
               </p>
-              <h4>{np.data.title}</h4>
+              <p class="next-card-title">{np.data.title}</p>
             </a>
           ))}
         </div>
@@ -847,7 +846,7 @@ const breadcrumbSchema = {
     margin-bottom: 12px;
   }
 
-  .next-card h4 {
+  .next-card-title {
     font-family: var(--font-serif);
     font-weight: 500;
     font-size: 24px;
@@ -972,7 +971,7 @@ const breadcrumbSchema = {
       grid-template-columns: 1fr;
     }
 
-    .next-card h4 {
+    .next-card-title {
       font-size: 20px;
     }
   }
