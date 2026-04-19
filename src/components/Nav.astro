@@ -2,7 +2,7 @@
 const currentPath = Astro.url.pathname;
 
 const links = [
-  { href: '/writing', label: 'Writing' },
+  { href: '/writing', label: 'Blogs' },
   { href: '/projects', label: 'Projects' },
   { href: '/planetia', label: 'Planetia' },
   { href: '/speaking', label: 'Speaking' },
@@ -308,6 +308,7 @@ function isActive(href: string): boolean {
     justify-content: center;
     padding: 14px 20px;
     font-size: 15px;
+    color: var(--color-paper);
   }
 
   /* Responsive */

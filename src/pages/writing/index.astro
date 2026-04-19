@@ -10,7 +10,7 @@ const sortedPosts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.
 
 // Featured post (most recent)
 const featured = sortedPosts[0];
-const remainingPosts = sortedPosts.slice(1);
+const featuredSlug = featured.id.replace(/\.md$/, '');
 
 // Tag counts (single pass)
 const tagCounts = new Map<string, number>();
@@ -18,9 +18,9 @@ for (const post of sortedPosts) {
   tagCounts.set(post.data.tag, (tagCounts.get(post.data.tag) || 0) + 1);
 }
 
-// Group remaining posts by year
-const yearGroups = new Map<number, typeof remainingPosts>();
-for (const post of remainingPosts) {
+// Group ALL posts by year (including featured, so search/filter can find it)
+const yearGroups = new Map<number, typeof sortedPosts>();
+for (const post of sortedPosts) {
   const year = post.data.date.getFullYear();
   if (!yearGroups.has(year)) yearGroups.set(year, []);
   yearGroups.get(year)!.push(post);
@@ -38,20 +38,20 @@ const searchIndex = sortedPosts.map(p => ({
 ---
 
 <BaseLayout
-  title="Writing - Rohit Garg"
-  description="Essays on product, AI, leadership, and the occasional book review."
+  title="Blogs - Rohit Garg"
+  description="Blog posts on product, AI, leadership, and the occasional book review."
 >
   <div class="writing-page container-wide">
     <!-- Page header -->
     <header class="writing-header">
       <h1 class="display-lg">Notes on <em>product</em>, AI, leadership, and the occasional book review.</h1>
-      <p class="writing-sub body-md">Roughly weekly essays. A mix of the craft of product management, AI as a coworker, and whatever audiobook I finished that week.</p>
+      <p class="writing-sub body-md">Roughly weekly posts. A mix of the craft of product management, AI as a coworker, and whatever audiobook I finished that week.</p>
     </header>
 
     <!-- Filter bar -->
     <div class="filter-bar">
       <div class="chip-group" id="chip-group">
-        <button class="chip active" data-tag="all" type="button">All writing</button>
+        <button class="chip active" data-tag="all" type="button">All posts</button>
         {TAG_ORDER.map(tag => {
           const count = tagCounts.get(tag);
           return count ? (
@@ -68,7 +68,7 @@ const searchIndex = sortedPosts.map(p => ({
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input type="search" placeholder="Search essays..." id="search-input" aria-label="Search essays" />
+        <input type="search" placeholder="Search posts..." id="search-input" aria-label="Search posts" />
       </div>
     </div>
 
@@ -90,7 +90,7 @@ const searchIndex = sortedPosts.map(p => ({
           </p>
           <h2 class="display-md">{featured.data.title}</h2>
           <p class="featured-excerpt body-md">{featured.data.excerpt}</p>
-          <span class="featured-cta">Read the essay &rarr;</span>
+          <span class="featured-cta">Read the post &rarr;</span>
         </div>
       </a>
     </section>
@@ -103,10 +103,10 @@ const searchIndex = sortedPosts.map(p => ({
       const posts = yearGroups.get(year)!;
       return (
         <section class="year-group" data-year={year}>
-          <h2 class="year-label mono-xxs">{year} &middot; <span class="year-count">{posts.length}</span> {posts.length === 1 ? 'essay' : 'essays'}</h2>
+          <h2 class="year-label mono-xxs">{year} &middot; <span class="year-count">{posts.length}</span> {posts.length === 1 ? 'post' : 'posts'}</h2>
           <div class="year-grid">
             {posts.map(post => (
-              <div class="card-wrapper" data-slug={post.id.replace(/\.md$/, '')} data-tag={post.data.tag} data-year={post.data.date.getFullYear()}>
+              <div class:list={['card-wrapper', { 'is-featured-dup': post.id.replace(/\.md$/, '') === featuredSlug }]} data-slug={post.id.replace(/\.md$/, '')} data-tag={post.data.tag} data-year={post.data.date.getFullYear()}>
                 <WritingCard
                   title={post.data.title}
                   excerpt={post.data.excerpt}
@@ -125,7 +125,7 @@ const searchIndex = sortedPosts.map(p => ({
 
     <!-- Empty state -->
     <div class="empty-state" id="empty-state" hidden>
-      <p class="body-md">No essays matching that. Try a broader term, or <button type="button" id="clear-filter" class="clear-link">browse all essays</button>.</p>
+      <p class="body-md">No posts matching that. Try a broader term, or <button type="button" id="clear-filter" class="clear-link">browse all posts</button>.</p>
     </div>
   </div>
 </BaseLayout>
@@ -140,6 +140,7 @@ const searchIndex = sortedPosts.map(p => ({
   const clearBtn = document.getElementById('clear-filter');
   const cards = document.querySelectorAll('.card-wrapper');
   const yearGroups = document.querySelectorAll('.year-group');
+  const featuredDup = document.querySelector('.is-featured-dup');
 
   let activeTag = 'all';
   let query = '';
@@ -174,16 +175,19 @@ const searchIndex = sortedPosts.map(p => ({
     if (featuredBlock) {
       featuredBlock.hidden = !!isFiltering;
     }
+    if (featuredDup) {
+      featuredDup.style.display = isFiltering ? '' : 'none';
+    }
 
     // Result label
     if (isFiltering && visibleCount > 0) {
       let label = '';
       if (activeTag !== 'all' && lowerQuery) {
-        label = `${visibleCount} ${visibleCount === 1 ? 'essay' : 'essays'} tagged ${activeTag} matching "${query}"`;
+        label = `${visibleCount} ${visibleCount === 1 ? 'post' : 'posts'} tagged ${activeTag} matching "${query}"`;
       } else if (activeTag !== 'all') {
-        label = `${visibleCount} ${visibleCount === 1 ? 'essay' : 'essays'} tagged ${activeTag}`;
+        label = `${visibleCount} ${visibleCount === 1 ? 'post' : 'posts'} tagged ${activeTag}`;
       } else if (lowerQuery) {
-        label = `${visibleCount} ${visibleCount === 1 ? 'essay' : 'essays'} matching "${query}"`;
+        label = `${visibleCount} ${visibleCount === 1 ? 'post' : 'posts'} matching "${query}"`;
       }
       resultLabel.textContent = label;
       resultLabel.hidden = false;
@@ -226,6 +230,9 @@ const searchIndex = sortedPosts.map(p => ({
 </script>
 
 <style>
+  /* Hide featured post duplicate in year grid (shown when filtering) */
+  .is-featured-dup { display: none; }
+
   /* Page layout */
   .writing-page {
     padding-top: 40px;

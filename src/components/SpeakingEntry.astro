@@ -12,7 +12,7 @@ const { slug, event, title, date, description, url } = Astro.props;
 
 const month = date.toLocaleDateString('en-US', { month: 'long' });
 const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
-const hasDetail = url || slug;
+const detailUrl = `/speaking/${slug}/`;
 ---
 
 <div class="entry">
@@ -24,9 +24,7 @@ const hasDetail = url || slug;
     <h3 class="entry-venue">{event}</h3>
     <p class="entry-title">{title}</p>
     <p class="entry-blurb">{description}</p>
-    {hasDetail && (
-      <a href={url || `/speaking/${slug}/`} class="entry-link">View details →</a>
-    )}
+    <a href={detailUrl} class="entry-link">View details →</a>
   </div>
 </div>
 
