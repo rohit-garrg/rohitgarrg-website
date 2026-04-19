@@ -176,7 +176,7 @@ const searchIndex = sortedPosts.map(p => ({
       featuredBlock.hidden = !!isFiltering;
     }
     if (featuredDup) {
-      featuredDup.style.display = isFiltering ? '' : 'none';
+      featuredDup.classList.toggle('is-featured-dup', !isFiltering);
     }
 
     // Result label
