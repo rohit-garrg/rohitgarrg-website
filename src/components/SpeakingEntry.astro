@@ -3,90 +3,130 @@ interface Props {
   slug: string;
   event: string;
   title: string;
-  month: string;
+  date: Date;
   description: string;
+  url?: string;
 }
 
-const { slug, event, title, month, description } = Astro.props;
+const { slug, event, title, date, description, url } = Astro.props;
+
+const month = date.toLocaleDateString('en-US', { month: 'long' });
+const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+const hasDetail = url || slug;
 ---
 
-<div class="timeline-entry">
-  <div class="timeline-month">{month}</div>
-  <h3><a href={`/speaking/${slug}/`}>{event}</a></h3>
-  <p class="talk-title">{title}</p>
-  <p class="talk-desc">{description}</p>
-  <a href={`/speaking/${slug}/`} class="view-link">View details →</a>
+<div class="entry">
+  <div class="entry-marker">
+    <span class="pebble" aria-hidden="true"></span>
+  </div>
+  <div class="entry-content">
+    <p class="entry-when mono-xs">{month} · {dateStr}</p>
+    <h3 class="entry-venue">{event}</h3>
+    <p class="entry-title">{title}</p>
+    <p class="entry-blurb">{description}</p>
+    {hasDetail && (
+      <a href={url || `/speaking/${slug}/`} class="entry-link">View details →</a>
+    )}
+  </div>
 </div>
 
 <style>
-  .timeline-entry {
+  .entry {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 0;
+    padding-bottom: 36px;
     position: relative;
-    padding-bottom: var(--space-xl);
   }
 
-  .timeline-entry::before {
+  .entry-marker {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Vertical line */
+  .entry-marker::before {
     content: '';
     position: absolute;
-    left: calc(-1 * var(--space-lg) - 5px);
-    top: 6px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--border);
-    border: 2px solid var(--bg-primary);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    background: var(--color-line);
   }
 
-  .timeline-month {
-    font-size: var(--text-meta);
-    color: var(--text-tertiary);
+  .pebble {
+    position: relative;
+    top: 0.35em;
+    width: 10px;
+    height: 10px;
+    background: var(--color-peri);
+    border-radius: var(--radius-organic-bead);
+    z-index: 1;
+  }
+
+  .entry-content {
+    padding-left: 16px;
+  }
+
+  .entry-when {
+    color: var(--color-mute);
+    margin-bottom: 6px;
+  }
+
+  .entry-venue {
+    font-family: var(--font-serif);
+    font-size: 26px;
     font-weight: 500;
-    margin-bottom: var(--space-xs);
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--color-ink);
+    margin-bottom: 4px;
   }
 
-  h3 {
-    font-family: var(--font-heading);
-    font-size: var(--text-h3);
-    font-weight: 500;
-    margin-bottom: var(--space-xs);
-    color: var(--text-primary);
+  .entry-title {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-peri-ink);
+    margin-bottom: 6px;
   }
 
-  h3 a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  h3 a:hover {
-    color: var(--accent);
-  }
-
-  .talk-title {
+  .entry-blurb {
+    font-family: var(--font-sans);
     font-size: 15px;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-xs);
-  }
-
-  .talk-desc {
-    font-size: var(--text-meta);
-    color: var(--text-tertiary);
     line-height: 1.5;
-    margin-bottom: var(--space-sm);
+    color: var(--color-ink-2);
+    max-width: 64ch;
+    margin-bottom: 8px;
   }
 
-  .view-link {
+  .entry-link {
+    font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 500;
-    color: var(--accent);
+    color: var(--color-peri-ink);
     text-decoration: none;
   }
 
-  .view-link:hover {
-    color: var(--accent-hover);
+  .entry-link:hover {
+    color: var(--color-peri);
   }
 
-  @media (max-width: 768px) {
-    .timeline-entry::before {
-      left: calc(-1 * var(--space-md) - 5px);
+  /* Last entry in a group: hide the trailing line */
+  .entry:last-child .entry-marker::before {
+    bottom: 50%;
+  }
+
+  @media (max-width: 767px) {
+    .entry-venue {
+      font-size: 22px;
+    }
+
+    .entry-content {
+      padding-left: 12px;
     }
   }
 </style>

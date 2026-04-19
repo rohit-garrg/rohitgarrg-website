@@ -1,142 +1,282 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const allProjects = await getCollection('projects');
+const orderedProjects = allProjects
+  .filter((p) => p.data.order !== undefined)
+  .sort((a, b) => a.data.order! - b.data.order!);
+
+// Ghost link mapping: project slug → blog post URL (only if a blog post exists)
+const storyLinks: Record<string, string> = {
+  planetia: '/writing/kids-question-to-app-store',
+};
+
+// Planetia primary action goes to App Store, not the site page
+const actionOverrides: Record<string, { label: string; url: string }> = {
+  planetia: {
+    label: 'On the App Store →',
+    url: 'https://apps.apple.com/us/app/planetia/id6760576240',
+  },
+};
 ---
 
 <BaseLayout
   title="Projects - Rohit Garg"
-  description="Side projects, experiments, and hobby builds."
+  description="Side projects, experiments, and things I'm tinkering with. Mostly built in evenings and weekends, most with an AI coworker over my shoulder."
 >
-  <div class="container">
-    <header class="page-header">
-      <h1>Projects</h1>
-      <p class="page-description">Side projects, experiments, and things I'm tinkering with.</p>
+  <div class="projects-page container-page">
+    <header class="projects-header">
+      <h1 class="display-lg"><em>Projects</em></h1>
+      <p class="projects-sub body-md">Side projects, experiments, and things I'm tinkering with. Mostly built in evenings and weekends, most with an AI coworker over my shoulder.</p>
     </header>
 
-    <div class="projects-grid">
-      <a href="/projects/solar-system" class="project-card">
-        <div class="project-image">
-          <img src="/images/projects/solar-system-og.webp" alt="Solar System Explorer screenshot" loading="lazy" width="1200" height="675" />
-        </div>
-        <div class="project-card-body">
-          <h2>Solar System Explorer</h2>
-          <p class="project-description">An interactive 3D solar system for kids. Tap planets, discover fun facts, fly a spacecraft between worlds, and explore all 22 celestial bodies.</p>
-          <div class="project-meta">
-            <span class="project-tag">React + Three.js</span>
-            <span class="project-tag">Built with AI</span>
-          </div>
-        </div>
-      </a>
+    <div class="projects-list">
+      {orderedProjects.map((project) => {
+        const slug = project.id.replace(/\.md$/, '');
+        const d = project.data;
+        const name = d.name ?? d.title;
+        const override = actionOverrides[slug];
+        const primaryLabel = override?.label ?? `${d.stat} →`;
+        const primaryUrl = override?.url ?? d.url ?? '#';
+        const storyUrl = storyLinks[slug];
+        const isExternal = primaryUrl.startsWith('http');
 
-      <a href="/projects/office-survivors" class="project-card">
-        <div class="project-image">
-          <img src="/images/projects/office-survivors-og.webp" alt="Office Survivors game screenshot" loading="lazy" width="1200" height="675" />
-        </div>
-        <div class="project-card-body">
-          <h2>Office Survivors</h2>
-          <p class="project-description">A satirical pixel-art browser game about surviving corporate life. Deliver tasks, dodge chaos agents, and climb from intern to CEO.</p>
-          <div class="project-meta">
-            <span class="project-tag">Phaser 3</span>
-            <span class="project-tag">Built with AI</span>
-          </div>
-        </div>
-      </a>
+        return (
+          <article class="project-card">
+            {d.image && (
+              <div class="card-visual">
+                <img src={d.image} alt={name} loading="lazy" decoding="async" />
+              </div>
+            )}
+            <div class="card-body">
+              <div class="card-body-inner">
+                <p class="mono-xs card-meta">{d.kind} · {d.year}</p>
+                <h2 class="card-title">{name}</h2>
+                <p class="card-blurb">{d.blurb ?? d.description}</p>
+                <div class="stack-pills">
+                  {(d.stack ?? []).map((tech) => (
+                    <span class="pill">{tech}</span>
+                  ))}
+                </div>
+                <div class="card-actions">
+                  <a
+                    href={primaryUrl}
+                    class="action-primary"
+                    {...(isExternal ? { target: '_blank', rel: 'noopener' } : {})}
+                  >{primaryLabel}</a>
+                  {storyUrl && (
+                    <a href={storyUrl} class="action-ghost">Read the story →</a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })}
     </div>
   </div>
 </BaseLayout>
 
 <style>
-  .page-header {
-    padding: var(--space-xl) 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: var(--space-xl);
+  .projects-page {
+    padding-top: var(--spacing-section-y);
+    padding-bottom: var(--spacing-section-y);
   }
 
-  .page-header h1 {
-    margin-bottom: var(--space-xs);
+  .projects-header {
+    margin-bottom: 56px;
   }
 
-  .page-description {
-    color: var(--text-secondary);
-    font-size: 20px;
-    font-weight: 300;
-    margin-bottom: 0;
+  .projects-header h1 {
+    margin-bottom: 12px;
   }
 
-  .projects-grid {
-    display: grid;
-    gap: var(--space-lg);
+  .projects-sub {
+    color: var(--color-ink-2);
+    max-width: 56ch;
   }
 
-  .project-card {
-    display: block;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.2s;
-  }
-
-  .project-card:hover {
-    border-color: var(--border-hover);
-  }
-
-  .project-image {
-    overflow: hidden;
-  }
-
-  .project-image img {
-    width: 100%;
-    height: auto;
-    display: block;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    transition: transform 0.2s ease;
-  }
-
-  .project-card:hover .project-image img {
-    transform: scale(1.03);
-  }
-
-  .project-card-body {
-    padding: var(--space-lg);
-  }
-
-  .project-card h2 {
-    font-family: var(--font-heading);
-    font-size: var(--text-h3);
-    font-weight: 500;
-    margin-bottom: var(--space-xs);
-    transition: color 0.2s ease;
-  }
-
-  .project-card:hover h2 {
-    color: var(--accent);
-  }
-
-  .project-description {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: var(--space-sm);
-  }
-
-  .project-meta {
+  .projects-list {
     display: flex;
-    gap: var(--space-xs);
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* ── Project card (two-column split) ── */
+  .project-card {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    overflow: hidden;
+    transition: box-shadow 200ms ease;
+  }
+
+  @media (hover: hover) {
+    .project-card:hover {
+      box-shadow: var(--shadow-card-hover);
+    }
+  }
+
+  .card-visual {
+    overflow: hidden;
+  }
+
+  .card-visual img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 11;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-body {
+    display: flex;
+    align-items: center;
+    padding: 36px 40px;
+  }
+
+  .card-body-inner {
+    width: 100%;
+  }
+
+  .card-meta {
+    color: var(--color-mute);
+    margin-bottom: 8px;
+  }
+
+  .card-title {
+    font-family: var(--font-serif);
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: 12px;
+  }
+
+  .card-blurb {
+    font-family: var(--font-sans);
+    font-size: 15.5px;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+    margin-bottom: 16px;
+  }
+
+  .stack-pills {
+    display: flex;
     flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
   }
 
-  .project-tag {
-    font-size: var(--text-tag);
-    padding: 2px 8px;
-    background: var(--bg-tertiary);
-    border-radius: 4px;
-    color: var(--text-secondary);
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    padding: 5px 12px;
+    color: var(--color-mute);
   }
 
-  @media (max-width: 768px) {
-    .page-header {
-      padding: var(--space-lg) 0;
+  .card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .action-primary {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    text-decoration: none;
+    transition: opacity 200ms ease;
+  }
+
+  .action-primary:hover {
+    opacity: 0.85;
+    color: var(--color-paper);
+  }
+
+  .action-primary:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  .action-ghost {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-line);
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: border-color 200ms ease;
+  }
+
+  .action-ghost:hover {
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  .action-ghost:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1023px) {
+    .card-body {
+      padding: 24px 28px;
+    }
+
+    .card-title {
+      font-size: 28px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .projects-page {
+      padding-top: var(--spacing-section-y-mobile);
+      padding-bottom: var(--spacing-section-y-mobile);
+    }
+
+    .projects-header {
+      margin-bottom: 40px;
+    }
+
+    .projects-list {
+      gap: 32px;
+    }
+
+    .project-card {
+      grid-template-columns: 1fr;
+    }
+
+    .card-visual img {
+      aspect-ratio: 16 / 9;
+    }
+
+    .card-body {
+      padding: 24px;
+    }
+
+    .card-title {
+      font-size: 26px;
     }
   }
 </style>

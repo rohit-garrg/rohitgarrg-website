@@ -3,59 +3,57 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SpeakingEntry from '../../components/SpeakingEntry.astro';
 
-// Get speaking entries from content collection
 const allSpeaking = await getCollection('speaking');
 
-// Sort by date (newest first)
-const sortedSpeaking = allSpeaking
-  .map(entry => ({
+const sorted = allSpeaking
+  .map((entry) => ({
     slug: entry.id.replace(/\.md$/, ''),
     event: entry.data.event,
     title: entry.data.title,
     date: entry.data.date,
     description: entry.data.description,
+    url: entry.data.url,
   }))
   .sort((a, b) => b.date.getTime() - a.date.getTime());
 
-// Group by year
-const groupedByYear = sortedSpeaking.reduce((acc, entry) => {
+// Group by year, descending
+const groupedByYear = sorted.reduce((acc, entry) => {
   const year = entry.date.getFullYear().toString();
   if (!acc[year]) acc[year] = [];
   acc[year].push(entry);
   return acc;
-}, {} as Record<string, typeof sortedSpeaking>);
+}, {} as Record<string, typeof sorted>);
+
 const years = Object.keys(groupedByYear).sort((a, b) => Number(b) - Number(a));
 ---
 
 <BaseLayout
   title="Speaking - Rohit Garg"
-  description="Talks and presentations on product management, AI in media, and building digital products at scale."
+  description="Talks and presentations at industry events and institutions. Usually about product, AI at scale, or news distribution."
 >
-  <div class="container">
-    <header class="page-header">
-      <h1>Speaking</h1>
-      <p class="page-description">Talks and presentations at industry events and institutions.</p>
+  <div class="speaking-page container-page">
+    <header class="speaking-header">
+      <h1 class="display-lg"><em>Speaking</em></h1>
+      <p class="speaking-sub body-md">Talks and presentations at industry events and institutions. Usually about product, AI at scale, or news distribution.</p>
     </header>
 
     {years.length > 0 ? (
       years.map((year) => (
-        <div class="year-group">
-          <h2>{year}</h2>
+        <section class="year-group" aria-label={`${year} events`}>
+          <h2 class="year-label">{year}</h2>
           <div class="timeline">
-            {groupedByYear[year].map((entry) => {
-              const month = entry.date.toLocaleDateString('en-US', { month: 'long' });
-              return (
-                <SpeakingEntry
-                  slug={entry.slug}
-                  event={entry.event}
-                  title={entry.title}
-                  month={month}
-                  description={entry.description}
-                />
-              );
-            })}
+            {groupedByYear[year].map((entry) => (
+              <SpeakingEntry
+                slug={entry.slug}
+                event={entry.event}
+                title={entry.title}
+                date={entry.date}
+                description={entry.description}
+                url={entry.url}
+              />
+            ))}
           </div>
-        </div>
+        </section>
       ))
     ) : (
       <p class="empty-state">Speaking engagements coming soon.</p>
@@ -64,52 +62,64 @@ const years = Object.keys(groupedByYear).sort((a, b) => Number(b) - Number(a));
 </BaseLayout>
 
 <style>
-  .page-header {
-    padding: var(--space-xl) 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: var(--space-lg);
+  .speaking-page {
+    padding-top: var(--spacing-section-y);
+    padding-bottom: var(--spacing-section-y);
   }
 
-  .page-header h1 {
-    margin-bottom: var(--space-xs);
+  .speaking-header {
+    margin-bottom: 56px;
   }
 
-  .page-description {
-    color: var(--text-secondary);
-    font-size: 20px;
-    font-weight: 300;
-    margin-bottom: 0;
+  .speaking-header h1 {
+    margin-bottom: 12px;
+  }
+
+  .speaking-sub {
+    color: var(--color-ink-2);
+    max-width: 56ch;
   }
 
   .year-group {
-    margin-bottom: var(--space-xl);
+    margin-bottom: 48px;
   }
 
-  .year-group h2 {
-    font-family: var(--font-heading);
+  .year-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .year-label {
+    font-family: var(--font-serif);
+    font-size: 34px;
     font-weight: 500;
-    margin-bottom: var(--space-lg);
-  }
-
-  .timeline {
-    border-left: 2px solid var(--border);
-    padding-left: var(--space-lg);
-    margin-left: var(--space-sm);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: 24px;
   }
 
   .empty-state {
-    padding: var(--space-xl) 0;
+    padding: 40px 0;
     text-align: center;
-    color: var(--text-secondary);
+    color: var(--color-mute);
   }
 
-  @media (max-width: 768px) {
-    .page-header {
-      padding: var(--space-lg) 0;
+  @media (max-width: 767px) {
+    .speaking-page {
+      padding-top: var(--spacing-section-y-mobile);
+      padding-bottom: var(--spacing-section-y-mobile);
     }
 
-    .timeline {
-      padding-left: var(--space-md);
+    .speaking-header {
+      margin-bottom: 40px;
+    }
+
+    .year-label {
+      font-size: 28px;
+    }
+
+    .year-group {
+      margin-bottom: 36px;
     }
   }
 </style>

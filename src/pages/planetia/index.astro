@@ -1,98 +1,92 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const features = [
+  { letter: 'A', label: 'Explore', desc: 'Fly through an interactive 3D solar system. Tap any planet to see facts, stats, and details written for kids who ask "but why?" a lot.' },
+  { letter: 'B', label: 'Compare', desc: 'See all the planets lined up by size, or spread out by distance from the Sun. The kind of visual that makes Jupiter\'s scale actually click.' },
+  { letter: 'C', label: 'Quiz', desc: 'True or false, multiple choice, find-the-planet, and put-them-in-order challenges. Kids earn badges and climb ranks from Space Cadet to Admiral. A daily question builds a streak.' },
+  { letter: 'D', label: 'Customize', desc: 'Pick colors and paint any planet. Add stripes, polka dots, hearts, stars. Make Mars purple. Creative play meets space science.' },
+  { letter: 'E', label: 'What If?', desc: 'What happens if Jupiter disappears? What if Earth had two suns? Kids change the rules and watch what happens to the orbits. Real gravitational physics, made playful. They can also build custom experiments from scratch.' },
+  { letter: 'F', label: 'Build Your Own', desc: 'Place stars, planets, and moons wherever you want. Set colors, sizes, orbit speeds. Then switch to gravity mode and see if your creation survives real physics.' },
+];
+
+const screenshots = [
+  { src: '/images/planetia/screenshot-explore.webp', alt: 'Planetia Explore mode — interactive 3D solar system with planet facts' },
+  { src: '/images/planetia/screenshot-compare.webp', alt: 'Planetia Compare mode — planets lined up by size' },
+  { src: '/images/planetia/screenshot-quiz.webp', alt: 'Planetia Quiz mode — space knowledge questions' },
+  { src: '/images/planetia/screenshot-customize.webp', alt: 'Planetia Customize mode — painting Jupiter pink with hearts' },
+  { src: '/images/planetia/screenshot-whatif.webp', alt: 'Planetia What If mode — physics experiments' },
+];
+
+const appStoreUrl = 'https://apps.apple.com/us/app/planetia/id6760576240';
 ---
 
 <BaseLayout
   title="Planetia — Solar System for Kids | Rohit Garg"
-  description="Planetia is a free iPad app that lets kids ages 5–9 explore, customize, and build 3D solar systems. No ads, no tracking. Built by a dad for his kids."
+  description="Planetia is a free iPad app that lets kids ages 5-9 explore, customize, and build 3D solar systems. No ads, no tracking. Built by a dad for his kids."
   ogImage="/images/planetia/planetia-og.webp"
 >
-  <article class="planetia-page">
+  <article class="planetia container-page">
 
-    <!-- Hero -->
-    <section class="planetia-hero">
-      <h1>Planetia — Solar System for Kids</h1>
-      <p class="tagline">An interactive 3D solar system built for curious kids (and the parents who can't answer all their space questions).</p>
-      <div class="hero-intro">
-        <p>Planetia is an iPad app for children ages 5–9. Six modes to explore, compare, quiz, customize, and build their own solar systems. 3D planets rendered with RealityKit. No ads. No in-app purchases. No data collection. Just space.</p>
+    <section class="hero">
+      <h1 class="display-lg">Planetia, Solar System for Kids</h1>
+      <p class="hero-tagline">An interactive 3D solar system built for curious kids (and the parents who can't answer all their space questions).</p>
+      <div class="hero-lede">
+        <p>Planetia is an iPad app for children ages 5-9. Six modes to explore, compare, quiz, customize, and build their own solar systems. 3D planets rendered with RealityKit. No ads. No in-app purchases. No data collection. Just space.</p>
       </div>
-      <a href="https://apps.apple.com/us/app/planetia/id6760576240" class="app-store-link" data-location="hero" target="_blank" rel="noopener">
-        <img src="/images/planetia/app-store-badge.svg" alt="Download Planetia on the App Store" width="120" height="40" />
+      <a href={appStoreUrl} class="app-store-btn" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on the App Store
       </a>
     </section>
 
-    <!-- Screenshots -->
-    <section class="screenshots">
+    <section class="screenshots" aria-label="App screenshots">
       <div class="screenshots-grid">
-        <img src="/images/planetia/screenshot-explore.webp" alt="Planetia Explore mode — interactive 3D solar system with planet facts" width="700" height="525" loading="lazy" />
-        <img src="/images/planetia/screenshot-compare.webp" alt="Planetia Compare mode — planets lined up by size" width="700" height="525" loading="lazy" />
-        <img src="/images/planetia/screenshot-quiz.webp" alt="Planetia Quiz mode — space knowledge questions" width="700" height="525" loading="lazy" />
-        <img src="/images/planetia/screenshot-customize.webp" alt="Planetia Customize mode — painting Jupiter pink with hearts" width="700" height="525" loading="lazy" />
-        <img src="/images/planetia/screenshot-whatif.webp" alt="Planetia What If mode — physics experiments" width="700" height="525" loading="lazy" />
+        {screenshots.map((s) => (
+          <img src={s.src} alt={s.alt} width="700" height="525" loading="lazy" decoding="async" />
+        ))}
       </div>
     </section>
 
-    <!-- What kids can do -->
-    <section class="planetia-content">
-      <h2>What kids can do</h2>
-      <div class="features-prose">
-        <p><strong>Explore</strong> — Fly through an interactive 3D solar system. Tap any planet to see facts, stats, and details written for kids who ask "but why?" a lot.</p>
-        <p><strong>Compare</strong> — See all the planets lined up by size, or spread out by distance from the Sun. The kind of visual that makes Jupiter's scale actually click.</p>
-        <p><strong>Quiz</strong> — True or false, multiple choice, find-the-planet, and put-them-in-order challenges. Kids earn badges and climb ranks from Space Cadet to Admiral. A daily question builds a streak.</p>
-        <p><strong>Customize</strong> — Pick colors and paint any planet. Add stripes, polka dots, hearts, stars. Make Mars purple. Creative play meets space science.</p>
-        <p><strong>What If?</strong> — What happens if Jupiter disappears? What if Earth had two suns? Kids change the rules and watch what happens to the orbits. Real gravitational physics, made playful. They can also build custom experiments from scratch.</p>
-        <p><strong>Build Your Own</strong> — Place stars, planets, and moons wherever you want. Set colors, sizes, orbit speeds. Then switch to gravity mode and see if your creation survives real physics.</p>
+    <section class="features-section">
+      <h2 class="features-heading">What kids can do</h2>
+      <div class="features-grid">
+        {features.map((f) => (
+          <div class="feature">
+            <div class="feature-chip">{f.letter}</div>
+            <h3><strong>{f.label}</strong> — {f.desc}</h3>
+          </div>
+        ))}
       </div>
     </section>
 
-    <!-- Why I built this -->
-    <section class="planetia-content">
+    <section class="prose-section">
       <h2>Why I built this</h2>
       <p>My kids are obsessed with space. One of them asks questions I have to Google ("Dad, what happens if two planets crash?"). The other wants to paint Jupiter purple and give it three rings.</p>
       <p>I couldn't find an app that did both — teach real science and let kids mess around creatively. So I built one. I had zero Swift experience when I started. The entire app was built using Claude Code as my primary development tool, with me writing specs and prompts and Claude writing the code. It took months of evenings and weekends. My kids were the test team. They're the harshest testers you'll find — if something's boring, they just walk away from the iPad.</p>
       <p>I wrote up the full story — from the browser prototype to the App Store submission, including the parts that were actually hard. <a href="/writing/kids-question-to-app-store">Read it here →</a></p>
     </section>
 
-    <!-- Details -->
-    <section class="planetia-content">
+    <section class="prose-section">
       <h2>Details</h2>
       <dl class="details-grid">
-        <div>
-          <dt>Platform</dt>
-          <dd>iPad only</dd>
-        </div>
-        <div>
-          <dt>Ages</dt>
-          <dd>5–9</dd>
-        </div>
-        <div>
-          <dt>Price</dt>
-          <dd>Free. Everything included, nothing locked.</dd>
-        </div>
-        <div>
-          <dt>Size</dt>
-          <dd>15.5 MB</dd>
-        </div>
-        <div>
-          <dt>Built with</dt>
-          <dd>SwiftUI, RealityKit</dd>
-        </div>
-        <div>
-          <dt>Data collection</dt>
-          <dd>None. No analytics, no tracking, no accounts. COPPA compliant.</dd>
-        </div>
+        <div><dt>Platform</dt><dd>iPad only</dd></div>
+        <div><dt>Ages</dt><dd>5-9</dd></div>
+        <div><dt>Price</dt><dd>Free. Everything included, nothing locked.</dd></div>
+        <div><dt>Size</dt><dd>15.5 MB</dd></div>
+        <div><dt>Built with</dt><dd>SwiftUI, RealityKit</dd></div>
+        <div><dt>Data collection</dt><dd>None. No analytics, no tracking, no accounts. COPPA compliant.</dd></div>
       </dl>
     </section>
 
-    <!-- Bottom CTA -->
-    <section class="planetia-cta">
-      <a href="https://apps.apple.com/us/app/planetia/id6760576240" class="app-store-link" data-location="cta" target="_blank" rel="noopener">
-        <img src="/images/planetia/app-store-badge.svg" alt="Download Planetia on the App Store" width="120" height="40" />
+    <section class="bottom-cta">
+      <a href={appStoreUrl} class="app-store-btn" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on the App Store
       </a>
     </section>
 
-    <!-- Footer links -->
-    <nav class="planetia-links">
+    <nav class="planetia-links" aria-label="Planetia legal">
       <a href="/planetia/privacy">Privacy Policy</a>
       <span aria-hidden="true">&middot;</span>
       <a href="/planetia/support">Support</a>
@@ -102,55 +96,83 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <style>
-  .planetia-page {
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: 32px 16px;
+  .planetia {
+    padding-top: var(--spacing-section-y);
+    padding-bottom: var(--spacing-section-y);
   }
 
-  /* Hero */
-  .planetia-hero {
+  /* ── Hero ── */
+  .hero {
     text-align: center;
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--spacing-section-y);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .tagline {
-    font-size: 17px;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-xl);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+  .hero h1 {
+    max-width: 20ch;
+    margin-bottom: 16px;
   }
 
-  .hero-intro {
-    max-width: 720px;
-    margin: 0 auto var(--space-xl);
-    text-align: left;
+  .hero-tagline {
+    font-size: 18px;
+    color: var(--color-ink-2);
+    max-width: 56ch;
+    margin-bottom: 28px;
+    line-height: 1.5;
   }
 
-  .hero-intro p {
-    line-height: 1.7;
+  .hero-lede {
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 24px 28px;
+    max-width: 60ch;
+    margin-bottom: 32px;
   }
 
-  .app-store-link {
-    display: inline-block;
+  .hero-lede p {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--color-ink-2);
+    margin-bottom: 0;
   }
 
-  .app-store-link img {
-    height: 54px;
-    width: auto;
+  .app-store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 14px 22px;
+    border-radius: var(--radius-sm);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    text-decoration: none;
+    transition: opacity 200ms ease;
   }
 
-  /* Screenshots */
+  .app-store-btn:hover {
+    opacity: 0.85;
+    color: var(--color-paper);
+  }
+
+  .app-store-btn:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  /* ── Screenshots ── */
   .screenshots {
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--spacing-section-y);
   }
 
   .screenshots-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
   }
 
   .screenshots-grid img {
@@ -158,40 +180,116 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     height: auto;
     aspect-ratio: 4 / 3;
     object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius-md);
+    display: block;
   }
 
-  @media (prefers-color-scheme: dark) {
-    .screenshots-grid img {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    }
+  /* Top 3: span 2 cols each */
+  .screenshots-grid img:nth-child(1),
+  .screenshots-grid img:nth-child(2),
+  .screenshots-grid img:nth-child(3) {
+    grid-column: span 2;
   }
 
-  /* Content sections */
-  .planetia-content {
-    max-width: 720px;
-    margin: 0 auto var(--space-2xl);
+  /* Bottom 2: span 3 cols each */
+  .screenshots-grid img:nth-child(4),
+  .screenshots-grid img:nth-child(5) {
+    grid-column: span 3;
   }
 
-  .planetia-content h2 {
-    margin-bottom: var(--space-lg);
+  /* ── Features ── */
+  .features-section {
+    margin-bottom: var(--spacing-section-y);
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .planetia-content p {
-    line-height: 1.7;
-    margin-bottom: var(--space-md);
+  .features-heading,
+  .prose-section h2 {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
   }
 
-  /* Features prose */
-  .features-prose p strong {
-    color: var(--text-primary);
+  .features-heading {
+    margin-bottom: 36px;
   }
 
-  /* Details grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .feature {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .feature-chip {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-peri-pale);
+    color: var(--color-peri-ink);
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+  }
+
+  .feature > h3 {
+    font-family: var(--font-sans);
+    font-size: 15.5px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--color-ink-2);
+    letter-spacing: 0;
+    margin-bottom: 0;
+  }
+
+  .feature > h3 strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  /* ── Prose sections (Why I built this, Details) ── */
+  .prose-section {
+    max-width: 68ch;
+    margin: 0 auto var(--spacing-section-y);
+  }
+
+  .prose-section h2 {
+    margin-bottom: 20px;
+  }
+
+  .prose-section p {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.62;
+    color: var(--color-ink);
+    margin-bottom: 16px;
+  }
+
+  .prose-section a {
+    color: var(--color-peri-ink);
+  }
+
+  .prose-section a:hover {
+    color: var(--color-peri);
+  }
+
+  /* ── Details grid ── */
   .details-grid {
     display: grid;
-    gap: var(--space-sm);
+    gap: 0;
     margin: 0;
     padding: 0;
   }
@@ -199,9 +297,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .details-grid > div {
     display: grid;
     grid-template-columns: 140px 1fr;
-    gap: var(--space-lg);
-    padding: var(--space-sm) 0;
-    border-bottom: 1px solid var(--border);
+    gap: 24px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-line);
   }
 
   .details-grid > div:last-child {
@@ -209,54 +307,111 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .details-grid dt {
-    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--color-mute);
     font-weight: 500;
   }
 
   .details-grid dd {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--color-ink);
     margin: 0;
   }
 
-  /* Bottom CTA */
-  .planetia-cta {
+  /* ── Bottom CTA ── */
+  .bottom-cta {
     text-align: center;
-    margin-bottom: var(--space-xl);
+    margin-bottom: 40px;
   }
 
-  /* Footer links */
+  /* ── Footer links ── */
   .planetia-links {
     text-align: center;
-    font-size: var(--text-meta);
-    color: var(--text-tertiary);
-    padding: var(--space-lg) 0;
-    border-top: 1px solid var(--border);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--color-mute);
+    padding-top: 24px;
+    border-top: 1px solid var(--color-line);
   }
 
   .planetia-links a {
-    color: var(--text-secondary);
+    color: var(--color-ink-2);
   }
 
   .planetia-links a:hover {
-    color: var(--accent);
+    color: var(--color-peri);
   }
 
   .planetia-links span {
-    margin: 0 var(--space-sm);
+    margin: 0 8px;
   }
 
-  /* Mobile */
-  @media (max-width: 768px) {
-    .planetia-page {
-      padding: 24px 18px;
+  /* ── Responsive ── */
+  @media (max-width: 1023px) {
+    .features-grid {
+      gap: 24px;
+    }
+
+    .features-heading,
+    .prose-section h2 {
+      font-size: 30px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .planetia {
+      padding-top: var(--spacing-section-y-mobile);
+      padding-bottom: var(--spacing-section-y-mobile);
+    }
+
+    .hero {
+      margin-bottom: var(--spacing-section-y-mobile);
+    }
+
+    .screenshots {
+      margin-bottom: var(--spacing-section-y-mobile);
     }
 
     .screenshots-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .screenshots-grid img:nth-child(1),
+    .screenshots-grid img:nth-child(2),
+    .screenshots-grid img:nth-child(3),
+    .screenshots-grid img:nth-child(4),
+    .screenshots-grid img:nth-child(5) {
+      grid-column: span 1;
+    }
+
+    .features-section {
+      margin-bottom: var(--spacing-section-y-mobile);
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .features-heading,
+    .prose-section h2 {
+      font-size: 26px;
+    }
+
+    .prose-section {
+      margin-bottom: var(--spacing-section-y-mobile);
+    }
+
+    .prose-section p {
+      font-size: 17px;
     }
 
     .details-grid > div {
       grid-template-columns: 1fr;
-      gap: var(--space-xs);
+      gap: 4px;
     }
   }
 </style>
