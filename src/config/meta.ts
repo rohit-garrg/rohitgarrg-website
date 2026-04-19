@@ -3,13 +3,9 @@
  * Edit this file to update numbers and status without touching components.
  */
 
-export const heroStats = [
-  { number: '14+', label: 'years shipping product' },
-  { number: '60+', label: 'person team' },
-  { number: '38', label: 'books in three years' },
-] as const;
+export const heroTagline = '14 years in product. 50+ books in three years. Three side projects and counting.';
 
-export const currentlyLine = 'Shipping Planetia for iPad and drafting essay #43.';
+export const currentlyLine = "Shipping Planetia for iPad and listening to Harry Potter and The Half Blood Prince (full cast edition).";
 
 export const nowStrip = [
   { text: 'Head of P&D · Times of India', beadColor: 'peri' as const },

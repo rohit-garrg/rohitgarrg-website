@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroBlock from '../components/HeroBlock.astro';
-import NowStrip from '../components/NowStrip.astro';
 import WritingCard from '../components/WritingCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
@@ -47,7 +46,6 @@ const websiteSchema = {
   <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
   <HeroBlock />
-  <NowStrip />
 
   <section class="section-writing" aria-label="Recent writing">
     <div class="container-wide">

@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import portrait from '../assets/rohit-portrait.png';
-import { heroStats, currentlyLine } from '../config/meta';
+import { heroTagline, currentlyLine } from '../config/meta';
 ---
 
 <section class="hero" aria-label="Introduction">
@@ -18,21 +18,14 @@ import { heroStats, currentlyLine } from '../config/meta';
       </p>
 
       <h1 class="display-xl">
-        Building <span class="blob-wrap"><em>products</em></span> for 240M readers. Tinkering with AI at night.
+        Building <span class="blob-wrap"><em>products</em></span> for 200M+ readers. Tinkering with AI at night.
       </h1>
 
       <p class="lede body-lg">
-        I'm Rohit. I lead Product and Design at Times of India, India's largest digital news publisher, with a team of 60+. On the side I build little things, read a lot, and write here about what actually happens inside a product org at scale.
+        I'm Rohit. I lead Product and Design at Times of India, India's largest digital news publisher. On the side I build little things, read a lot, and write here about what actually happens inside a product org at scale.
       </p>
 
-      <div class="meta-row">
-        {heroStats.map((stat) => (
-          <span class="stat">
-            <span class="stat-number">{stat.number}</span>
-            <span class="stat-label">{stat.label}</span>
-          </span>
-        ))}
-      </div>
+      <p class="hero-tagline body-sm">{heroTagline}</p>
 
       <div class="hero-actions">
         <a href="/writing" class="btn-primary">Read the writing</a>
@@ -160,31 +153,9 @@ import { heroStats, currentlyLine } from '../config/meta';
     margin-bottom: 36px;
   }
 
-  /* Meta row */
-  .meta-row {
-    display: flex;
-    gap: 26px;
-    margin-bottom: 36px;
-    flex-wrap: wrap;
-  }
-
-  .stat {
-    display: flex;
-    gap: 6px;
-    align-items: baseline;
-  }
-
-  .stat-number {
-    font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 17px;
-    color: var(--color-ink);
-  }
-
-  .stat-label {
-    font-family: var(--font-sans);
-    font-size: 14.5px;
+  .hero-tagline {
     color: var(--color-mute);
+    margin-bottom: 36px;
   }
 
   /* Action buttons */
