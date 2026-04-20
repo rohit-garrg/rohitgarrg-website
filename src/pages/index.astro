@@ -69,7 +69,7 @@ const websiteSchema = {
             readingTime={getReadingTime(article)}
             cover={article.data.cover}
             tag={article.data.tag}
-            slug={article.id.replace(/\.md$/, '')}
+            slug={article.id.replace(/\.mdx?$/, '')}
             featured={i === 0}
           />
         ))}

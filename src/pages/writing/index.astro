@@ -10,7 +10,7 @@ const sortedPosts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.
 
 // Featured post (most recent)
 const featured = sortedPosts[0];
-const featuredSlug = featured.id.replace(/\.md$/, '');
+const featuredSlug = featured.id.replace(/\.mdx?$/, '');
 
 // Tag counts (single pass)
 const tagCounts = new Map<string, number>();
@@ -29,7 +29,7 @@ const sortedYears = [...yearGroups.keys()].sort((a, b) => b - a);
 
 // Search index for client-side filter/search
 const searchIndex = sortedPosts.map(p => ({
-  s: p.id.replace(/\.md$/, ''),
+  s: p.id.replace(/\.mdx?$/, ''),
   t: p.data.title,
   e: p.data.excerpt,
   g: p.data.tag,
@@ -73,8 +73,8 @@ const searchIndex = sortedPosts.map(p => ({
     </div>
 
     <!-- Featured block -->
-    <section class="featured-block" id="featured-block" data-slug={featured.id.replace(/\.md$/, '')}>
-      <a href={`/writing/${featured.id.replace(/\.md$/, '')}`} class="featured-link">
+    <section class="featured-block" id="featured-block" data-slug={featured.id.replace(/\.mdx?$/, '')}>
+      <a href={`/writing/${featured.id.replace(/\.mdx?$/, '')}`} class="featured-link">
         <div class="featured-cover">
           <img
             src={featured.data.cover}
@@ -106,7 +106,7 @@ const searchIndex = sortedPosts.map(p => ({
           <h2 class="year-label mono-xxs">{year} &middot; <span class="year-count">{posts.length}</span> {posts.length === 1 ? 'post' : 'posts'}</h2>
           <div class="year-grid">
             {posts.map(post => (
-              <div class:list={['card-wrapper', { 'is-featured-dup': post.id.replace(/\.md$/, '') === featuredSlug }]} data-slug={post.id.replace(/\.md$/, '')} data-tag={post.data.tag} data-year={post.data.date.getFullYear()}>
+              <div class:list={['card-wrapper', { 'is-featured-dup': post.id.replace(/\.mdx?$/, '') === featuredSlug }]} data-slug={post.id.replace(/\.mdx?$/, '')} data-tag={post.data.tag} data-year={post.data.date.getFullYear()}>
                 <WritingCard
                   title={post.data.title}
                   excerpt={post.data.excerpt}
@@ -114,7 +114,7 @@ const searchIndex = sortedPosts.map(p => ({
                   readingTime={post.data.readMin}
                   cover={post.data.cover}
                   tag={post.data.tag}
-                  slug={post.id.replace(/\.md$/, '')}
+                  slug={post.id.replace(/\.mdx?$/, '')}
                 />
               </div>
             ))}

@@ -7,14 +7,14 @@ import { TAG_COLORS } from '../../utils/tags';
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
   return posts.map((post) => ({
-    params: { slug: post.id.replace(/\.md$/, '') },
+    params: { slug: post.id.replace(/\.mdx?$/, '') },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
 const { Content, headings } = await post.render();
-const slug = post.id.replace(/\.md$/, '');
+const slug = post.id.replace(/\.mdx?$/, '');
 
 // All posts for next-up and series
 const allPosts = await getCollection('posts');
@@ -24,7 +24,7 @@ const sortedPosts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.
 let nextPosts: typeof sortedPosts;
 if (post.data.nextPosts?.length) {
   nextPosts = post.data.nextPosts
-    .map((s: string) => allPosts.find(p => p.id.replace(/\.md$/, '') === s))
+    .map((s: string) => allPosts.find(p => p.id.replace(/\.mdx?$/, '') === s))
     .filter(Boolean) as typeof sortedPosts;
 } else {
   nextPosts = sortedPosts
@@ -111,11 +111,11 @@ const breadcrumbSchema = {
         {seriesInfo && (
           <div class="series-bar mono-xs">
             {seriesInfo.prev && (
-              <a href={`/writing/${seriesInfo.prev.id.replace(/\.md$/, '')}`} class="series-link">&larr; Prev</a>
+              <a href={`/writing/${seriesInfo.prev.id.replace(/\.mdx?$/, '')}`} class="series-link">&larr; Prev</a>
             )}
             <span>{seriesInfo.name} &middot; Part {seriesInfo.current} of {seriesInfo.total === 1 ? 'an ongoing series' : seriesInfo.total}</span>
             {seriesInfo.next && (
-              <a href={`/writing/${seriesInfo.next.id.replace(/\.md$/, '')}`} class="series-link">Next &rarr;</a>
+              <a href={`/writing/${seriesInfo.next.id.replace(/\.mdx?$/, '')}`} class="series-link">Next &rarr;</a>
             )}
           </div>
         )}
@@ -241,7 +241,7 @@ const breadcrumbSchema = {
         <p class="next-up-label mono-xxs">Keep reading</p>
         <div class="next-up-grid">
           {nextPosts.map(np => (
-            <a href={`/writing/${np.id.replace(/\.md$/, '')}`} class="next-card">
+            <a href={`/writing/${np.id.replace(/\.mdx?$/, '')}`} class="next-card">
               <p class="next-meta mono-xs">
                 <span class="meta-dot" style={`background: ${TAG_COLORS[np.data.tag] || 'var(--color-slate)'}`}></span>
                 {np.data.tag} &middot; {np.data.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}

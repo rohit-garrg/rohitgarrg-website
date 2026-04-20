@@ -18,9 +18,10 @@ export async function GET(context) {
       media: 'http://search.yahoo.com/mrss/',
     },
     items: sortedPosts.map(post => {
-      const slug = post.id.replace(/\.md$/, '');
+      const slug = post.id.replace(/\.mdx?$/, '');
       const coverUrl = new URL(post.data.cover, context.site).href;
-      const bodyHtml = marked.parse(post.body || '');
+      const isMdx = post.id.endsWith('.mdx');
+      const bodyHtml = isMdx ? `<p>${escapeHtml(post.data.excerpt)}</p>` : marked.parse(post.body || '');
       const contentHtml = `<img src="${coverUrl}" alt="${escapeHtml(post.data.title)}" />\n${bodyHtml}`;
 
       return {

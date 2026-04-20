@@ -1,0 +1,667 @@
+---
+import { Image } from 'astro:assets';
+
+interface BeforeAfterPair {
+  id?: string;
+  label?: string;
+  before: ImageMetadata | string;
+  after: ImageMetadata | string;
+  beforeAlt: string;
+  afterAlt: string;
+  loading?: 'lazy' | 'eager';
+}
+
+interface Props {
+  pairs: BeforeAfterPair[];
+  beforeLabel?: string;
+  afterLabel?: string;
+  initialPosition?: number;
+  aspectRatio?: string;
+  objectFit?: 'cover' | 'contain';
+  mobileLayout?: 'stack' | 'hidden';
+  showSwitcher?: 'auto' | 'always' | 'never';
+}
+
+const {
+  pairs,
+  beforeLabel = 'Before',
+  afterLabel = 'After',
+  initialPosition: rawPosition = 50,
+  aspectRatio = '16 / 10',
+  objectFit = 'cover',
+  mobileLayout = 'stack',
+  showSwitcher = 'auto',
+} = Astro.props;
+
+const initialPosition = Math.min(100, Math.max(0, rawPosition));
+
+if (import.meta.env.DEV) {
+  if (rawPosition < 0 || rawPosition > 100) {
+    console.warn(`[BeforeAfter] initialPosition ${rawPosition} out of range [0, 100], clamped to ${initialPosition}`);
+  }
+  if (aspectRatio && !/^\d+(\.\d+)?\s*\/\s*\d+(\.\d+)?$/.test(aspectRatio)) {
+    console.warn(`[BeforeAfter] aspectRatio "${aspectRatio}" may not be a valid CSS aspect-ratio value`);
+  }
+  if (showSwitcher === 'never' && pairs.length > 1) {
+    console.warn(`[BeforeAfter] showSwitcher="never" with ${pairs.length} pairs — subsequent pairs are unreachable`);
+  }
+}
+
+const normalizedPairs = pairs.map((pair, i) => ({
+  ...pair,
+  id: pair.id || `pair-${i}`,
+  label: pair.label || pair.id || `Pair ${i + 1}`,
+  loading: pair.loading || 'lazy',
+}));
+
+const switcherVisible =
+  showSwitcher === 'always' ||
+  (showSwitcher === 'auto' && normalizedPairs.length > 1);
+
+const instanceId = `ba-${crypto.randomUUID().slice(0, 8)}`;
+
+function isImageMetadata(src: ImageMetadata | string): src is ImageMetadata {
+  return typeof src === 'object' && src !== null && 'src' in src;
+}
+---
+
+<figure
+  class={`ba-root ${mobileLayout === 'hidden' ? 'ba-mobile-hidden' : ''}`}
+  data-before-after
+  data-instance-id={instanceId}
+  data-initial-position={initialPosition}
+  data-mobile-layout={mobileLayout}
+>
+  {switcherVisible && (
+    <div class="ba-switcher" role="tablist" aria-label="Compare pairs">
+      {normalizedPairs.map((pair, i) => (
+        <button
+          class={`ba-tab mono-xs ${i === 0 ? 'ba-tab--active' : ''}`}
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          data-pair-id={pair.id}
+          type="button"
+        >
+          {pair.label}
+        </button>
+      ))}
+    </div>
+  )}
+
+  <div
+    class="ba-canvas"
+    style={`aspect-ratio: ${aspectRatio};`}
+  >
+    {normalizedPairs.map((pair, i) => (
+      <div
+        class={`ba-pair ${i === 0 ? 'ba-pair--active' : ''}`}
+        data-pair-id={pair.id}
+      >
+        <figure class="ba-figure ba-figure--before">
+          {isImageMetadata(pair.before) ? (
+            <Image
+              src={pair.before}
+              alt={pair.beforeAlt}
+              widths={[600, 900, 1400]}
+              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 80vw, 700px"
+              loading={pair.loading}
+              decoding="async"
+              class="ba-img"
+              style={`object-fit: ${objectFit};`}
+            />
+          ) : (
+            <img
+              src={pair.before}
+              alt={pair.beforeAlt}
+              loading={pair.loading}
+              decoding="async"
+              class="ba-img"
+              style={`object-fit: ${objectFit};`}
+            />
+          )}
+          <figcaption class="ba-label ba-label--before mono-xs">{beforeLabel}</figcaption>
+        </figure>
+
+        <figure
+          class="ba-figure ba-figure--after"
+          style={`clip-path: inset(0 0 0 ${initialPosition}%);`}
+        >
+          {isImageMetadata(pair.after) ? (
+            <Image
+              src={pair.after}
+              alt={pair.afterAlt}
+              widths={[600, 900, 1400]}
+              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 80vw, 700px"
+              loading={pair.loading}
+              decoding="async"
+              class="ba-img"
+              style={`object-fit: ${objectFit};`}
+            />
+          ) : (
+            <img
+              src={pair.after}
+              alt={pair.afterAlt}
+              loading={pair.loading}
+              decoding="async"
+              class="ba-img"
+              style={`object-fit: ${objectFit};`}
+            />
+          )}
+          <figcaption class="ba-label ba-label--after mono-xs">{afterLabel}</figcaption>
+        </figure>
+
+        <div
+          class="ba-handle"
+          style={`left: ${initialPosition}%;`}
+          role="slider"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={initialPosition}
+          aria-valuetext={`${initialPosition} percent, ${afterLabel} image visible on the right`}
+          aria-label="Before and after comparison slider"
+          tabindex={0}
+        >
+          <div class="ba-handle-line"></div>
+          <div class="ba-handle-thumb">
+            <span class="ba-handle-grip" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {mobileLayout === 'stack' && (
+    <div class="ba-stack">
+      {switcherVisible && (
+        <div class="ba-stack-switcher" role="tablist" aria-label="Compare pairs">
+          {normalizedPairs.map((pair, i) => (
+            <button
+              class={`ba-tab mono-xs ${i === 0 ? 'ba-tab--active' : ''}`}
+              role="tab"
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? 0 : -1}
+              data-pair-id={pair.id}
+              type="button"
+            >
+              {pair.label}
+            </button>
+          ))}
+        </div>
+      )}
+      {normalizedPairs.map((pair, i) => (
+        <div
+          class={`ba-stack-pair ${i === 0 ? 'ba-stack-pair--active' : ''}`}
+          data-pair-id={pair.id}
+        >
+          <figure class="ba-stack-figure">
+            <p class="ba-stack-label mono-xs">{beforeLabel}</p>
+            {isImageMetadata(pair.before) ? (
+              <Image
+                src={pair.before}
+                alt={pair.beforeAlt}
+                widths={[400, 600]}
+                sizes="100vw"
+                loading={pair.loading}
+                decoding="async"
+                class="ba-stack-img"
+                style={`object-fit: ${objectFit};`}
+              />
+            ) : (
+              <img
+                src={pair.before}
+                alt={pair.beforeAlt}
+                loading={pair.loading}
+                decoding="async"
+                class="ba-stack-img"
+                style={`object-fit: ${objectFit};`}
+              />
+            )}
+          </figure>
+          <figure class="ba-stack-figure">
+            <p class="ba-stack-label mono-xs">{afterLabel}</p>
+            {isImageMetadata(pair.after) ? (
+              <Image
+                src={pair.after}
+                alt={pair.afterAlt}
+                widths={[400, 600]}
+                sizes="100vw"
+                loading={pair.loading}
+                decoding="async"
+                class="ba-stack-img"
+                style={`object-fit: ${objectFit};`}
+              />
+            ) : (
+              <img
+                src={pair.after}
+                alt={pair.afterAlt}
+                loading={pair.loading}
+                decoding="async"
+                class="ba-stack-img"
+                style={`object-fit: ${objectFit};`}
+              />
+            )}
+          </figure>
+        </div>
+      ))}
+    </div>
+  )}
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-before-after]').forEach(root => {
+    const canvas = root.querySelector<HTMLElement>('.ba-canvas');
+    if (!canvas) return;
+
+    const initialPosition = Number(root.dataset.initialPosition) || 50;
+    let position = initialPosition;
+
+    const pairs = canvas.querySelectorAll<HTMLElement>('.ba-pair');
+    if (pairs.length === 0) return;
+
+    const desktopSwitcher = root.querySelector<HTMLElement>('.ba-switcher');
+    const stack = root.querySelector<HTMLElement>('.ba-stack');
+    const stackSwitcher = stack?.querySelector<HTMLElement>('.ba-stack-switcher');
+    const stackPairs = stack ? stack.querySelectorAll<HTMLElement>('.ba-stack-pair') : [];
+
+    // Cached references to avoid per-pointermove DOM queries
+    let activePair = pairs[0];
+    let activeAfterFig = activePair.querySelector<HTMLElement>('.ba-figure--after');
+    let activeHandle = activePair.querySelector<HTMLElement>('.ba-handle');
+
+    function setActivePair(pairId: string) {
+      const found = canvas!.querySelector<HTMLElement>(`.ba-pair[data-pair-id="${pairId}"]`);
+      if (!found) return;
+      activePair = found;
+      activeAfterFig = activePair.querySelector<HTMLElement>('.ba-figure--after');
+      activeHandle = activePair.querySelector<HTMLElement>('.ba-handle');
+    }
+
+    function setPosition(pct: number) {
+      position = Math.min(100, Math.max(0, pct));
+      if (activeAfterFig) {
+        activeAfterFig.style.clipPath = `inset(0 0 0 ${position}%)`;
+      }
+      if (activeHandle) {
+        activeHandle.style.left = `${position}%`;
+        activeHandle.setAttribute('aria-valuenow', String(Math.round(position)));
+        activeHandle.setAttribute('aria-valuetext', `${Math.round(position)} percent, after image visible on the right`);
+      }
+    }
+
+    let dragging = false;
+
+    function getPositionFromPointer(e: PointerEvent): number {
+      const rect = canvas!.getBoundingClientRect();
+      return ((e.clientX - rect.left) / rect.width) * 100;
+    }
+
+    canvas.addEventListener('pointerdown', (e: PointerEvent) => {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      dragging = true;
+      canvas!.setPointerCapture(e.pointerId);
+      setPosition(getPositionFromPointer(e));
+    });
+
+    canvas.addEventListener('pointermove', (e: PointerEvent) => {
+      if (!dragging) return;
+      e.preventDefault();
+      setPosition(getPositionFromPointer(e));
+    });
+
+    canvas.addEventListener('pointerup', (e: PointerEvent) => {
+      if (!dragging) return;
+      dragging = false;
+      canvas!.releasePointerCapture(e.pointerId);
+    });
+
+    canvas.addEventListener('pointercancel', (e: PointerEvent) => {
+      dragging = false;
+      canvas!.releasePointerCapture(e.pointerId);
+    });
+
+    canvas.style.touchAction = 'none';
+
+    canvas.addEventListener('keydown', (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.classList.contains('ba-handle')) return;
+
+      let step = 0;
+      switch (e.key) {
+        case 'ArrowLeft':
+        case 'ArrowDown':
+          step = -5; break;
+        case 'ArrowRight':
+        case 'ArrowUp':
+          step = 5; break;
+        case 'PageDown':
+          step = -10; break;
+        case 'PageUp':
+          step = 10; break;
+        case 'Home':
+          setPosition(0); e.preventDefault(); return;
+        case 'End':
+          setPosition(100); e.preventDefault(); return;
+        default: return;
+      }
+      e.preventDefault();
+      setPosition(position + step);
+    });
+
+    // Cache all tab buttons from both switchers for cross-sync
+    const desktopTabs = desktopSwitcher ? desktopSwitcher.querySelectorAll<HTMLButtonElement>('[role="tab"]') : [];
+    const stackTabs = stackSwitcher ? stackSwitcher.querySelectorAll<HTMLButtonElement>('[role="tab"]') : [];
+    const allTabs = [...Array.from(desktopTabs), ...Array.from(stackTabs)];
+
+    function activateTab(tab: HTMLButtonElement) {
+      const pairId = tab.dataset.pairId || '';
+
+      allTabs.forEach(t => {
+        const isActive = t.dataset.pairId === pairId;
+        t.setAttribute('aria-selected', String(isActive));
+        t.classList.toggle('ba-tab--active', isActive);
+        t.tabIndex = isActive ? 0 : -1;
+      });
+
+      setActivePair(pairId);
+
+      pairs.forEach(p => {
+        p.classList.toggle('ba-pair--active', p.dataset.pairId === pairId);
+      });
+
+      stackPairs.forEach(sp => {
+        sp.classList.toggle('ba-stack-pair--active', sp.dataset.pairId === pairId);
+      });
+
+      setPosition(initialPosition);
+    }
+
+    function setupSwitcher(switcher: HTMLElement) {
+      const tabs = switcher.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+      if (tabs.length === 0) return;
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => activateTab(tab));
+      });
+
+      switcher.addEventListener('keydown', (e: KeyboardEvent) => {
+        const target = e.target as HTMLButtonElement;
+        if (target.getAttribute('role') !== 'tab') return;
+
+        const tabArr = Array.from(tabs);
+        const idx = tabArr.indexOf(target);
+        let newIdx = idx;
+
+        switch (e.key) {
+          case 'ArrowRight':
+            newIdx = (idx + 1) % tabArr.length; break;
+          case 'ArrowLeft':
+            newIdx = (idx - 1 + tabArr.length) % tabArr.length; break;
+          case 'Home':
+            newIdx = 0; break;
+          case 'End':
+            newIdx = tabArr.length - 1; break;
+          default: return;
+        }
+
+        e.preventDefault();
+        tabArr[newIdx].focus();
+        activateTab(tabArr[newIdx]);
+      });
+    }
+
+    if (desktopSwitcher) setupSwitcher(desktopSwitcher);
+    if (stackSwitcher) setupSwitcher(stackSwitcher);
+
+    if (import.meta.env.DEV) {
+      pairs.forEach(pair => {
+        const imgs = pair.querySelectorAll<HTMLImageElement>('.ba-img');
+        if (imgs.length < 2) return;
+        let loaded = 0;
+        imgs.forEach(img => {
+          const check = () => {
+            loaded++;
+            if (loaded === 2) {
+              const r1 = imgs[0].naturalWidth / imgs[0].naturalHeight;
+              const r2 = imgs[1].naturalWidth / imgs[1].naturalHeight;
+              const diff = Math.abs(r1 - r2) / Math.max(r1, r2) * 100;
+              if (diff > 0.5) {
+                console.warn(
+                  `[BeforeAfter] Pair "${pair.dataset.pairId}": aspect ratio mismatch — ` +
+                  `before ${r1.toFixed(3)}, after ${r2.toFixed(3)} (${diff.toFixed(1)}% difference)`
+                );
+              }
+            }
+          };
+          if (img.complete) check();
+          else img.addEventListener('load', check, { once: true });
+        });
+      });
+    }
+
+    root.setAttribute('data-before-after-hydrated', '');
+  });
+</script>
+
+<style>
+  .ba-root {
+    margin: 2rem 0;
+    max-width: 100%;
+  }
+
+  .ba-switcher {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ba-tab {
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    background: var(--color-paper-2);
+    color: var(--color-mute);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .ba-tab:hover {
+    color: var(--color-ink);
+  }
+
+  .ba-tab--active {
+    background: var(--color-peri-pale);
+    color: var(--color-peri-ink);
+    border-color: var(--color-peri-pale);
+  }
+
+  .ba-tab:focus-visible {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  .ba-canvas {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-line);
+    background: var(--color-paper-2);
+    cursor: ew-resize;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .ba-pair {
+    display: none;
+    position: absolute;
+    inset: 0;
+  }
+
+  .ba-pair--active {
+    display: block;
+  }
+
+  .ba-figure {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ba-figure--after {
+    z-index: 1;
+  }
+
+  .ba-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ba-label {
+    position: absolute;
+    bottom: 12px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in oklch, var(--color-paper) 85%, transparent);
+    color: var(--color-ink-2);
+    pointer-events: none;
+    z-index: 3;
+    line-height: 1;
+  }
+
+  .ba-label--before {
+    left: 12px;
+  }
+
+  .ba-label--after {
+    right: 12px;
+  }
+
+  .ba-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+    cursor: ew-resize;
+  }
+
+  .ba-handle:focus-visible {
+    outline: none;
+  }
+
+  .ba-handle:focus-visible .ba-handle-thumb {
+    outline: 2px solid var(--color-peri-ink);
+    outline-offset: 2px;
+  }
+
+  .ba-handle-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-ink);
+    pointer-events: none;
+  }
+
+  .ba-handle-thumb {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-paper);
+    border: 2px solid var(--color-peri);
+    box-shadow: 0 2px 8px oklch(0.45 0.15 270 / 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  /* Invisible touch target — 44px minimum */
+  .ba-handle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -22px;
+    right: -22px;
+  }
+
+  .ba-handle-grip {
+    display: flex;
+    gap: 3px;
+  }
+
+  .ba-handle-grip::before,
+  .ba-handle-grip::after {
+    content: '';
+    width: 1px;
+    height: 12px;
+    background: var(--color-mute);
+  }
+
+  .ba-stack {
+    display: none;
+  }
+
+  .ba-stack-pair {
+    display: none;
+  }
+
+  .ba-stack-pair--active {
+    display: block;
+  }
+
+  .ba-stack-figure {
+    margin: 0 0 12px;
+    padding: 0;
+  }
+
+  .ba-stack-label {
+    margin: 0 0 6px;
+    color: var(--color-mute);
+  }
+
+  .ba-stack-img {
+    display: block;
+    width: 100%;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-line);
+  }
+
+  .ba-stack-switcher {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 767px) {
+    .ba-canvas,
+    .ba-switcher {
+      display: none;
+    }
+
+    .ba-stack {
+      display: block;
+    }
+
+    .ba-mobile-hidden {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ba-tab {
+      transition: none;
+    }
+  }
+</style>

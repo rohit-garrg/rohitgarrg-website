@@ -7,7 +7,7 @@ const allSpeaking = await getCollection('speaking');
 
 const sorted = allSpeaking
   .map((entry) => ({
-    slug: entry.id.replace(/\.md$/, ''),
+    slug: entry.id.replace(/\.mdx?$/, ''),
     event: entry.data.event,
     title: entry.data.title,
     date: entry.data.date,

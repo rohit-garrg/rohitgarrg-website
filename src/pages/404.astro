@@ -34,7 +34,7 @@ const recentPosts = allPosts
             readingTime={post.data.readMin}
             cover={post.data.cover}
             tag={post.data.tag}
-            slug={post.id.replace(/\.md$/, '')}
+            slug={post.id.replace(/\.mdx?$/, '')}
           />
         ))}
       </div>

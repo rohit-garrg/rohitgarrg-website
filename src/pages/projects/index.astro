@@ -33,7 +33,7 @@ const actionOverrides: Record<string, { label: string; url: string }> = {
 
     <div class="projects-list">
       {orderedProjects.map((project) => {
-        const slug = project.id.replace(/\.md$/, '');
+        const slug = project.id.replace(/\.mdx?$/, '');
         const d = project.data;
         const name = d.name ?? d.title;
         const override = actionOverrides[slug];

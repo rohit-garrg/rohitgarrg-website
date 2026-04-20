@@ -6,7 +6,7 @@ import Lightbox from '../../components/Lightbox.astro';
 export async function getStaticPaths() {
   const speaking = await getCollection('speaking');
   return speaking.map((entry) => ({
-    params: { slug: entry.id.replace(/\.md$/, '') },
+    params: { slug: entry.id.replace(/\.mdx?$/, '') },
     props: { entry },
   }));
 }
