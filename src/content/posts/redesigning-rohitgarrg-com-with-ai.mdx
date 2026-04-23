@@ -1,0 +1,120 @@
+---
+title: "Redesigning rohitgarrg.com with AI"
+date: 2026-04-22
+tag: "AI"
+excerpt: "A weekend redesign using Claude Design, Claude.ai, and Claude Code. Notes on what each tool did well, where the chain broke, and what manual review still needs to catch."
+readMin: 5
+cover: "/images/writing/redesigning-rohitgarrg-com-with-ai/lead.webp"
+nextPosts: ["how-i-actually-use-claude", "weekend-website-claude-workflow"]
+---
+
+import BeforeAfter from '../../components/BeforeAfter.astro';
+import oldHome from '../../assets/redesign/old_home.webp';
+import newHome from '../../assets/redesign/new_home.webp';
+import oldListing from '../../assets/redesign/old_listing.webp';
+import newListing from '../../assets/redesign/new_listing.webp';
+import oldPost from '../../assets/redesign/old_post.webp';
+import newPost from '../../assets/redesign/new_post.webp';
+import stitchHome from '../../assets/redesign/stitch_home.webp';
+import stitchListing from '../../assets/redesign/stitch_listing.webp';
+import stitchPost from '../../assets/redesign/stitch_post.webp';
+
+Claude Design launched on April 17. I spent the following weekend rebuilding rohitgarrg.com from scratch. The old site had a palette I had stopped liking and a layout I had built before tools like Claude Design existed. I wanted to see how far three LLM tools could take me.
+
+The workflow: Claude Design for visual exploration, Claude.ai for planning and prompt generation, [Claude Code for implementation](/writing/weekend-website-claude-workflow). Gemini and Opus ran in critique mode on the side, [reviewing plans before Claude Code executed them](/writing/how-i-actually-use-claude). Five phases: foundation, home, writing system, other pages, polish.
+
+The redesign shipped. The palette is cooler. The writing index has a tag-based filter. Long posts have an on-this-page panel. In the same weekend, the tools wrote a 1,840-word essay titled "Your AI coworker is not a tool, it is a team member who forgets," filed it under my byline, and routed it toward production. They listed a talk at Product Konf Delhi on November 8, 2024, at a venue where I have never spoken. I caught both before publish.
+
+<BeforeAfter
+  pairs={[
+    { id: 'home', label: 'Home', before: oldHome, after: newHome,
+      beforeAlt: 'Old rohitgarrg.com home page, April 2025',
+      afterAlt: 'New rohitgarrg.com home page, April 2026', loading: 'eager' },
+    { id: 'writing', label: 'Writing index', before: oldListing, after: newListing,
+      beforeAlt: 'Old writing index page',
+      afterAlt: 'New writing index with tag filter' },
+    { id: 'post', label: 'Blog post', before: oldPost, after: newPost,
+      beforeAlt: 'Old blog post template',
+      afterAlt: 'New blog post with sticky TOC' },
+  ]}
+  aspectRatio="1400 / 761"
+/>
+
+## The two tools got the same brief
+
+The brief was detailed. Timeline, positioning, what the old site got wrong, what the new one needed to preserve, what it should introduce, three screens per direction, explicit constraints on what not to do. Three directions that had to make genuinely different aesthetic bets.
+
+I ran the same brief through Stitch with Google to see what a second tool would do with the same input.
+
+Claude Design came back with follow-up questions before producing anything. It offered three named directions to pick from: Soft/organic with rounded surfaces and warm-cool mix, Product studio with systems-driven monochrome grids, or Technical/notebook with mono type and annotation energy. Each one had character. I wasn't picking between abstractions, I was picking between characters. It asked for reference sites. I sent Gates Notes for overall aesthetic, Russell Brand for newsletter treatment, Muriel Vega for iconography. It asked about iconography style, mobile scope, portrait usage, newsletter emphasis, and how realistic the sample copy should be.
+
+Stitch did not ask anything. It produced three directions straight from the brief: Editorial with serif headlines and gray tones, Architect with rigid all-caps blue type, Innovator with green rounded cards. Each was technically a different aesthetic. None felt like they were made for this site. The headlines read like designer cosplay. "ARCHITECTING DIGITAL RIGOR" was one. "Directory_Index.v02" was another. The placeholder copy was aspirational and hollow.
+
+Both tools followed the brief. Stitch treated it as a complete spec. Claude Design treated it as a starting point. The quality gap tracks to that difference more than to anything else.
+
+<BeforeAfter
+  pairs={[
+    { id: 'home', label: 'Home', before: newHome, after: stitchHome,
+      beforeAlt: 'Claude Design home page direction',
+      afterAlt: 'Stitch home page direction' },
+    { id: 'writing', label: 'Writing index', before: newListing, after: stitchListing,
+      beforeAlt: 'Claude Design writing index direction',
+      afterAlt: 'Stitch writing index direction' },
+    { id: 'post', label: 'Blog post', before: newPost, after: stitchPost,
+      beforeAlt: 'Claude Design blog post direction',
+      afterAlt: 'Stitch blog post direction' },
+  ]}
+  beforeLabel="Claude Design"
+  afterLabel="Stitch"
+  aspectRatio="1400 / 761"
+/>
+
+## The prototype had opinions about who I am
+
+The redesign had a prototype file filled with placeholder content. Post cards, project entries, speaking history, an About paragraph. Standard practice. You fill a layout with stand-in copy so the design has something to breathe against.
+
+At the top of the file, one comment:
+
+```
+// Real sample content based on actual rohitgarrg.com structure.
+```
+
+The comment was wrong. The content was invented. The first post card had the title "Your AI coworker is not a tool, it is a team member who forgets" and the excerpt "Agents are competent, fast, and have zero institutional memory. The design problem is not prompting, it is onboarding." I have not written that post. The speaking section listed a talk at Product Konf Delhi on November 8, 2024 titled "Designing for 240M monthly readers" with the dek "What scale does to the design function and what it protects you from." I have not spoken at Product Konf.
+
+When I asked Claude.ai to turn the design into a set of instructions for Claude Code, it read the comment and treated the placeholder content as my real copy. The instructions it generated pointed the build at that file for the featured posts, for the speaking section, for the projects list, for the About paragraph. If Claude Code had executed the instructions as written, the site would have published the fabricated essay as a real post on a real URL and listed the fabricated talk as a real speaking engagement, under my byline.
+
+The adversarial review pass did not catch it. Gemini and Opus checked design consistency, token collisions, tablet breakpoint behavior, copyright on stock images, em dash violations in sample bodies. Roughly thirty-five issues across the handoff. Content authenticity was not on the checklist because content authenticity is not a design review concern.
+
+I caught it in a different chat. I was asking Claude.ai about swapping analytics tools, and in the course of that conversation we were reading through the same instruction files. The reference to the prototype file looked off. I pulled it up. The first title was an essay I had not written. Two clicks later I found the Product Konf entry.
+
+One comment at the top of a placeholder file had propagated through three tools as instruction.
+
+## The fix
+
+I wrote a rule and put it at the top of the instructions file:
+
+```
+The prototype folder is a visual reference for layout,
+component structure, and design language. Nothing more.
+The placeholder file contains stand-in copy used only to
+render the design mock. Production content lives in the
+real content folders. When this file points at prototype
+data, treat it as a reference for shape and field names
+only. The actual strings must come from the existing
+production content. If production copy does not fit a
+new container, stop and ask.
+```
+
+A shorter version went into the project's main to-do file as a second layer. Then I rewrote each instruction block that had previously pointed at the prototype file, so it pointed at the real content folders instead. The global rule was the net. The specific edits were the patch at each known leak.
+
+During a manual review pass partway through the build, three things had slipped through. Search was not surfacing the latest article when I clicked on a relevant tag. The subscribe button was broken in the mobile menu. And Product Konf Delhi was back in the speaking section.
+
+I do not know how Product Konf came back. Possibly one of the later build sessions read the prototype file on its own and pulled details from it. Possibly the global rule was read but not applied consistently across sessions. The specific mechanism was never traced. A rule written in plain English, plus targeted edits at every known site of the problem, did not hold in every instance. The fix narrowed the failure surface. It did not close it.
+
+Manual review caught all three. The site shipped clean.
+
+## Two notes from the weekend
+
+Claude Design has a separate monthly quota from Claude.ai. I burned seventy-five percent of mine on a single redesign prompt. The three-directions-with-three-screens-each output is dense, and the iteration loop inside Claude Design compounds fast. If you are planning to use it for a real project, treat the quota as a budget before you start clicking.
+
+Somewhere in the middle of the build I swapped GA4 for GoatCounter. The original plan was to keep GA4 and add a consent banner for DPDP and GDPR compliance. GoatCounter is cookieless, collects no personal data, and needs no banner under either regime. A one-line script tag replaced the GA4 snippet plus the custom consent component I would have otherwise had to build and maintain. The swap took under an hour.
