@@ -9,7 +9,7 @@ cover: "/images/writing/project-hail-mary-review/lead.webp"
 
 I watched the movie first. Loved it. Ryan Gosling was charming, the visuals were great, and I walked out of the theater thinking I'd gotten the full story.
 
-Then I listened to the audiobook. Sixteen hours. And I realized the movie had given me the highlights reel of something much bigger.
+Then I listened to [the audiobook](/writing/audiobook-commute-reading-habit). Sixteen hours. And I realized the movie had given me the highlights reel of something much bigger.
 
 ## What the book is (no spoilers)
 

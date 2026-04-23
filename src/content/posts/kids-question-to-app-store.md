@@ -19,7 +19,7 @@ My kids used it a few times and moved on.
 
 Fair enough. A laptop browser isn't how a five-year-old wants to explore space. An iPad is. Touch, pinch, rotate. That's how kids already expect things to work.
 
-So the next step was an iPad app. I had never opened Xcode. I didn't know Swift or SwiftUI or RealityKit. But I'd already shipped a browser game and a full website redesign using the same workflow: plan everything in Claude AI, break it into phased prompts, hand those to Claude Code. The question was whether that process would survive a platform I'd never touched.
+So the next step was an iPad app. I had never opened Xcode. I didn't know Swift or SwiftUI or RealityKit. But I'd already shipped a browser game and a full website redesign using [the same workflow](/writing/weekend-website-claude-workflow): plan everything in Claude AI, break it into phased prompts, hand those to Claude Code. The question was whether that process would survive a platform I'd never touched.
 
 It did. Four weekends. And the part that surprised me most was that the code was the easy part.
 

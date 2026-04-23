@@ -77,7 +77,7 @@ I work in product management. For months, I told myself my role was safe. Produc
 
 But there was this uneasiness in my chest that wouldn't go away. Deep down, I knew that sitting on past accolades while everything around me was shifting was the worst possible thing I could do. I was doing exactly what my father did. Telling myself the change didn't apply to me.
 
-So I enrolled in a couple of agentic AI coding courses. Went back to being a complete beginner. The first few weeks were humbling in a way I hadn't experienced since my early twenties. I was slow. I was confused. I asked questions that probably seemed obvious to everyone else.
+So I [enrolled in a couple of agentic AI coding courses](/writing/how-i-learned-ai). Went back to being a complete beginner. The first few weeks were humbling in a way I hadn't experienced since my early twenties. I was slow. I was confused. I asked questions that probably seemed obvious to everyone else.
 
 But something unlocked that I wasn't expecting. Not just a new skill. A new way of relating to my own competence. I stopped being a product manager nervously watching AI from the sidelines and became a person actively learning something new. The identity shifted, and the anxiety went with it.
 

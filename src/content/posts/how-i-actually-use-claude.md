@@ -9,7 +9,7 @@ cover: "/images/writing/how-i-actually-use-claude/lead.webp"
 
 Most people use Claude like a search engine with better grammar. Type a question, get an answer, move on. That works for quick tasks. But it's about 20% of what Claude can actually do, and it's the least interesting 20%.
 
-In one of my previous posts, I wrote about how I got started building with AI. The deleted apps, the Udemy courses, the first project that actually shipped. A few people asked the same follow-up: okay, but what's the actual workflow?
+In one of my previous posts, [I wrote about how I got started building with AI](/writing/how-i-learned-ai). The deleted apps, the Udemy courses, the first project that actually shipped. A few people asked the same follow-up: okay, but what's the actual workflow?
 
 This is that post.
 

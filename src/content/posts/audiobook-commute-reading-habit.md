@@ -67,7 +67,7 @@ Out of 38 books, a handful have genuinely changed how I think:
 
 **No Rules Rules** by Reed Hastings — Netflix's culture of radical candor and talent density. Made me rethink how I give feedback to my team.
 
-**The Ride of a Lifetime** by Bob Iger — Disney's CEO on leadership. One story about owning mistakes publicly stayed with me so strongly I wrote a separate post about it.
+**The Ride of a Lifetime** by Bob Iger — Disney's CEO on leadership. One story about owning mistakes publicly stayed with me so strongly [I wrote a separate post about it](/writing/exceptional-managers).
 
 **The Remains of the Day** by Kazuo Ishiguro — Not a business book. A quiet, devastating novel about a butler reflecting on his life. It hit differently while stuck in traffic, thinking about my own choices.
 

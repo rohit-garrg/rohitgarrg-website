@@ -20,6 +20,15 @@
             "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -qE '\\.(astro|ts|mjs|css|md)\"'; then npm run build 2>&1 | tail -5; fi"
           }
         ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(echo \"$CLAUDE_TOOL_INPUT\" | grep -oE 'src/content/posts/[^\"]+\\.mdx?'); if [ -n \"$FILE\" ]; then WORDS=$(wc -w < \"$FILE\" 2>/dev/null | tr -d ' '); if [ \"$WORDS\" -gt 200 ]; then echo 'New blog post with content detected. Consider running /interlink to add internal cross-links.'; fi; fi"
+          }
+        ]
       }
     ]
   }
