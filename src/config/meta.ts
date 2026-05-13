@@ -5,7 +5,7 @@
 
 export const heroTagline = '14 years in product. 50+ books in three years. Three side projects and counting.';
 
-export const currentlyLine = "Shipping Planetia for iPad and listening to Harry Potter and The Half Blood Prince (full cast edition).";
+export const currentlyLine = "Shipping Planetia for iPad and listening to Harry Potter and The Deathly Hallows (full cast edition).";
 
 export const nowStrip = [
   { text: 'Head of P&D · Times of India', beadColor: 'peri' as const },
