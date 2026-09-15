@@ -50,6 +50,8 @@ if (post.data.series) {
 // TOC (H2 and H3 only)
 const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
 
+const hasTweets = post.body.includes('twitter-tweet');
+
 
 const formattedDate = post.data.date.toLocaleDateString('en-US', {
   month: 'short',
@@ -103,6 +105,7 @@ const breadcrumbSchema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  {hasTweets && <script is:inline async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>}
 
   <article>
     <!-- Post hero -->
@@ -575,6 +578,24 @@ const breadcrumbSchema = {
     font-style: inherit;
   }
 
+  .article-body :global(.tweet-embed) {
+    margin: 2em auto;
+    max-width: 550px;
+  }
+
+  .article-body :global(blockquote.twitter-tweet) {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+    border-left: none;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin: 0;
+  }
+
   .article-body :global(a) {
     color: var(--color-peri-ink);
     text-decoration: underline;
@@ -944,6 +965,10 @@ const breadcrumbSchema = {
 
     .article-body :global(blockquote) {
       font-size: 22px;
+    }
+
+    .article-body :global(blockquote.twitter-tweet) {
+      font-size: 16px;
     }
 
     .article-body :global(.inline-cta) {
