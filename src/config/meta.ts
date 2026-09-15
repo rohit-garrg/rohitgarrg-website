@@ -5,11 +5,11 @@
 
 export const heroTagline = '14 years in product. 50+ books in three years. Three side projects and counting.';
 
-export const currentlyLine = "Shipping Planetia for iPad and listening to Harry Potter and The Deathly Hallows (full cast edition).";
+export const currentlyLine = "Shipping Drops for Android and listening to A Clash of Kings by George RR Martin.";
 
 export const nowStrip = [
-  { text: 'Head of P&D · Times of India', beadColor: 'peri' as const },
-  { text: 'Shipping Planetia on the App Store', beadColor: 'sage' as const },
+  { text: 'Business Head · Indiatimes', beadColor: 'peri' as const },
+  { text: 'Shipping Drops for Android', beadColor: 'sage' as const },
   { text: 'Reading <em>The Unaccountability Machine</em>', beadColor: 'clay' as const },
 ] as const;
 
