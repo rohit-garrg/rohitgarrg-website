@@ -42,6 +42,7 @@ Personal branding site for Rohit Garg, Head of Product & Design at Times of Indi
 - **Typography:** Newsreader (serif, body text), Geist (sans, UI), Geist Mono (code). Self-hosted WOFF2 in `/fonts/`.
 - **Mobile-first.** Everything must be fully responsive.
 - **Tag colours:** Defined in `src/utils/tags.ts` (shared `TAG_COLORS` map used across components).
+- **CutToContext section:** `/cuttocontext/*` (overview, privacy, terms) is gated by `isPublic` in `src/config/cuttocontext.ts`. While false, the pages are live but noindexed and excluded from nav and sitemap. Keep inbound links (footer, projects, posts) out until it flips.
 - **Tweet embeds:** Paste X's official blockquote markup wrapped in `<figure class="tweet-embed">` directly into the post body (raw HTML in markdown). The article page (`src/pages/writing/[...slug].astro`) detects `twitter-tweet` in the post body and loads `widgets.js` automatically — no per-post changes needed. Keep posts with tweets as `.md`, not `.mdx`.
 
 ## Article Frontmatter

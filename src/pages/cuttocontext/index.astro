@@ -1,0 +1,22 @@
+---
+import CutToContextLayout from '../../layouts/CutToContextLayout.astro';
+import { cuttocontext } from '../../config/cuttocontext';
+---
+
+<CutToContextLayout
+  title="CutToContext"
+  description="Short vertical explainer videos on the system behind a headline, with every claim sourced. A personal project by Rohit Garg."
+  heading="CutToContext"
+>
+  <p>CutToContext is a personal project by Rohit Garg. It makes short vertical explainer videos, each under a minute, on the system behind a headline, with every claim sourced. The videos are published on YouTube, Instagram and X.</p>
+  <p>The videos use AI-generated visuals and an AI voice.</p>
+
+  {/* VIDEO GRID SLOT — YouTube embeds go here once there are videos. Intentionally empty. */}
+
+  <h2 id="upload-tool">The upload tool</h2>
+  <p>CutToContext uses a private upload tool that only its owner uses. It publishes videos to the owner's own YouTube, Instagram and X accounts and reads performance data for those accounts. It is not available to the public, and there is no sign-up.</p>
+  <p>Read the <a href="/cuttocontext/privacy">privacy policy</a> and <a href="/cuttocontext/terms">terms</a>.</p>
+
+  <h2 id="contact">Contact</h2>
+  <p><a href={`mailto:${cuttocontext.email}`}>{cuttocontext.email}</a></p>
+</CutToContextLayout>

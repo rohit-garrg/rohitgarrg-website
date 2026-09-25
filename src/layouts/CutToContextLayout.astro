@@ -1,0 +1,155 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { cuttocontext } from '../config/cuttocontext';
+
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+}
+
+const { title, description, heading } = Astro.props;
+
+const pages = [
+  { href: '/cuttocontext', label: 'Overview' },
+  { href: '/cuttocontext/privacy', label: 'Privacy Policy' },
+  { href: '/cuttocontext/terms', label: 'Terms' },
+];
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+---
+
+<BaseLayout title={title} description={description} noindex={!cuttocontext.isPublic}>
+  <article class="ctc container-page">
+    <header class="ctc-header">
+      <p class="mono-xs">CutToContext</p>
+      <h1 class="display-lg">{heading}</h1>
+    </header>
+
+    <div class="ctc-body">
+      <slot />
+    </div>
+
+    <nav class="ctc-links" aria-label="CutToContext pages">
+      {pages.map(({ href, label }, i) => (
+        <>
+          {i > 0 && <span aria-hidden="true">&middot;</span>}
+          {currentPath === href
+            ? <span class="current" aria-current="page">{label}</span>
+            : <a href={href}>{label}</a>}
+        </>
+      ))}
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .ctc {
+    padding-top: var(--spacing-section-y);
+    padding-bottom: var(--spacing-section-y);
+  }
+
+  .ctc-header {
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--color-line);
+    margin-bottom: 40px;
+  }
+
+  .ctc-header .mono-xs {
+    color: var(--color-mute);
+    margin-bottom: 16px;
+  }
+
+  .ctc-body {
+    max-width: 68ch;
+    margin-bottom: 56px;
+  }
+
+  .ctc-body :global(p),
+  .ctc-body :global(li) {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.62;
+    color: var(--color-ink);
+  }
+
+  .ctc-body :global(p) {
+    margin-bottom: 20px;
+  }
+
+  .ctc-body :global(ul) {
+    padding-left: 1.25em;
+    margin-bottom: 20px;
+  }
+
+  .ctc-body :global(li) {
+    list-style: disc;
+    margin-bottom: 8px;
+  }
+
+  .ctc-body :global(h2) {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    margin-top: 40px;
+    margin-bottom: 12px;
+    scroll-margin-top: 90px;
+  }
+
+  .ctc-body :global(a) {
+    color: var(--color-peri-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ctc-body :global(a:hover) {
+    color: var(--color-peri);
+  }
+
+  .ctc-body :global(.caption) {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--color-mute);
+    margin-top: 40px;
+  }
+
+  .ctc-links {
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--color-mute);
+    padding-top: 24px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .ctc-links a {
+    color: var(--color-ink-2);
+  }
+
+  .ctc-links a:hover {
+    color: var(--color-peri);
+  }
+
+  .ctc-links span {
+    margin: 0 8px;
+  }
+
+  .ctc-links .current {
+    margin: 0;
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 767px) {
+    .ctc {
+      padding-top: var(--spacing-section-y-mobile);
+      padding-bottom: var(--spacing-section-y-mobile);
+    }
+
+    .ctc-body :global(p),
+    .ctc-body :global(li) {
+      font-size: 17px;
+    }
+  }
+</style>

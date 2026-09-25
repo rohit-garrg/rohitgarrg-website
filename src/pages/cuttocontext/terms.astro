@@ -1,0 +1,28 @@
+---
+import CutToContextLayout from '../../layouts/CutToContextLayout.astro';
+import { cuttocontext } from '../../config/cuttocontext';
+---
+
+<CutToContextLayout
+  title="Terms - CutToContext"
+  description="Terms for CutToContext videos and the CutToContext upload tool."
+  heading="Terms"
+>
+  <p>CutToContext is a personal, non-commercial project run by Rohit Garg.</p>
+
+  <h2 id="content">The content</h2>
+  <p>CutToContext videos are general information. They are not legal, medical or financial advice.</p>
+  <p>The videos use AI-generated visuals and an AI voice. Claims are sourced, but facts change after publication and errors are possible. Check the sources before relying on anything.</p>
+  <p>Everything is provided as-is, without warranties. CutToContext is not liable for decisions made based on the videos.</p>
+
+  <h2 id="platforms">Platforms</h2>
+  <p>The videos live on YouTube, Instagram and X. Those platforms' terms apply when you watch or interact there. The YouTube integration is subject to the <a href="https://www.youtube.com/t/terms">YouTube Terms of Service</a>.</p>
+
+  <h2 id="upload-tool">The upload tool</h2>
+  <p>The CutToContext upload tool is private, used only by its owner, and not offered to anyone else.</p>
+
+  <h2 id="contact">Contact</h2>
+  <p>Corrections, questions and takedown requests: <a href={`mailto:${cuttocontext.email}`}>{cuttocontext.email}</a>.</p>
+
+  <p class="caption">Last updated {cuttocontext.lastUpdated}</p>
+</CutToContextLayout>

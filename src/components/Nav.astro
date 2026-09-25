@@ -1,4 +1,6 @@
 ---
+import { cuttocontext } from '../config/cuttocontext';
+
 const currentPath = Astro.url.pathname;
 
 const links = [
@@ -8,6 +10,10 @@ const links = [
   { href: '/speaking', label: 'Speaking' },
   { href: '/about', label: 'About' },
 ];
+
+if (cuttocontext.isPublic) {
+  links.push({ href: '/cuttocontext', label: 'CutToContext' });
+}
 
 function isActive(href: string): boolean {
   if (currentPath === '/') return false;
